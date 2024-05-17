@@ -1,0 +1,7 @@
+{
+    "algorithm_name": "Unigram",
+    "gamma": 0.5,
+    "delta": 2.0,
+    "hash_key": 15485863,
+    "z_threshold": 4.0
+}

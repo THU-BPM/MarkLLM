@@ -1,0 +1,8 @@
+{
+    "algorithm_name": "EXPEdit",
+    "pseudo_length": 420,
+    "sequence_length": 200,
+    "n_runs": 100,
+    "key": 42,
+    "p_threshold": 0.2
+}

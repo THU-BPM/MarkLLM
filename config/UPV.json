@@ -1,0 +1,13 @@
+{
+    "algorithm_name": "UPV",
+    "gamma": 0.5,
+    "delta": 2.0,
+    "z_threshold": 4.0,
+    "prefix_length": 1,
+    "bit_number": 16,
+    "sigma": 0.01,
+    "default_top_k": 20,
+    "generator_model_name": "watermark/upv/model/generator_model_b16_p1.pt",
+    "detector_model_name": "watermark/upv/model/detector_model_b16_p1_z4.pt",
+    "detect_mode": "network"
+}

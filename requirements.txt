@@ -1,0 +1,13 @@
+transformers
+datasets
+nltk
+jieba
+accelerate
+SentencePiece
+openai==0.28
+matplotlib
+Cython
+Pillow==9.4.0
+sacrebleu
+sentence-transformers
+networkx

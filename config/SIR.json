@@ -1,0 +1,11 @@
+{
+    "algorithm_name": "SIR",
+    "delta": 1.0,
+    "chunk_length": 10,
+    "scale_dimension": 300,
+    "z_threshold": 0.2,
+    "transform_model_input_dim": 1024,
+    "transform_model_name": "watermark/sir/model/transform_model_cbert.pth",
+    "embedding_model_path": "watermark/sir/model/compositional-bert-large-uncased/",
+    "mapping_name": "watermark/sir/mapping/300_mapping_50272.json"
+}
