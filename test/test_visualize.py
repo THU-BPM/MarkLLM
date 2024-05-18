@@ -12,9 +12,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from visualize.page_layout_settings import PageLayoutSettings
 from evaluation.tools.text_editor import TruncatePromptTextEditor
 from visualize.data_for_visualization import DataForVisualization
-from visualize.visualizer import DiscreetVisualizer, ContinuousVisualizer
-from visualize.legend_settings import DiscreetLegendSettings, ContinuousLegendSettings
-from visualize.color_scheme import ColorSchemeForDiscreetVisualization, ColorSchemeForContinuousVisualization
+from visualize.visualizer import DiscreteVisualizer, ContinuousVisualizer
+from visualize.legend_settings import DiscreteLegendSettings, ContinuousLegendSettings
+from visualize.color_scheme import ColorSchemeForDiscreteVisualization, ColorSchemeForContinuousVisualization
 
 
 def test_discreet_visualization():
@@ -22,10 +22,10 @@ def test_discreet_visualization():
     flags = [-1, -1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0]
     weights = [0, 0, 0.1, 0.5, 0.3, 0.8, 0.2, 0.4, 0.1, 0.5, 0.3, 0.8, 0.2, 0.4, 0.1, 0.5, 0.3, 0.8, 0.2, 0.4, 0.1, 0.5, 0.3, 0.8, 0.2, 0.4, 0.1, 0.5, 0.3, 0.8, 0.2, 0.4]
 
-    discreet_visualizer = DiscreetVisualizer(color_scheme=ColorSchemeForDiscreetVisualization(),
+    discreet_visualizer = DiscreteVisualizer(color_scheme=ColorSchemeForDiscreteVisualization(),
                                             font_settings=FontSettings(), 
                                             page_layout_settings=PageLayoutSettings(),
-                                            legend_settings=DiscreetLegendSettings())
+                                            legend_settings=DiscreteLegendSettings())
     img = discreet_visualizer.visualize(data=DataForVisualization(tokens, flags, weights), 
                                         show_text=True, visualize_weight=True, display_legend=True)
     img.save("test1.png")
@@ -99,10 +99,10 @@ def test_visualization_without_weight(algorithm_name, visualize_type='discreet')
 
     # Init visualizer
     if visualize_type == 'discreet':
-        visualizer = DiscreetVisualizer(color_scheme=ColorSchemeForDiscreetVisualization(),
+        visualizer = DiscreteVisualizer(color_scheme=ColorSchemeForDiscreteVisualization(),
                                         font_settings=FontSettings(), 
                                         page_layout_settings=PageLayoutSettings(),
-                                        legend_settings=DiscreetLegendSettings())
+                                        legend_settings=DiscreteLegendSettings())
     else:
         visualizer = ContinuousVisualizer(color_scheme=ColorSchemeForContinuousVisualization(),
                                         font_settings=FontSettings(), 
@@ -133,10 +133,10 @@ def test_visualization_with_weight(algorithm_name):
     watermarked_data, unwatermarked_data = get_data(algorithm_name)
 
     # Init visualizer
-    visualizer = DiscreetVisualizer(color_scheme=ColorSchemeForDiscreetVisualization(),
+    visualizer = DiscreteVisualizer(color_scheme=ColorSchemeForDiscreteVisualization(),
                                     font_settings=FontSettings(), 
                                     page_layout_settings=PageLayoutSettings(),
-                                    legend_settings=DiscreetLegendSettings())
+                                    legend_settings=DiscreteLegendSettings())
     
     # Visualize
     watermarked_img = visualizer.visualize(data=watermarked_data, 

@@ -30,7 +30,7 @@ class ColorScheme:
         return font_size  
 
 
-class ColorSchemeForDiscreetVisualization(ColorScheme):
+class ColorSchemeForDiscreteVisualization(ColorScheme):
     """Color scheme for discreet visualization (KGW Family)."""
 
     def __init__(self, background_color='white', prefix_color='#D2B48C', 

@@ -188,10 +188,10 @@ from visualize.font_settings import FontSettings
 from watermark.auto_watermark import AutoWatermark
 from utils.transformers_config import TransformersConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from visualize.visualizer import DiscreetVisualizer
-from visualize.legend_settings import DiscreetLegendSettings
+from visualize.visualizer import DiscreteVisualizer
+from visualize.legend_settings import DiscreteLegendSettings
 from visualize.page_layout_settings import PageLayoutSettings
-from visualize.color_scheme import ColorSchemeForDiscreetVisualization
+from visualize.color_scheme import ColorSchemeForDiscreteVisualization
 
 # Load watermark algorithm
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -212,10 +212,10 @@ watermarked_data = myWatermark.get_data_for_visualization(watermarked_text)
 unwatermarked_data = myWatermark.get_data_for_visualization(unwatermarked_text)
 
 # Init visualizer
-visualizer = DiscreetVisualizer(color_scheme=ColorSchemeForDiscreetVisualization(),
+visualizer = DiscreteVisualizer(color_scheme=ColorSchemeForDiscreteVisualization(),
                                 font_settings=FontSettings(), 
                                 page_layout_settings=PageLayoutSettings(),
-                                legend_settings=DiscreetLegendSettings())
+                                legend_settings=DiscreteLegendSettings())
 # Visualize
 watermarked_img = visualizer.visualize(data=watermarked_data, 
                                        show_text=True, 

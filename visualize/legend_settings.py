@@ -24,7 +24,7 @@ class LegendSettings:
         self.legend_width = legend_width
 
 
-class DiscreetLegendSettings(LegendSettings):
+class DiscreteLegendSettings(LegendSettings):
     """Legend settings for discreet visualization."""
 
     def __init__(self, legend_font_path: str = "font/arial.ttf", legend_font_size: int = 12, legend_width: int = 160,

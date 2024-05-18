@@ -6,10 +6,10 @@
 from typing import Union
 from PIL import Image, ImageDraw
 from .font_settings import FontSettings
-from .legend_settings import LegendSettings, DiscreetLegendSettings, ContinuousLegendSettings
+from .legend_settings import LegendSettings, DiscreteLegendSettings, ContinuousLegendSettings
 from .page_layout_settings import PageLayoutSettings
 from .data_for_visualization import DataForVisualization
-from .color_scheme import ColorScheme, ColorSchemeForDiscreetVisualization, ColorSchemeForContinuousVisualization
+from .color_scheme import ColorScheme, ColorSchemeForDiscreteVisualization, ColorSchemeForContinuousVisualization
 
 
 class BaseVisualizer:
@@ -164,21 +164,21 @@ class BaseVisualizer:
 
         return img
 
-class DiscreetVisualizer(BaseVisualizer):
+class DiscreteVisualizer(BaseVisualizer):
     """Visualizer for discreet visualization (KGW Family)."""
     def __init__(self, 
-                 color_scheme: ColorSchemeForDiscreetVisualization, 
+                 color_scheme: ColorSchemeForDiscreteVisualization, 
                  font_settings: FontSettings, 
                  page_layout_settings: PageLayoutSettings,
-                 legend_settings: DiscreetLegendSettings) -> None:
+                 legend_settings: DiscreteLegendSettings) -> None:
         """
             Initialize the discreet visualizer.
 
             Parameters:
-                color_scheme (ColorSchemeForDiscreetVisualization): The color scheme.
+                color_scheme (ColorSchemeForDiscreteVisualization): The color scheme.
                 font_settings (FontSettings): The font settings.
                 page_layout_settings (PageLayoutSettings): The page layout settings.
-                legend_settings (DiscreetLegendSettings): The discreet legend settings.
+                legend_settings (DiscreteLegendSettings): The discreet legend settings.
         """
         super().__init__(color_scheme, font_settings, page_layout_settings, legend_settings)
     
