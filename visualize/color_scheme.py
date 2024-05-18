@@ -31,12 +31,12 @@ class ColorScheme:
 
 
 class ColorSchemeForDiscreteVisualization(ColorScheme):
-    """Color scheme for discreet visualization (KGW Family)."""
+    """Color scheme for discrete visualization (KGW Family)."""
 
     def __init__(self, background_color='white', prefix_color='#D2B48C', 
                  red_token_color='#EA9999', green_token_color='#B6D7A8') -> None:
         """
-            Initialize the color scheme for discreet visualization.
+            Initialize the color scheme for discrete visualization.
 
             Parameters:
                 background_color (str): The background color.

@@ -25,12 +25,12 @@ class LegendSettings:
 
 
 class DiscreteLegendSettings(LegendSettings):
-    """Legend settings for discreet visualization."""
+    """Legend settings for discrete visualization."""
 
     def __init__(self, legend_font_path: str = "font/arial.ttf", legend_font_size: int = 12, legend_width: int = 160,
                  rec_width: int = 50, text_offset: int = 20, top_spacing: int = 20) -> None:
         """
-            Initialize the discreet legend settings.
+            Initialize the discrete legend settings.
 
             Parameters:
                 legend_font_path (str): The path to the legend font file.

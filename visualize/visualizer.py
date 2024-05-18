@@ -165,20 +165,20 @@ class BaseVisualizer:
         return img
 
 class DiscreteVisualizer(BaseVisualizer):
-    """Visualizer for discreet visualization (KGW Family)."""
+    """Visualizer for discrete visualization (KGW Family)."""
     def __init__(self, 
                  color_scheme: ColorSchemeForDiscreteVisualization, 
                  font_settings: FontSettings, 
                  page_layout_settings: PageLayoutSettings,
                  legend_settings: DiscreteLegendSettings) -> None:
         """
-            Initialize the discreet visualizer.
+            Initialize the discrete visualizer.
 
             Parameters:
                 color_scheme (ColorSchemeForDiscreteVisualization): The color scheme.
                 font_settings (FontSettings): The font settings.
                 page_layout_settings (PageLayoutSettings): The page layout settings.
-                legend_settings (DiscreteLegendSettings): The discreet legend settings.
+                legend_settings (DiscreteLegendSettings): The discrete legend settings.
         """
         super().__init__(color_scheme, font_settings, page_layout_settings, legend_settings)
     
@@ -197,7 +197,7 @@ class DiscreteVisualizer(BaseVisualizer):
             draw.rectangle([(x, y), (x + token_width, y + self.font_settings.font_size)], fill=token_color)
     
     def _display_legend(self, draw, x, y, img_height=None):
-        """Display the legend for discreet visualization."""
+        """Display the legend for discrete visualization."""
         items = self.color_scheme.get_legend_items()
         rect_width = self.legend_settings.rec_width
         rect_height = self.font_settings.font_size
