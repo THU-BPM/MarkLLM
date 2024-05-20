@@ -198,7 +198,7 @@ class DynamicThresholdSuccessRateCalculator(BaseSuccessRateCalculator):
 
     def calculate(self, watermarked_result: List[float], non_watermarked_result: List[float]) -> Dict[str, float]:
         """Calculate success rates based on provided results."""
-        self._check_instance(watermarked_result + non_watermarked_result, (bool, float))
+        self._check_instance(watermarked_result + non_watermarked_result, float)
 
         inputs = [DetectionResult(True, x) for x in watermarked_result] + [DetectionResult(False, x) for x in non_watermarked_result]
         threshold = self._find_threshold(inputs)
