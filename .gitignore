@@ -8,10 +8,8 @@ __pycache__/
 
 # Test
 test.py
-detectability.py
-robustness.py
-quality.py
 script.sh
+evaluation/examples/tools.py
 
 # Model
 watermark/sir/model/compositional-bert-large-uncased/

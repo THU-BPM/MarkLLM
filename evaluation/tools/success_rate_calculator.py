@@ -92,8 +92,8 @@ class FundamentalSuccessRateCalculator(BaseSuccessRateCalculator):
 
     def calculate(self, watermarked_result: List[bool], non_watermarked_result: List[bool]) -> Dict[str, float]:
         """calculate success rates of watermark detection based on provided results."""
-        self.check_instance(watermarked_result, bool)
-        self.check_instance(non_watermarked_result, bool)
+        self._check_instance(watermarked_result, bool)
+        self._check_instance(non_watermarked_result, bool)
 
         inputs = [DetectionResult(True, x) for x in watermarked_result] + [DetectionResult(False, x) for x in non_watermarked_result]
         metrics = self._compute_metrics(inputs)
