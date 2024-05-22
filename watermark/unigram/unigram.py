@@ -178,7 +178,7 @@ class Unigram(BaseWatermark):
         """Get data for visualization."""
         
         # encode text
-        encoded_text = self.config.generation_tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.device)
+        encoded_text = self.config.generation_tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.config.device)
         
         # compute z-score and highlight values
         z_score, highlight_values = self.utils.score_sequence(encoded_text)
