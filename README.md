@@ -5,11 +5,17 @@
 <a href="https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing" alt="Colab">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 
+[TOC]
+
 ### Demo | Paper 
 
 - [**Demo**](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing): We utilize Google Colab as our platform to fully publicly demonstrate the capabilities of MarkLLM through a Jupyter Notebook.
-- **Website Demo (About to Release)**: We have also developed a website to facilitate interaction. Due to resource limitations, we cannot offer live access to everyone. Instead, we provide a demonstration video.
+- [**Website Demo**](https://drive.google.com/file/d/1sLI7BOR6Qrs-qeBor0ieh0k6vUZe-I59/view?usp=sharing): We have also developed a website to facilitate interaction. Due to resource limitations, we cannot offer live access to everyone. Instead, we provide a demonstration video.
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King*
+
+### Updates
+
+- 🎉 **(2024.05.23)** We're thrilled to announce the release of our website demo!
 
 ### Introduction to MarkLLM
 
@@ -420,13 +426,11 @@ In addition to the Colab Jupyter notebook we provide (some models cannot be down
 
 ### Citations
 ```
-@misc{pan2024markllm,
-      title={MarkLLM: An Open-Source Toolkit for LLM Watermarking}, 
-      author={Leyi Pan and Aiwei Liu and Zhiwei He and Zitian Gao and Xuandong Zhao and Yijian Lu and Binglin Zhou and Shuliang Liu and Xuming Hu and Lijie Wen and Irwin King},
-      year={2024},
-      eprint={2405.10051},
-      archivePrefix={arXiv},
-      primaryClass={cs.CR}
+@article{pan2024markllm,
+  title={MarkLLM: An Open-Source Toolkit for LLM Watermarking},
+  author={Pan, Leyi and Liu, Aiwei and He, Zhiwei and Gao, Zitian and Zhao, Xuandong and Lu, Yijian and Zhou, Binglin and Liu, Shuliang and Hu, Xuming and Wen, Lijie and others},
+  journal={arXiv preprint arXiv:2405.10051},
+  year={2024}
 }
 ```
 
