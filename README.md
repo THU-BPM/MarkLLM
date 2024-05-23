@@ -5,7 +5,22 @@
 <a href="https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing" alt="Colab">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 
-[TOC]
+### Contents
+
+- [Demo \| Paper](#demo--paper)
+- [Updates](#updates)
+- [Introduction to MarkLLM](#introduction-to-markllm)
+  - [Overview](#overview)
+  - [Key Features of MarkLLM](#key-features-of-markllm)
+- [Repo contents](#repo-contents)
+- [How to use the toolkit in your own code](#how-to-use-the-toolkit-in-your-own-code)
+  - [Setting up the environment](#setting-up-the-environment)
+  - [Invoking watermarking algorithms](#invoking-watermarking-algorithms)
+  - [Visualizing mechanisms](#visualizing-mechanisms)
+  - [Applying evaluation pipelines](#applying-evaluation-pipelines)
+- [More user examples](#more-user-examples)
+- [Demo jupyter notebooks](#demo-jupyter-notebooks)
+- [Citations](#citations)
 
 ### Demo | Paper 
 
@@ -183,7 +198,7 @@ unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
 detect_result = myWatermark.detect_watermark(unwatermarked_text)
 ```
 
-#### Visualizing Mechanisms
+#### Visualizing mechanisms
 
 Assuming you already have a pair of `watermarked_text` and `unwatermarked_text`, and you wish to visualize the differences and specifically highlight the watermark within the watermarked text using a watermarking algorithm, you can utilize the visualization tools available in the `visualize/` directory. 
 
