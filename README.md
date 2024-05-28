@@ -116,7 +116,7 @@ MarkLLM/
 ├── exceptions/                 # Custom exception definitions for error handling
 │   └── exceptions.py
 ├── font/                       # Fonts needed for visualization purposes
-├── MarkLLM_demo.ipynb          # Juypter Notebook
+├── MarkLLM_demo.ipynb          # Jupyter Notebook
 ├── test/                       # Test cases and examples for user testing
 │   ├── test_method.py          
 │   ├── test_pipeline.py        
