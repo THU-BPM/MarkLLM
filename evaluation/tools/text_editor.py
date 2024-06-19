@@ -4,20 +4,21 @@
 # ================================================
 
 import re
+import copy
 import nltk
 import torch
 import random
 import numpy as np
+from tqdm import tqdm
+from nltk import pos_tag
 from nltk.corpus import wordnet
+from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 from utils.openai_utils import OpenAIAPI
+from oracle.quality_oracle import QualityOracle
 from exceptions.exceptions import DiversityValueError
 from transformers import T5Tokenizer, T5ForConditionalGeneration, BertTokenizer, BertForMaskedLM
-from oracle.quality_oracle import QualityOracle
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from tqdm import tqdm
-import copy
+
 
 class TextEditor:
     """Base class for text editing."""

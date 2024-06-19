@@ -1,15 +1,19 @@
-import json
-import openai
+# =================================================================
+# oracle.py
+# Description: This file contains helper class of RandomWalkAttack
+# =================================================================
+
 import os
-import numpy as np
-import tiktoken
-import random
-from time import sleep
-import jsonlines
 import re
 import copy
-import transformers
+import json
 import torch
+import openai
+import random
+import tiktoken
+import numpy as np
+import transformers
+from time import sleep
 
 DEF_MODEL = "gpt-4"
 MODELS = {"gpt-4": "gpt-4", "gpt-3.5": "gpt-3.5-turbo"}
@@ -59,7 +63,6 @@ def read_jsonl(file: str):
     return data
 
 def query_openai(prompt, model="text-davinci-003", max_tokens=512):
-    # prompt = instruction+"\n"+query
     response = openai.Completion.create(
         engine=model, # "gpt-3.5-turbo-instruct"
         prompt=prompt,
@@ -68,7 +71,6 @@ def query_openai(prompt, model="text-davinci-003", max_tokens=512):
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
-        # stop=["\n"]
     )
     return response.choices[0].text
 
@@ -88,7 +90,6 @@ def chat(message, history = [{"role": "system", "content": "You are a research a
          ):
   """General routine to send a message to GPT.
      Can take an optional parameter history of messages, and can also return message and history as extra parameter"""
-  CONTEXT = {"gpt-4":8192, "gpt-3.5": 4096}
   if tokenizer is None:
     tokenizer = TOKENIZERS[model]
   hist_tokens  = count_tokens(", ".join(D["content"] for D in history), tokenizer)
@@ -147,7 +148,7 @@ class QualityOracle:
         return f'''
         Please act as an impartial judge and evaluate the quality of the responses provided by two
         AI assistants to the user question displayed below. You should choose the response that
-        follows the user’s instructions and answers the user’s question better. Your evaluation
+        follows the user's instructions and answers the user's question better. Your evaluation
         should consider factors such as the helpfulness, relevance, accuracy, depth, creativity,
         and level of detail of their responses. Begin your evaluation by comparing the two
         responses and provide an explanation. Avoid any position biases and ensure that the
@@ -304,4 +305,4 @@ class QualityOracle:
         print()
         choice = self.query_gpt_once(original_response, paraphrased_response, tie_threshold=tie_threshold)
         second_score = score_dict[choice]
-        return (score-second_score)/2 # essentially (1, 0), (1, -1), (1, 1), (0, 1), (0, -1), (0, 0), (-1, 1), (-1, 0), (-1, -1) -> 0.5, 0, 1, 0.5, -0.5, 0, 0, -0.5, -1
+        return (score - second_score)/2 # essentially (1, 0), (1, -1), (1, 1), (0, 1), (0, -1), (0, 0), (-1, 1), (-1, 0), (-1, -1) -> 0.5, 0, 1, 0.5, -0.5, 0, 0, -0.5, -1
