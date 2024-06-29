@@ -10,7 +10,7 @@ from utils.transformers_config import TransformersConfig
 from evaluation.tools.success_rate_calculator import DynamicThresholdSuccessRateCalculator
 from transformers import AutoModelForCausalLM, AutoTokenizer, T5Tokenizer, T5ForConditionalGeneration, BertTokenizer, BertForMaskedLM
 from evaluation.pipelines.detection import WatermarkedTextDetectionPipeline, UnWatermarkedTextDetectionPipeline, DetectionPipelineReturnType
-from evaluation.tools.text_editor import TruncatePromptTextEditor, WordDeletion, SynonymSubstitution, ContextAwareSynonymSubstitution, GPTParaphraser, DipperParaphraser
+from evaluation.tools.text_editor import TruncatePromptTextEditor, WordDeletion, SynonymSubstitution, ContextAwareSynonymSubstitution, GPTParaphraser, DipperParaphraser, TranslationTextEditor
 
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -44,6 +44,8 @@ def assess_robustness(algorithm_name, attack_name):
                                    model=T5ForConditionalGeneration.from_pretrained('/data2/shared_model/kalpeshk2011/dipper-paraphraser-xxl/', device_map='auto'),
                                    lex_diversity=60, order_diversity=0, sent_interval=1, 
                                    max_new_tokens=100, do_sample=True, top_p=0.75, top_k=None)
+    elif attack_name == 'Translation':
+        attack = TranslationTextEditor()
 
     pipline1 = WatermarkedTextDetectionPipeline(dataset=my_dataset, text_editor_list=[TruncatePromptTextEditor(), attack],
                                                 show_progress=True, return_type=DetectionPipelineReturnType.SCORES) 

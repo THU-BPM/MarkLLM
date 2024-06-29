@@ -15,10 +15,11 @@ from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 from utils.openai_utils import OpenAIAPI
-from oracle.quality_oracle import QualityOracle
+# Wrong import: from oracle.quality_oracle import QualityOracle
+from .oracle import QualityOracle
 from exceptions.exceptions import DiversityValueError
 from transformers import T5Tokenizer, T5ForConditionalGeneration, BertTokenizer, BertForMaskedLM
-
+from translate import Translator
 
 class TextEditor:
     """Base class for text editing."""
@@ -468,3 +469,19 @@ class CodeGenerationTextEditor(TextEditor):
         text = text.lstrip("\n")
         text = text.split("\n\n")[0]
         return text
+
+
+class TranslationTextEditor(TextEditor):
+    """
+    Translate text from English to Chinese, and from English back to Chinese
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def edit(self, text: str, reference=None):
+        zh_translator = Translator(from_lang="en", to_lang="zh")
+        en_translator = Translator(from_lang="zh", to_lang="en")
+        zh_translation = zh_translator.translate(text)
+        en_translation = en_translator.translate(zh_translation)
+        return en_translation
