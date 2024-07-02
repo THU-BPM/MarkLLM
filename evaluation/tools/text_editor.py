@@ -472,16 +472,25 @@ class CodeGenerationTextEditor(TextEditor):
 
 
 class TranslationTextEditor(TextEditor):
-    """
-    Translate text from English to Chinese, and from English back to Chinese
-    """
+    """Translate text from source language to intermediary language, then do it the other way around"""
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 translate_to_intermediary = Translator(from_lang="en", to_lang="zh").translate,
+                 translate_to_source = Translator(from_lang="zh", to_lang="en").translate) -> None:
+        """
+        Initialize the translation text editor.
+        Use English as default source language.
+        Use Chinese as default intermediary language.
+
+        Parameters:
+            translate_to_source ((str) -> (str)): A function that translates the intermediary language into the source language.
+            translate_to_intermediary ((str) -> (str)): A function that translates the source language into the intermediary language.
+        """
         super().__init__()
+        self.translate_to_source = translate_to_source
+        self.translate_to_intermediary = translate_to_intermediary
 
     def edit(self, text: str, reference=None):
-        zh_translator = Translator(from_lang="en", to_lang="zh")
-        en_translator = Translator(from_lang="zh", to_lang="en")
-        zh_translation = zh_translator.translate(text)
-        en_translation = en_translator.translate(zh_translation)
-        return en_translation
+        intermediary_text = self.translate_to_intermediary(text)
+        edit_result = self.translate_to_source(intermediary_text)
+        return edit_result
