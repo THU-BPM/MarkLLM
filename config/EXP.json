@@ -2,6 +2,6 @@
     "algorithm_name": "EXP",
     "prefix_length": 4,
     "hash_key": 15485863,
-    "threshold": 2.0,
+    "threshold": 1e-4,
     "sequence_length": 200
 }

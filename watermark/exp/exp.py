@@ -4,6 +4,7 @@
 # ============================================
 
 import torch
+import scipy
 from math import log
 from ..base import BaseWatermark
 from utils.utils import load_config_file
@@ -151,17 +152,17 @@ class EXP(BaseWatermark):
             r = random_numbers[encoded_text[i]]
             total_score += log(1 / (1 - r))
 
-        # Compute the average score across all scored tokens
-        score = total_score / num_scored if num_scored > 0 else 0
+        # Calculate p_value
+        p_value = scipy.stats.gamma.sf(total_score, num_scored, loc=0, scale=1)
 
         # Determine if the computed score exceeds the threshold for watermarking
-        is_watermarked = score > self.config.threshold
+        is_watermarked = p_value < self.config.threshold
 
         # Return results based on the `return_dict` flag
         if return_dict:
-            return {"is_watermarked": is_watermarked, "score": score}
+            return {"is_watermarked": is_watermarked, "score": p_value}
         else:
-            return (is_watermarked, score)
+            return (is_watermarked, p_value)
         
     def get_data_for_visualization(self, text: str, *args, **kwargs) -> DataForVisualization:
         """Get data for visualization."""
