@@ -29,7 +29,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King*
 
 ### Updates
-
+- 🎉 **(2024.07.03)** Updated Back-Translation Attack. Thanks to Zihan Tang for his PR! 
 - 🎉 **(2024.06.19)** Updated Random Walk Attack from the impossibility results of strong watermarking [paper](https://arxiv.org/abs/2311.04378) at [ICML](https://openreview.net/pdf/c85c77848c1a0a1a53da8fb873d2b27c5b8509c1.pdf), 2024. ([Blog](https://kempnerinstitute.harvard.edu/research/deeper-learning/watermarking-in-the-sand/)). Thanks to Hanlin Zhang for his PR!
 - 🎉 **(2024.05.23)** We're thrilled to announce the release of our website demo!
 
