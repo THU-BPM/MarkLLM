@@ -12,14 +12,13 @@ import numpy as np
 from tqdm import tqdm
 from nltk import pos_tag
 from nltk.corpus import wordnet
+from translate import Translator
+from .oracle import QualityOracle
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 from utils.openai_utils import OpenAIAPI
-# Wrong import: from oracle.quality_oracle import QualityOracle
-from .oracle import QualityOracle
 from exceptions.exceptions import DiversityValueError
 from transformers import T5Tokenizer, T5ForConditionalGeneration, BertTokenizer, BertForMaskedLM
-from translate import Translator
 
 class TextEditor:
     """Base class for text editing."""
@@ -471,20 +470,18 @@ class CodeGenerationTextEditor(TextEditor):
         return text
 
 
-class TranslationTextEditor(TextEditor):
-    """Translate text from source language to intermediary language, then do it the other way around"""
+class BackTranslationTextEditor(TextEditor):
+    """Translate text from source language to intermediary language, then back to the source language."""
 
     def __init__(self,
                  translate_to_intermediary = Translator(from_lang="en", to_lang="zh").translate,
                  translate_to_source = Translator(from_lang="zh", to_lang="en").translate) -> None:
         """
-        Initialize the translation text editor.
-        Use English as default source language.
-        Use Chinese as default intermediary language.
+        Initialize the back translation editor.
 
         Parameters:
-            translate_to_source ((str) -> (str)): A function that translates the intermediary language into the source language.
-            translate_to_intermediary ((str) -> (str)): A function that translates the source language into the intermediary language.
+            translate_to_intermediary (function): The function to translate text to the intermediary language.
+            translate_to_source (function): The function to translate text to the source language.
         """
         super().__init__()
         self.translate_to_source = translate_to_source
