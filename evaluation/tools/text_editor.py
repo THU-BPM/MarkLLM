@@ -15,10 +15,11 @@ from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 from utils.openai_utils import OpenAIAPI
-from oracle.quality_oracle import QualityOracle
+# Wrong import: from oracle.quality_oracle import QualityOracle
+from .oracle import QualityOracle
 from exceptions.exceptions import DiversityValueError
 from transformers import T5Tokenizer, T5ForConditionalGeneration, BertTokenizer, BertForMaskedLM
-
+from translate import Translator
 
 class TextEditor:
     """Base class for text editing."""
@@ -468,3 +469,28 @@ class CodeGenerationTextEditor(TextEditor):
         text = text.lstrip("\n")
         text = text.split("\n\n")[0]
         return text
+
+
+class TranslationTextEditor(TextEditor):
+    """Translate text from source language to intermediary language, then do it the other way around"""
+
+    def __init__(self,
+                 translate_to_intermediary = Translator(from_lang="en", to_lang="zh").translate,
+                 translate_to_source = Translator(from_lang="zh", to_lang="en").translate) -> None:
+        """
+        Initialize the translation text editor.
+        Use English as default source language.
+        Use Chinese as default intermediary language.
+
+        Parameters:
+            translate_to_source ((str) -> (str)): A function that translates the intermediary language into the source language.
+            translate_to_intermediary ((str) -> (str)): A function that translates the source language into the intermediary language.
+        """
+        super().__init__()
+        self.translate_to_source = translate_to_source
+        self.translate_to_intermediary = translate_to_intermediary
+
+    def edit(self, text: str, reference=None):
+        intermediary_text = self.translate_to_intermediary(text)
+        edit_result = self.translate_to_source(intermediary_text)
+        return edit_result
