@@ -95,6 +95,7 @@ class KGWUtils:
         return greenlist_ids
     
     def get_greenlist_ids_self(self, input_ids: torch.LongTensor) -> list[int]:
+        """Get greenlist ids for the input_ids via selfHash scheme."""
         greenlist_size = int(self.config.vocab_size * self.config.gamma)
         greenlist_ids = []
         f_x = self.f_time(input_ids)
@@ -102,8 +103,8 @@ class KGWUtils:
             h_k = f_x * self.prf[k]
             self._seed_rng(h_k)
             vocab_permutation = torch.randperm(self.config.vocab_size, device=input_ids.device, generator=self.rng)
-            greenlist_ids = vocab_permutation[:greenlist_size]
-            if k in greenlist_ids:
+            temp_greenlist_ids = vocab_permutation[:greenlist_size]
+            if k in temp_greenlist_ids:
                 greenlist_ids.append(k)
         return greenlist_ids
     
