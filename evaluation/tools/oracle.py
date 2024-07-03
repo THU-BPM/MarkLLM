@@ -18,7 +18,7 @@ from time import sleep
 DEF_MODEL = "gpt-4"
 MODELS = {"gpt-4": "gpt-4", "gpt-3.5": "gpt-3.5-turbo"}
 TOKENIZERS  = {model : tiktoken.encoding_for_model(MODELS[model]) for model in MODELS }
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = None # openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def set_seed(seed):
    random.seed(seed)
