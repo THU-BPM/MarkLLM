@@ -38,6 +38,7 @@ class EXPEditConfig:
         self.n_runs = config_dict['n_runs']
         self.p_threshold = config_dict['p_threshold']
         self.key = config_dict['key']
+        self.top_k = config_dict['top_k']
 
         self.generation_model = transformers_config.model
         self.generation_tokenizer = transformers_config.tokenizer
@@ -64,7 +65,7 @@ class EXPEditUtils:
     def exp_sampling(self, probs: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
         """Sample token using exponential distribution."""
         # Ensure top_k is not greater than the vocabulary size
-        top_k = min(50, probs.size(-1))
+        top_k = min(self.config.top_k, probs.size(-1))
     
         # Get the top_k probabilities and their indices
         top_probs, top_indices = torch.topk(probs, top_k, dim=-1)
