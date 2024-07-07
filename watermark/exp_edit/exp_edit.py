@@ -63,7 +63,17 @@ class EXPEditUtils:
 
     def exp_sampling(self, probs: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
         """Sample token using exponential distribution."""
-        return torch.argmax(u ** (1 / probs), axis=1).unsqueeze(-1)
+        # Ensure top_k is not greater than the vocabulary size
+        top_k = min(50, probs.size(-1))
+    
+        # Get the top_k probabilities and their indices
+        top_probs, top_indices = torch.topk(probs, top_k, dim=-1)
+    
+        # Perform exponential sampling on the top_k probabilities
+        sampled_indices = torch.argmax(u.gather(-1, top_indices) ** (1 / top_probs), dim=-1)
+    
+        # Map back the sampled indices to the original vocabulary indices
+        return top_indices.gather(-1, sampled_indices.unsqueeze(-1))
     
     def value_transformation(self, value: float) -> float:
         """Transform value to range [0, 1]."""
