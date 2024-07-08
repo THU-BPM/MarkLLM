@@ -4,6 +4,7 @@
 # ============================================
 
 import torch
+import scipy
 from math import log
 from ..base import BaseWatermark
 from utils.utils import load_config_file
@@ -34,6 +35,7 @@ class EXPConfig:
         self.hash_key = config_dict['hash_key']
         self.threshold = config_dict['threshold']
         self.sequence_length = config_dict['sequence_length']
+        self.top_k = config_dict['top_k']
 
         self.generation_model = transformers_config.model
         self.generation_tokenizer = transformers_config.tokenizer
@@ -66,7 +68,22 @@ class EXPUtils:
     
     def exp_sampling(self, probs: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
         """Sample a token from the vocabulary using the exponential sampling method."""
-        return torch.argmax(u ** (1 / probs), axis=1).unsqueeze(-1)
+        
+        # If top_k is not specified, use argmax
+        if self.config.top_k <= 0:
+            return torch.argmax(u ** (1 / probs), axis=1).unsqueeze(-1)
+        
+        # Ensure top_k is not greater than the vocabulary size
+        top_k = min(self.config.top_k, probs.size(-1))
+    
+        # Get the top_k probabilities and their indices
+        top_probs, top_indices = torch.topk(probs, top_k, dim=-1)
+    
+        # Perform exponential sampling on the top_k probabilities
+        sampled_indices = torch.argmax(u.gather(-1, top_indices) ** (1 / top_probs), dim=-1)
+    
+        # Map back the sampled indices to the original vocabulary indices
+        return top_indices.gather(-1, sampled_indices.unsqueeze(-1))
     
     def _value_transformation(self, value):
         """Transform the value to a range between 0 and 1."""
@@ -151,17 +168,17 @@ class EXP(BaseWatermark):
             r = random_numbers[encoded_text[i]]
             total_score += log(1 / (1 - r))
 
-        # Compute the average score across all scored tokens
-        score = total_score / num_scored if num_scored > 0 else 0
+        # Calculate p_value
+        p_value = scipy.stats.gamma.sf(total_score, num_scored, loc=0, scale=1)
 
         # Determine if the computed score exceeds the threshold for watermarking
-        is_watermarked = score > self.config.threshold
+        is_watermarked = p_value < self.config.threshold
 
         # Return results based on the `return_dict` flag
         if return_dict:
-            return {"is_watermarked": is_watermarked, "score": score}
+            return {"is_watermarked": is_watermarked, "score": p_value}
         else:
-            return (is_watermarked, score)
+            return (is_watermarked, p_value)
         
     def get_data_for_visualization(self, text: str, *args, **kwargs) -> DataForVisualization:
         """Get data for visualization."""

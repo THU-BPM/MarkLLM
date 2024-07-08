@@ -11,3 +11,5 @@ Pillow==9.4.0
 sacrebleu
 sentence-transformers
 networkx
+translate
+tiktoken

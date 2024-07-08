@@ -179,10 +179,16 @@ class DynamicThresholdSuccessRateCalculator(BaseSuccessRateCalculator):
 
     def _compute_metrics(self, inputs: List[DetectionResult], threshold: float) -> Dict[str, float]:
         """Compute metrics based on the provided inputs and threshold."""
-        TP = sum(1 for x in inputs if x.detect_result >= threshold and x.gold_label)
-        FP = sum(1 for x in inputs if x.detect_result >= threshold and not x.gold_label)
-        TN = sum(1 for x in inputs if x.detect_result < threshold and not x.gold_label)
-        FN = sum(1 for x in inputs if x.detect_result < threshold and x.gold_label)
+        if not self.reverse:
+            TP = sum(1 for x in inputs if x.detect_result >= threshold and x.gold_label)
+            FP = sum(1 for x in inputs if x.detect_result >= threshold and not x.gold_label)
+            TN = sum(1 for x in inputs if x.detect_result < threshold and not x.gold_label)
+            FN = sum(1 for x in inputs if x.detect_result < threshold and x.gold_label)
+        else:
+            TP = sum(1 for x in inputs if x.detect_result <= threshold and x.gold_label)
+            FP = sum(1 for x in inputs if x.detect_result <= threshold and not x.gold_label)
+            TN = sum(1 for x in inputs if x.detect_result > threshold and not x.gold_label)
+            FN = sum(1 for x in inputs if x.detect_result > threshold and x.gold_label)
 
         metrics = {
             'TPR': TP / (TP + FN) if TP + FN else 0,
