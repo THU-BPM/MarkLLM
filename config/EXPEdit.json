@@ -4,5 +4,6 @@
     "sequence_length": 200,
     "n_runs": 100,
     "key": 42,
-    "p_threshold": 0.2
+    "p_threshold": 0.2,
+    "top_k": 50
 }

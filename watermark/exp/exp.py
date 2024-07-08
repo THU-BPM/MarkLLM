@@ -35,6 +35,7 @@ class EXPConfig:
         self.hash_key = config_dict['hash_key']
         self.threshold = config_dict['threshold']
         self.sequence_length = config_dict['sequence_length']
+        self.top_k = config_dict['top_k']
 
         self.generation_model = transformers_config.model
         self.generation_tokenizer = transformers_config.tokenizer
@@ -67,7 +68,17 @@ class EXPUtils:
     
     def exp_sampling(self, probs: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
         """Sample a token from the vocabulary using the exponential sampling method."""
-        return torch.argmax(u ** (1 / probs), axis=1).unsqueeze(-1)
+        # Ensure top_k is not greater than the vocabulary size
+        top_k = min(self.config.top_k, probs.size(-1))
+    
+        # Get the top_k probabilities and their indices
+        top_probs, top_indices = torch.topk(probs, top_k, dim=-1)
+    
+        # Perform exponential sampling on the top_k probabilities
+        sampled_indices = torch.argmax(u.gather(-1, top_indices) ** (1 / top_probs), dim=-1)
+    
+        # Map back the sampled indices to the original vocabulary indices
+        return top_indices.gather(-1, sampled_indices.unsqueeze(-1))
     
     def _value_transformation(self, value):
         """Transform the value to a range between 0 and 1."""
