@@ -68,6 +68,11 @@ class EXPUtils:
     
     def exp_sampling(self, probs: torch.Tensor, u: torch.Tensor) -> torch.Tensor:
         """Sample a token from the vocabulary using the exponential sampling method."""
+        
+        # If top_k is not specified, use argmax
+        if self.config.top_k <= 0:
+            return torch.argmax(u ** (1 / probs), axis=1).unsqueeze(-1)
+        
         # Ensure top_k is not greater than the vocabulary size
         top_k = min(self.config.top_k, probs.size(-1))
     

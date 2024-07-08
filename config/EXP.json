@@ -4,5 +4,5 @@
     "hash_key": 15485863,
     "threshold": 1e-4,
     "sequence_length": 200,
-    "top_k": 50
+    "top_k": 0
 }
