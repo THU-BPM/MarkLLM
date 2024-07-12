@@ -1,0 +1,9 @@
+{
+    "algorithm_name": "ITSEdit",
+    "pseudo_length": 256,
+    "sequence_length": 200,
+    "n_runs":500,
+    "key": 42,
+    "p_threshold": 0.1,
+    "top_k": 0
+}
