@@ -20,7 +20,7 @@ natural_text = item['natural_text']
 
 def test_algorithm(algorithm_name):
     # Check algorithm name
-    assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR', 'XSIR', 'UPV', 'EXP', 'EXPEdit']
+    assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR', 'XSIR', 'UPV', 'EXP', 'EXPEdit','ITSEdit']
 
     # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
