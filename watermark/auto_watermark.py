@@ -16,7 +16,8 @@ WATERMARK_MAPPING_NAMES={
     'XSIR': 'watermark.xsir.XSIR',
     'EWD': 'watermark.ewd.EWD',
     'EXP': 'watermark.exp.EXP',
-    'EXPEdit': 'watermark.exp_edit.EXPEdit'
+    'EXPEdit': 'watermark.exp_edit.EXPEdit',
+    'ITSEdit': 'watermark.its_edit.ITSEdit'
 }
 
 def watermark_name_from_alg_name(name):
