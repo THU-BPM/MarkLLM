@@ -29,6 +29,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King*
 
 ### Updates
+- 🎉 **(2024.07.13)** Add ITSEdit watermarking method. Thanks to Yiming Liu for his PR! 
 - 🎉 **(2024.07.09)** Add more hashing schemes for KGW (skip, min, additive, selfhash). Thanks to Yichen Di for his PR! 
 - 🎉 **(2024.07.08)** Add top-k filter for watermarking methods in Christ family. Thanks to Kai Shi for his PR! 
 - 🎉 **(2024.07.03)** Updated Back-Translation Attack. Thanks to Zihan Tang for his PR! 
