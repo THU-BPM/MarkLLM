@@ -68,10 +68,10 @@ class PPLCalculator(DirectTextQualityAnalyzer):
 
     def analyze(self, text: str):
         """Calculate the perplexity of the given text."""
-        criteration = torch.nn.CrossEntropyLoss()
+        criterion = torch.nn.CrossEntropyLoss()
         encoded_text = self.tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.device)
         logits = self.model(torch.unsqueeze(encoded_text, 0), return_dict=True).logits[0]
-        loss = criteration(logits[:-1], encoded_text[1:])
+        loss = criterion(logits[:-1], encoded_text[1:])
         ppl = torch.exp(loss)
         return ppl.item()
 
