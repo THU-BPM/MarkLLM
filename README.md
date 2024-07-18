@@ -57,19 +57,19 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
 
   **Currently Supported Algorithms:**
 
-  | Algorithm Name | Family        | Link                                                                                                                                                                        |
-  | -------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | KGW            | KGW Family    | [[2301.10226\] A Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2301.10226)                                                                            |
-  | Unigram        | KGW Family    | [[2306.17439\] Provable Robust Watermarking for AI-Generated Text (arxiv.org)](https://arxiv.org/abs/2306.17439)                                                               |
-  | SWEET          | KGW Family    | [[2305.15060\] Who Wrote this Code? Watermarking for Code Generation (arxiv.org)](https://arxiv.org/abs/2305.15060)                                                            |
-  | UPV            | KGW Family    | [[2307.16230\] An Unforgeable Publicly Verifiable Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2307.16230)                                           |
-  | EWD            | KGW Family    | [[2403.13485\] An Entropy-based Text Watermarking Detection Method (arxiv.org)](https://arxiv.org/abs/2403.13485)                                                              |
-  | SIR            | KGW Family    | [[2310.06356\] A Semantic Invariant Robust Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.06356)                                                  |
+  | Algorithm Name | Family        | Link                                                         |
+  | -------------- | ------------- | ------------------------------------------------------------ |
+  | KGW            | KGW Family    | [[2301.10226\] A Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2301.10226) |
+  | Unigram        | KGW Family    | [[2306.17439\] Provable Robust Watermarking for AI-Generated Text (arxiv.org)](https://arxiv.org/abs/2306.17439) |
+  | SWEET          | KGW Family    | [[2305.15060\] Who Wrote this Code? Watermarking for Code Generation (arxiv.org)](https://arxiv.org/abs/2305.15060) |
+  | UPV            | KGW Family    | [[2307.16230\] An Unforgeable Publicly Verifiable Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2307.16230) |
+  | EWD            | KGW Family    | [[2403.13485\] An Entropy-based Text Watermarking Detection Method (arxiv.org)](https://arxiv.org/abs/2403.13485) |
+  | SIR            | KGW Family    | [[2310.06356\] A Semantic Invariant Robust Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.06356) |
   | X-SIR          | KGW Family    | [[2402.14007\] Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.14007) |
-  | EXP            | Christ Family | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                           |
-  | EXP-Edit       | Christ Family | [[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)     
-
-  | ITS-Edit       | Christ Family | [[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                             |
+  | EXP            | Christ Family | https://www.scottaaronson.com/talks/watermark.ppt            |
+  | EXP-Edit       | Christ Family | [[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593) |
+  | ITS-Edit       | Christ Family | [[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593) |
+  
 - **Visualization Solutions:** The toolkit includes custom visualization tools that enable clear and insightful views into how different watermarking algorithms operate under various scenarios. These visualizations help demystify the algorithms' mechanisms, making them more understandable for users.
 
   <img src="images\mechanism_visualization.png" alt="mechanism_visualization" style="zoom:35%;" />
@@ -93,16 +93,16 @@ Below is the directory structure of the MarkLLM project, which encapsulates its 
 ```plaintext
 MarkLLM/
 ├── config/                     # Configuration files for various watermark algorithms
-│   ├── EWD.json             
-│   ├── EXPEdit.json         
-│   ├── EXP.json             
+│   ├── EWD.json           
+│   ├── EXPEdit.json       
+│   ├── EXP.json           
 │   ├── KGW.json
-│   ├── ITSEdit.json              
-│   ├── SIR.json              
-│   ├── SWEET.json           
-│   ├── Unigram.json          
-│   ├── UPV.json             
-│   └── XSIR.json             
+│   ├── ITSEdit.json            
+│   ├── SIR.json            
+│   ├── SWEET.json         
+│   ├── Unigram.json        
+│   ├── UPV.json           
+│   └── XSIR.json           
 ├── dataset/                    # Datasets used in the project
 │   ├── c4/
 │   ├── human_eval/
@@ -111,48 +111,48 @@ MarkLLM/
 │   ├── dataset.py              # Script for handling dataset operations within evaluations
 │   ├── examples/               # Scripts for automated evaluations using pipelines
 │   │   ├── assess_detectability.py  
-│   │   ├── assess_quality.py      
+│   │   ├── assess_quality.py    
 │   │   └── assess_robustness.py   
 │   ├── pipelines/              # Pipelines for structured evaluation processes
-│   │   ├── detection.py      
+│   │   ├── detection.py    
 │   │   └── quality_analysis.py 
 │   └── tools/                  # Evaluation tools
 │       ├── oracle.py
 │       ├── success_rate_calculator.py  
-        ├── text_editor.py           
+        ├── text_editor.py         
 │       └── text_quality_analyzer.py   
 ├── exceptions/                 # Custom exception definitions for error handling
 │   └── exceptions.py
 ├── font/                       # Fonts needed for visualization purposes
 ├── MarkLLM_demo.ipynb          # Jupyter Notebook
 ├── test/                       # Test cases and examples for user testing
-│   ├── test_method.py        
-│   ├── test_pipeline.py      
-│   └── test_visualize.py     
+│   ├── test_method.py      
+│   ├── test_pipeline.py    
+│   └── test_visualize.py   
 ├── utils/                      # Helper classes and functions supporting various operations
-│   ├── openai_utils.py       
+│   ├── openai_utils.py     
 │   ├── transformers_config.py 
-│   └── utils.py              
+│   └── utils.py            
 ├── visualize/                  # Visualization Solutions module of MarkLLM
-│   ├── color_scheme.py      
+│   ├── color_scheme.py    
 │   ├── data_for_visualization.py  
-│   ├── font_settings.py      
-│   ├── legend_settings.py    
+│   ├── font_settings.py    
+│   ├── legend_settings.py  
 │   ├── page_layout_settings.py 
-│   └── visualizer.py         
+│   └── visualizer.py       
 ├── watermark/                  # Implementation framework for watermark algorithms
 │   ├── auto_watermark.py       # AutoWatermark class
 │   ├── base.py                 # Base classes and functions for watermarking
-│   ├── ewd/                  
-│   ├── exp/                 
-│   ├── exp_edit/            
+│   ├── ewd/                
+│   ├── exp/               
+│   ├── exp_edit/          
 │   ├── kgw/
-│   ├── its_edit/                   
-│   ├── sir/                 
-│   ├── sweet/                
-│   ├── unigram/             
-│   ├── upv/                  
-│   └── xsir/                 
+│   ├── its_edit/                 
+│   ├── sir/               
+│   ├── sweet/              
+│   ├── unigram/           
+│   ├── upv/                
+│   └── xsir/               
 ├── README.md                   # Main project documentation
 └── requirements.txt            # Dependencies required for the project
 ```
@@ -412,7 +412,7 @@ my_watermark = AutoWatermark.load('KGW',
 quality_pipeline = DirectTextQualityAnalysisPipeline(
     dataset=my_dataset, 
     watermarked_text_editor_list=[TruncatePromptTextEditor()],
-    unwatermarked_text_editor_list=[],                                                 	
+    unwatermarked_text_editor_list=[],                                               
     analyzer=PPLCalculator(
         model=AutoModelForCausalLM.from_pretrained('..model/llama-7b/', device_map='auto'),                 		tokenizer=LlamaTokenizer.from_pretrained('..model/llama-7b/'),
         device=device),
