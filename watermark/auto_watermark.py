@@ -14,6 +14,7 @@ WATERMARK_MAPPING_NAMES={
     'UPV': 'watermark.upv.UPV',
     'SIR': 'watermark.sir.SIR',
     'XSIR': 'watermark.xsir.XSIR',
+    'DIP': 'watermark.dip.DIP',
     'EWD': 'watermark.ewd.EWD',
     'EXP': 'watermark.exp.EXP',
     'EXPEdit': 'watermark.exp_edit.EXPEdit',
