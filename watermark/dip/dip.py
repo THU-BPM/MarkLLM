@@ -158,6 +158,10 @@ class DIPUtils:
         s_all_portion_in_right = s_all_portion_in_right_2/2 + s_all_portion_in_right_1/2
         s_shift_logits = torch.log(s_all_portion_in_right)
         shift_logits = torch.gather(s_shift_logits, -1, unshuffle)
+        
+        # reweight_logits = p_logits + shift_logits
+        # shuffled_reweight_logits = torch.gather(reweight_logits, -1, shuffle)
+        # print(shuffled_reweight_logits[0][:boundary_1])
 
         return p_logits + shift_logits
     
@@ -179,65 +183,60 @@ class DIPUtils:
         
         return mask, seeds
     
-    def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
-        """Score the input_ids and return green_token_ratio and green_token_flags"""
+    # def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
+    #     """Score the input_ids and return green_token_ratio and green_token_flags"""
         
-        # print(self.config.generation_tokenizer.batch_decode(input_ids.unsqueeze(0), skip_special_tokens=True)[0])
-        num_tokens_scored = len(input_ids) - self.config.prefix_length
-        if num_tokens_scored < 1:
-            raise ValueError(
-                (
-                    f"Must have at least {1} token to score after "
-                    f"the first min_prefix_len={self.config.prefix_length} tokens required by the seeding scheme."
-                )
-            )
+    #     # print(self.config.generation_tokenizer.batch_decode(input_ids.unsqueeze(0), skip_special_tokens=True)[0])
+    #     num_tokens_scored = len(input_ids) - self.config.prefix_length
+    #     if num_tokens_scored < 1:
+    #         raise ValueError(
+    #             (
+    #                 f"Must have at least {1} token to score after "
+    #                 f"the first min_prefix_len={self.config.prefix_length} tokens required by the seeding scheme."
+    #             )
+    #         )
             
-        green_token_count = 0
-        green_token_flags = [-1 for _ in range(self.config.prefix_length)]
+    #     green_token_count = 0
+    #     green_token_flags = [-1 for _ in range(self.config.prefix_length)]
         
-        for idx in range(self.config.prefix_length, len(input_ids)):
-            curr_token = input_ids[idx]
+    #     for idx in range(self.config.prefix_length, len(input_ids)):
+    #         curr_token = input_ids[idx]
             
-            decoded_text = self.config.generation_tokenizer.batch_decode(input_ids[:idx].unsqueeze(0), skip_special_tokens=True)[0]
+    #         decoded_text = self.config.generation_tokenizer.batch_decode(input_ids[:idx].unsqueeze(0), skip_special_tokens=True)[0]
 
-            # Generate a texture key s based on input_ids[i - prefix : i]
-            mask, seeds = self.get_seed_for_cipher(input_ids[idx - self.config.prefix_length : idx].unsqueeze(0))
+    #         # Generate a texture key s based on input_ids[i - prefix : i]
+    #         mask, seeds = self.get_seed_for_cipher(input_ids[idx - self.config.prefix_length : idx].unsqueeze(0))
             
-            # 打开文件以追加模式 ('a' 表示追加模式，'w' 表示写模式会覆盖文件)
-            # with open('output.txt', 'a') as file:
-            #     file.write(decoded_text + '\n')  # 写入解码后的文本并换行
-            #     file.write(str(seeds[0]) + '\n')
-
-            # time.sleep(0.1)
+    #         # Generate the permutation of token set cipher
+    #         rng = [
+    #             torch.Generator(device=input_ids.device).manual_seed(seed) for seed in seeds
+    #         ]
+    #         mask = torch.tensor(mask, device=input_ids.device)
+    #         shuffle = self.from_random(
+    #             rng, input_ids.size(0)
+    #         )
             
-            # Generate the permutation of token set cipher
-            rng = [
-                torch.Generator(device=input_ids.device).manual_seed(seed) for seed in seeds
-            ]
-            mask = torch.tensor(mask, device=input_ids.device)
-            shuffle = self.from_random(
-                rng, input_ids.size(0)
-            )
+    #         # print("detect shuffle: ", shuffle[:50])
+    #         # Calculate the list of green tokens
+    #         greenlist_ids = shuffle[int(self.config.gamma * len(shuffle)) : ]
+    #         if curr_token in greenlist_ids:
+    #             green_token_count += 1
+    #             green_token_flags.append(1)
+    #         else:
+    #             green_token_flags.append(0)
             
-            # print("detect shuffle: ", shuffle[:50])
-            # Calculate the list of green tokens
-            greenlist_ids = shuffle[int(self.config.gamma * len(shuffle)) : ]
-            if curr_token in greenlist_ids:
-                green_token_count += 1
-                green_token_flags.append(1)
-            else:
-                green_token_flags.append(0)
-            
-        print(f"total length: {len(input_ids)}")
-        print(f"green token count: {green_token_count}")
+    #     print(f"total length: {len(input_ids)}")
+    #     print(f"green token count: {green_token_count}")
         
-        # Calculate the score
-        green_token_ratio = green_token_count / len(input_ids) - (1 - self.config.gamma)
-        return green_token_ratio, green_token_flags
+    #     # Calculate the score
+    #     green_token_ratio = green_token_count / len(input_ids) - (1 - self.config.gamma)
+    #     return green_token_ratio, green_token_flags
     
     def get_green_token_quantile(self, input_ids: torch.LongTensor, vocab_size, current_token):
         """Get the vocab quantile of current token"""
-        mask, seeds = self._extract_context_code(input_ids)
+        mask, seeds = self.get_seed_for_cipher(input_ids.unsqueeze(0))
+        # print(f"seed: f{seeds[0]}")
+        
         rng = [
             torch.Generator(device=input_ids.device).manual_seed(seed) for seed in seeds
         ]
@@ -250,7 +249,10 @@ class DIPUtils:
         # （对各个batch）当前token的id 的位置下标组成的tensor
         # token_quantile是该token所处在词表vocab中的位置的百分比
         # 用于后续detect中的gamma阈值判断
-        token_quantile = [(torch.where(shuffle == current_token)[0] +1)/vocab_size]
+        # print(shuffle[:3])
+        # print(f"position: {torch.where(shuffle[0] == current_token)[0]}")
+        
+        token_quantile = [(torch.where(shuffle[0] == current_token)[0] +1)/vocab_size]
         
         return token_quantile
     
@@ -261,11 +263,27 @@ class DIPUtils:
         for i in range(input_ids.shape[-1] - 1):
             pre = input_ids[ : i+1]
             cur = input_ids[i+1]
+            # print(f"cur token:{cur}")
             token_quantile = self.get_green_token_quantile(pre, vocab_size, cur)
-            
+            # print(f"token_quantile: {token_quantile}")
             scores[i] = torch.stack(token_quantile).reshape(-1)
         
         return scores
+    
+    def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
+        
+        score = self.get_dip_score(input_ids, self.config.vocab_size)
+        green_tokens = torch.sum(score >= self.config.gamma, dim=-1, keepdim=False)
+        print(green_tokens.item())
+        
+        green_token_flags = torch.zeros_like(score)
+        condition_indices = torch.nonzero(score >= self.config.gamma, as_tuple=False)
+        green_token_flags[condition_indices] = 1
+        green_token_flags[:self.config.prefix_length] = -1
+        
+        mid2 = (green_tokens - (1-self.config.gamma) * input_ids.size(-1)) / sqrt(input_ids.size(-1))
+        
+        return mid2.item(), green_token_flags.tolist()
 
 class DIPLogitsProcessor(LogitsProcessor):
     """LogitsProcessor for DiP algorithm, process logits to add watermark."""
@@ -285,13 +303,6 @@ class DIPLogitsProcessor(LogitsProcessor):
         """Apply watermark to the scores."""
         mask, seeds = self.utils.get_seed_for_cipher(input_ids)
         
-        # decoded_text = self.config.generation_tokenizer.batch_decode(input_ids, skip_special_tokens=True)[0]
-
-        # 打开文件以追加模式 ('a' 表示追加模式，'w' 表示写模式会覆盖文件)
-        # with open('output.txt', 'a') as file:
-        #     file.write(decoded_text + '\n')  # 写入解码后的文本并换行
-        #     file.write(str(seeds[0]) + '\n')
-        
         rng = [
             torch.Generator(device=scores.device).manual_seed(seed) for seed in seeds
         ]
@@ -299,8 +310,7 @@ class DIPLogitsProcessor(LogitsProcessor):
         shuffle = self.utils.from_random(
             rng, scores.size(1)
         )
-        
-        # print("gen shuffle: ", shuffle[:50])
+
         reweighted_scores = self.utils.reweight_logits(shuffle, scores)
         
         return mask, reweighted_scores
@@ -311,8 +321,6 @@ class DIPLogitsProcessor(LogitsProcessor):
             return scores
         
         mask, reweighted_scores = self._apply_watermark(input_ids, scores)
-
-        # time.sleep(0.1)
         
         if self.config.ignore_history:
             return reweighted_scores
@@ -356,20 +364,21 @@ class DIP(BaseWatermark):
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the text."""
 
-        print("text:")
-        print(text)
+        # print("text:")
+        # print(text)
         # Encode the text
         encoded_text = self.config.generation_tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.config.device)
 
-        decoded_text = self.config.generation_tokenizer.batch_decode(encoded_text.unsqueeze(0), skip_special_tokens=False)[0]
+        # decoded_text = self.config.generation_tokenizer.batch_decode(encoded_text.unsqueeze(0), skip_special_tokens=False)[0]
         
-        print('decode test:')
-        print(decoded_text)
+        # print('decode test:')
+        # print(decoded_text)
 
         # Compute green token ratio using a utility method
-        green_token_ratio, _ = self.utils.score_sequence(encoded_text)
+        z_score, _ = self.utils.score_sequence(encoded_text)
+        # green_token_ratio, _ = self.utils.score_sequence(encoded_text)
         
-        z_score = abs(green_token_ratio * sqrt(len(encoded_text)))
+        # z_score = (green_token_ratio * sqrt(len(encoded_text)))
         
         # prob = exp(-2 * z_score * z_score)
         

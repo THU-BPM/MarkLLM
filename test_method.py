@@ -8,6 +8,12 @@ import torch
 from watermark.auto_watermark import AutoWatermark
 from utils.transformers_config import TransformersConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from visualize.font_settings import FontSettings
+
+from visualize.visualizer import DiscreteVisualizer
+from visualize.legend_settings import DiscreteLegendSettings
+from visualize.page_layout_settings import PageLayoutSettings
+from visualize.color_scheme import ColorSchemeForDiscreteVisualization
 
 
 # Load data
@@ -29,6 +35,7 @@ for line in lines:
 def test_algorithm(algorithm_name):
     # Check algorithm name
     assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR', 'XSIR', 'DIP', 'UPV', 'EXP', 'EXPEdit','ITSEdit']
+    print("done")
 
     # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -42,33 +49,46 @@ def test_algorithm(algorithm_name):
                                             min_length=230,
                                             do_sample=True,
                                             no_repeat_ngram_size=4)
+    print("done")
+    visualizer = DiscreteVisualizer(color_scheme=ColorSchemeForDiscreteVisualization(),
+                                font_settings=FontSettings(), 
+                                page_layout_settings=PageLayoutSettings(),
+                                legend_settings=DiscreteLegendSettings())
     
     # Load watermark algorithm
     myWatermark = AutoWatermark.load(f'{algorithm_name}', 
                                      algorithm_config=f'config/{algorithm_name}.json',
                                      transformers_config=transformers_config)
 
-    #for prompt, natural_text in zip(prompts, natural_texts):
-    with open('output.txt', 'a') as file:
-            file.write('gen started!' + '\n\n')  # 写入解码后的文本并换行
-            
-            
-    #prompts[0] = 'Let\'s generate a random texts with over 500 words.'
-    watermarked_text = myWatermark.generate_watermarked_text(prompts[0])
-    print(watermarked_text[len(prompts[0]):])
-    # unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
-    with open('output.txt', 'a') as file:
-            file.write('\n\ngen end!' + '\n\n')  # 写入解码后的文本并换行
-            file.write('detect started!\n\n')
-    detect_result = myWatermark.detect_watermark(watermarked_text[len(prompts[0]):])
+    i = 1
+    print("done")
+    for prompt, natural_text in zip(prompts, natural_texts):
     
-    print(detect_result)
-    # detect_result = myWatermark.detect_watermark(unwatermarked_text)
-    # print(detect_result)
-    detect_result = myWatermark.detect_watermark(natural_texts[0])
-    print(detect_result)
-    
-    print()
+        watermarked_text = myWatermark.generate_watermarked_text(prompt)
+        unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
+        detect_result = myWatermark.detect_watermark(watermarked_text)
+        watermarked_data = myWatermark.get_data_for_visualization(watermarked_text)
+        watermarked_img = visualizer.visualize(data=watermarked_data, 
+                                       show_text=True, 
+                                       visualize_weight=True, 
+                                       display_legend=True)
+        watermarked_img.save(f"DIP_watermarked{i}.png")
+        
+        print(detect_result)
+        detect_result = myWatermark.detect_watermark(unwatermarked_text)
+        unwatermarked_data = myWatermark.get_data_for_visualization(unwatermarked_text)
+        unwatermarked_img = visualizer.visualize(data=unwatermarked_data,
+                                         show_text=True, 
+                                         visualize_weight=True, 
+                                         display_legend=True)
+        unwatermarked_img.save(f"DIP_unwatermarked{i}.png")
+        
+        print(detect_result)
+        detect_result = myWatermark.detect_watermark(natural_text)
+        print(detect_result)
+        
+        i = i + 1
+        print()
 
 
 if __name__ == '__main__':

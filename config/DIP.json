@@ -1,10 +1,10 @@
 {
     "algorithm_name": "DIP",
     "gamma": 0.5,
-    "alpha": 0.45,
+    "alpha": 0.3,
     "key": 42,
     "prefix_length": 1,
-    "z_threshold": 1.073,
+    "z_threshold": 1.513,
     "p_threshold": 0.01,
     "ignore_history": 1
 }
