@@ -4,12 +4,11 @@
 # ================================================
 
 import torch
-import time
 import hashlib
 import random
 from typing import Tuple, Union
 import torch.nn.functional as F
-from math import sqrt, log, exp, ceil
+from math import sqrt
 from functools import partial
 from ..base import BaseWatermark
 from utils.utils import load_config_file
@@ -45,7 +44,6 @@ class DIPConfig:
         self.alpha = config_dict['alpha']
         self.ignore_history = bool(config_dict['ignore_history'])
         self.z_threshold = config_dict['z_threshold']
-        self.p_threshold = config_dict['p_threshold']
         self.prefix_length = config_dict['prefix_length']
 
         self.generation_model = transformers_config.model
@@ -102,35 +100,9 @@ class DIPUtils:
         else:
             shuffle = torch.randperm(vocab_size, generator=rng, device=rng.device)
         return shuffle
-    
-    # def _f_alpha(self, shuffled_logits: torch.LongTensor, i: int, _alpha: float) -> float:
-    #     """Calculate the f_alpha(i|theta) function."""
-    #     return max(shuffled_logits[:i+1].sum().item() - _alpha, 0) / (1 - _alpha)
-    
-    # def _p_alpha_w(self, shuffled_logits: torch.LongTensor, i: int, _alpha: float) -> float:
-    #     """Calculate the p_alpha(w_i|theta) function."""
-    #     return self._f_alpha(shuffled_logits, i, _alpha) - self._f_alpha(shuffled_logits, i-1, _alpha)
-    
-    # def reweight_logits(self, shuffle: torch.Tensor, p_logits: torch.LongTensor) -> torch.LongTensor:
-    #     """Reweight the logits using the shuffle and alpha."""
-    #     unshuffle = torch.argsort(shuffle, dim=-1)
-        
-    #     shuffled_logits = torch.gather(p_logits, -1, shuffle)
-    #     reweighted_logits = torch.zeros_like(p_logits)
-    #     for i in range(1, len(p_logits) + 1):
-    #         p_alpha_w = self._p_alpha_w(shuffled_logits, i, self.config.alpha)
-    #         p_1_minus_alpha_w = self._p_alpha_w(shuffled_logits, i, 1 - self.config.alpha)
-    #         reweighted_logits[i-1] = (1 - self.config.alpha) * p_alpha_w + self.config.alpha * p_1_minus_alpha_w
-            
-    #     # Restore the original order using unshuffle
-    #     reweighted_logits = torch.gather(reweighted_logits, -1, unshuffle)
-        
-    #     return reweighted_logits
-
 
     def reweight_logits(self, shuffle: torch.LongTensor, p_logits: torch.FloatTensor) -> torch.FloatTensor:
         """Reweight the logits using the shuffle and alpha."""
-        
         unshuffle = torch.argsort(shuffle, dim=-1)
         
         s_p_logits = torch.gather(p_logits, -1, shuffle)
@@ -158,10 +130,6 @@ class DIPUtils:
         s_all_portion_in_right = s_all_portion_in_right_2/2 + s_all_portion_in_right_1/2
         s_shift_logits = torch.log(s_all_portion_in_right)
         shift_logits = torch.gather(s_shift_logits, -1, unshuffle)
-        
-        # reweight_logits = p_logits + shift_logits
-        # shuffled_reweight_logits = torch.gather(reweight_logits, -1, shuffle)
-        # print(shuffled_reweight_logits[0][:boundary_1])
 
         return p_logits + shift_logits
     
@@ -178,64 +146,12 @@ class DIPUtils:
                 for context_code in context_codes 
             ]
         )
-        # print(seeds[0])
-        # time.sleep(0.1)
         
         return mask, seeds
-    
-    # def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
-    #     """Score the input_ids and return green_token_ratio and green_token_flags"""
-        
-    #     # print(self.config.generation_tokenizer.batch_decode(input_ids.unsqueeze(0), skip_special_tokens=True)[0])
-    #     num_tokens_scored = len(input_ids) - self.config.prefix_length
-    #     if num_tokens_scored < 1:
-    #         raise ValueError(
-    #             (
-    #                 f"Must have at least {1} token to score after "
-    #                 f"the first min_prefix_len={self.config.prefix_length} tokens required by the seeding scheme."
-    #             )
-    #         )
-            
-    #     green_token_count = 0
-    #     green_token_flags = [-1 for _ in range(self.config.prefix_length)]
-        
-    #     for idx in range(self.config.prefix_length, len(input_ids)):
-    #         curr_token = input_ids[idx]
-            
-    #         decoded_text = self.config.generation_tokenizer.batch_decode(input_ids[:idx].unsqueeze(0), skip_special_tokens=True)[0]
-
-    #         # Generate a texture key s based on input_ids[i - prefix : i]
-    #         mask, seeds = self.get_seed_for_cipher(input_ids[idx - self.config.prefix_length : idx].unsqueeze(0))
-            
-    #         # Generate the permutation of token set cipher
-    #         rng = [
-    #             torch.Generator(device=input_ids.device).manual_seed(seed) for seed in seeds
-    #         ]
-    #         mask = torch.tensor(mask, device=input_ids.device)
-    #         shuffle = self.from_random(
-    #             rng, input_ids.size(0)
-    #         )
-            
-    #         # print("detect shuffle: ", shuffle[:50])
-    #         # Calculate the list of green tokens
-    #         greenlist_ids = shuffle[int(self.config.gamma * len(shuffle)) : ]
-    #         if curr_token in greenlist_ids:
-    #             green_token_count += 1
-    #             green_token_flags.append(1)
-    #         else:
-    #             green_token_flags.append(0)
-            
-    #     print(f"total length: {len(input_ids)}")
-    #     print(f"green token count: {green_token_count}")
-        
-    #     # Calculate the score
-    #     green_token_ratio = green_token_count / len(input_ids) - (1 - self.config.gamma)
-    #     return green_token_ratio, green_token_flags
     
     def get_green_token_quantile(self, input_ids: torch.LongTensor, vocab_size, current_token):
         """Get the vocab quantile of current token"""
         mask, seeds = self.get_seed_for_cipher(input_ids.unsqueeze(0))
-        # print(f"seed: f{seeds[0]}")
         
         rng = [
             torch.Generator(device=input_ids.device).manual_seed(seed) for seed in seeds
@@ -246,14 +162,7 @@ class DIPUtils:
             rng, vocab_size
         )
         
-        # （对各个batch）当前token的id 的位置下标组成的tensor
-        # token_quantile是该token所处在词表vocab中的位置的百分比
-        # 用于后续detect中的gamma阈值判断
-        # print(shuffle[:3])
-        # print(f"position: {torch.where(shuffle[0] == current_token)[0]}")
-        
         token_quantile = [(torch.where(shuffle[0] == current_token)[0] +1)/vocab_size]
-        
         return token_quantile
     
     def get_dip_score(self, input_ids: torch.LongTensor, vocab_size):
@@ -263,15 +172,13 @@ class DIPUtils:
         for i in range(input_ids.shape[-1] - 1):
             pre = input_ids[ : i+1]
             cur = input_ids[i+1]
-            # print(f"cur token:{cur}")
             token_quantile = self.get_green_token_quantile(pre, vocab_size, cur)
-            # print(f"token_quantile: {token_quantile}")
             scores[i] = torch.stack(token_quantile).reshape(-1)
         
         return scores
     
     def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
-        
+        """Score the input_ids and return z_score and green_token_flags."""
         score = self.get_dip_score(input_ids, self.config.vocab_size)
         green_tokens = torch.sum(score >= self.config.gamma, dim=-1, keepdim=False)
         print(green_tokens.item())
@@ -281,9 +188,8 @@ class DIPUtils:
         green_token_flags[condition_indices] = 1
         green_token_flags[:self.config.prefix_length] = -1
         
-        mid2 = (green_tokens - (1-self.config.gamma) * input_ids.size(-1)) / sqrt(input_ids.size(-1))
-        
-        return mid2.item(), green_token_flags.tolist()
+        z_score = (green_tokens - (1-self.config.gamma) * input_ids.size(-1)) / sqrt(input_ids.size(-1))
+        return z_score.item(), green_token_flags.tolist()
 
 class DIPLogitsProcessor(LogitsProcessor):
     """LogitsProcessor for DiP algorithm, process logits to add watermark."""
@@ -363,33 +269,12 @@ class DIP(BaseWatermark):
     
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the text."""
-
-        # print("text:")
-        # print(text)
-        # Encode the text
         encoded_text = self.config.generation_tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.config.device)
 
-        # decoded_text = self.config.generation_tokenizer.batch_decode(encoded_text.unsqueeze(0), skip_special_tokens=False)[0]
-        
-        # print('decode test:')
-        # print(decoded_text)
-
-        # Compute green token ratio using a utility method
+        # Compute z-score using a utility method
         z_score, _ = self.utils.score_sequence(encoded_text)
-        # green_token_ratio, _ = self.utils.score_sequence(encoded_text)
         
-        # z_score = (green_token_ratio * sqrt(len(encoded_text)))
-        
-        # prob = exp(-2 * z_score * z_score)
-        
-        # print(prob)
-
-        # Calculate the K-L divergence
-        # gm_ratio = green_token_ratio + (1 - self.config.gamma)
-        # kl_div = gm_ratio * log(gm_ratio / (1 - self.config.gamma)) + (1 - gm_ratio) * log((1 - gm_ratio) / self.config.gamma)
-        # prob = exp(-kl_div * len(encoded_text))
-        
-        # Determine if the green token ratio indicates a watermark
+        # Determine if the z-score indicates a watermark
         is_watermarked = z_score > self.config.z_threshold
 
         # Return results based on the return_dict flag
