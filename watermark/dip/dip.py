@@ -149,7 +149,7 @@ class DIPUtils:
         
         return mask, seeds
     
-    def get_green_token_quantile(self, input_ids: torch.LongTensor, vocab_size, current_token):
+    def _get_green_token_quantile(self, input_ids: torch.LongTensor, vocab_size, current_token):
         """Get the vocab quantile of current token"""
         mask, seeds = self.get_seed_for_cipher(input_ids.unsqueeze(0))
         
@@ -165,21 +165,21 @@ class DIPUtils:
         token_quantile = [(torch.where(shuffle[0] == current_token)[0] +1)/vocab_size]
         return token_quantile
     
-    def get_dip_score(self, input_ids: torch.LongTensor, vocab_size):
+    def _get_dip_score(self, input_ids: torch.LongTensor, vocab_size):
         """Get the DiP score of the input_ids"""
         scores = torch.zeros(input_ids.shape, device=input_ids.device)
         
         for i in range(input_ids.shape[-1] - 1):
             pre = input_ids[ : i+1]
             cur = input_ids[i+1]
-            token_quantile = self.get_green_token_quantile(pre, vocab_size, cur)
+            token_quantile = self._get_green_token_quantile(pre, vocab_size, cur)
             scores[i] = torch.stack(token_quantile).reshape(-1)
         
         return scores
     
     def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
         """Score the input_ids and return z_score and green_token_flags."""
-        score = self.get_dip_score(input_ids, self.config.vocab_size)
+        score = self._get_dip_score(input_ids, self.config.vocab_size)
         green_tokens = torch.sum(score >= self.config.gamma, dim=-1, keepdim=False)
         print(green_tokens.item())
         
