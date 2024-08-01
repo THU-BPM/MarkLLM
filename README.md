@@ -20,6 +20,7 @@
   - [Applying evaluation pipelines](#applying-evaluation-pipelines)
 - [More user examples](#more-user-examples)
 - [Demo jupyter notebooks](#demo-jupyter-notebooks)
+- [Python package](#python-package)
 - [Citations](#citations)
 
 ### Demo | Paper
@@ -29,7 +30,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King*
 
 ### Updates
-
+- 🎉 **(2024.08.01)** Released as a [python package](https://pypi.org/project/markllm/)! Try `pip install markllm`. We provide a user example at the end of this file.
 - 🎉 **(2024.07.13)** Add ITSEdit watermarking method. Thanks to Yiming Liu for his PR!
 - 🎉 **(2024.07.09)** Add more hashing schemes for KGW (skip, min, additive, selfhash). Thanks to Yichen Di for his PR!
 - 🎉 **(2024.07.08)** Add top-k filter for watermarking methods in Christ family. Thanks to Kai Shi for his PR!
@@ -447,6 +448,41 @@ export PYTHONPATH="path_to_the_MarkLLM_project:$PYTHONPATH"
 ### Demo jupyter notebooks
 
 In addition to the Colab Jupyter notebook we provide (some models cannot be downloaded due to storage limits), you can also easily deploy using `MarkLLM_demo.ipynb` on your local machine.
+
+### Python Package
+A user example:
+```python
+import torch
+from markllm.watermark.auto_watermark import AutoWatermark
+from markllm.utils.transformers_config import TransformersConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Device
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Transformers config
+transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained('facebook/opt-1.3b').to(device),
+                                         tokenizer=AutoTokenizer.from_pretrained('facebook/opt-1.3b'),
+                                         vocab_size=50272,
+                                         device=device,
+                                         max_new_tokens=200,
+                                         min_length=230,
+                                         do_sample=True,
+                                         no_repeat_ngram_size=4)
+  
+# Load watermark algorithm
+myWatermark = AutoWatermark.load('KGW', transformers_config=transformers_config)
+
+# Prompt
+prompt = 'Good Morning.'
+
+# Generate and detect
+watermarked_text = myWatermark.generate_watermarked_text(prompt)
+detect_result = myWatermark.detect_watermark(watermarked_text)
+unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
+detect_result = myWatermark.detect_watermark(unwatermarked_text)
+```
+
 
 ### Citations
 
