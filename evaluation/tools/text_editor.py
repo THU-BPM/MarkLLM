@@ -17,7 +17,7 @@ from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
 from utils.openai_utils import OpenAIAPI
 from exceptions.exceptions import DiversityValueError
-from evaluation.tools.quality_oracle import QualityOracle
+from evaluation.tools.oracle import QualityOracle
 from transformers import T5Tokenizer, T5ForConditionalGeneration, BertTokenizer, BertForMaskedLM
 
 class TextEditor:

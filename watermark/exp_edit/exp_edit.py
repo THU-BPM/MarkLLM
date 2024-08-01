@@ -26,7 +26,7 @@ class EXPEditConfig:
                 algorithm_config (str): Path to the algorithm configuration file.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        if algorithm_config is not None:
+        if algorithm_config is None:
             config_dict = load_config_file('config/EXPEdit.json')
         else:
             config_dict = load_config_file(algorithm_config)
