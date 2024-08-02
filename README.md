@@ -452,35 +452,52 @@ In addition to the Colab Jupyter notebook we provide (some models cannot be down
 ### Python Package
 A user example:
 ```python
-import torch
+import torch, random
+import numpy as np
 from markllm.watermark.auto_watermark import AutoWatermark
 from markllm.utils.transformers_config import TransformersConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Setting random seed for reproducibility
+seed = 30
+torch.manual_seed(seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(seed)
+np.random.seed(seed)
+random.seed(seed)
 
 # Device
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Transformers config
-transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained('facebook/opt-1.3b').to(device),
-                                         tokenizer=AutoTokenizer.from_pretrained('facebook/opt-1.3b'),
-                                         vocab_size=50272,
-                                         device=device,
-                                         max_new_tokens=200,
-                                         min_length=230,
-                                         do_sample=True,
-                                         no_repeat_ngram_size=4)
-  
+model_name = 'facebook/opt-1.3b'
+transformers_config = TransformersConfig(
+    model=AutoModelForCausalLM.from_pretrained(model_name).to(device),
+    tokenizer=AutoTokenizer.from_pretrained(model_name),
+    vocab_size=50272,
+    device=device,
+    max_new_tokens=200,
+    min_length=230,
+    do_sample=True,
+    no_repeat_ngram_size=4
+)
+
 # Load watermark algorithm
 myWatermark = AutoWatermark.load('KGW', transformers_config=transformers_config)
 
-# Prompt
+# Prompt and generation
 prompt = 'Good Morning.'
-
-# Generate and detect
 watermarked_text = myWatermark.generate_watermarked_text(prompt)
-detect_result = myWatermark.detect_watermark(watermarked_text)
+# How would I get started with Python...
 unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
-detect_result = myWatermark.detect_watermark(unwatermarked_text)
+# I am happy that you are back with ...
+
+# Detection
+detect_result_watermarked = myWatermark.detect_watermark(watermarked_text)
+# {'is_watermarked': True, 'score': 9.287487590439852}
+detect_result_unwatermarked = myWatermark.detect_watermark(unwatermarked_text)
+# {'is_watermarked': False, 'score': -0.8443170536763502}
+
 ```
 
 
