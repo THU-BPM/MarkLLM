@@ -31,6 +31,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu*
 
 ### Updates
+- 🎉 **(2024.08.08)** Add [DiPmark](https://arxiv.org/abs/2310.07710) watermarking method. Thanks to Sheng Guan for his PR!
 - 🎉 **(2024.08.01)** Released as a [python package](https://pypi.org/project/markllm/)! Try `pip install markllm`. We provide a user example at the end of this file.
 - 🎉 **(2024.07.13)** Add ITSEdit watermarking method. Thanks to Yiming Liu for his PR!
 - 🎉 **(2024.07.09)** Add more hashing schemes for KGW (skip, min, additive, selfhash). Thanks to Yichen Di for his PR!
@@ -68,6 +69,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | EWD            | KGW Family    | [[2403.13485\] An Entropy-based Text Watermarking Detection Method (arxiv.org)](https://arxiv.org/abs/2403.13485) |
   | SIR            | KGW Family    | [[2310.06356\] A Semantic Invariant Robust Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.06356) |
   | X-SIR          | KGW Family    | [[2402.14007\] Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.14007) |
+  | DiPmark       | KGW Family | [[2310.07710\] A Resilient and Accessible Distribution-Preserving Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.07710) |
   | EXP            | Christ Family | https://www.scottaaronson.com/talks/watermark.ppt            |
   | EXP-Edit       | Christ Family | [[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593) |
   | ITS-Edit       | Christ Family | [[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593) |
