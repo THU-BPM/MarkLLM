@@ -34,7 +34,7 @@ natural_text = item['natural_text']
 
 def test_algorithm(algorithm_name):
     # Check algorithm name
-    assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR', 'XSIR', 'UPV', 'EXP', 'EXPEdit','ITSEdit']
+    assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR', 'XSIR', 'DIP', 'Unbiased', 'UPV', 'EXP', 'EXPGumbel', 'EXPEdit','ITSEdit']
 
     # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -65,6 +65,6 @@ def test_algorithm(algorithm_name):
 
 
 if __name__ == '__main__':
-    test_algorithm('KGW')
+    test_algorithm('EXPGumbel')
 
 

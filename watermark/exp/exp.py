@@ -43,7 +43,7 @@ class EXPConfig:
         else:
             config_dict = load_config_file(algorithm_config)
         if config_dict['algorithm_name'] != 'EXP':
-            raise AlgorithmNameMismatchError('KGW', config_dict['algorithm_name'])
+            raise AlgorithmNameMismatchError('EXP', config_dict['algorithm_name'])
 
         self.prefix_length = config_dict['prefix_length']
         self.hash_key = config_dict['hash_key']

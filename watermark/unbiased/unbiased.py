@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ================================================
-# dip.py
-# Description: Implementation of DiPmark algorithm
-# ================================================
+# ===========================================================
+# unbiased.py
+# Description: Implementation of Unbiased Watermark algorithm
+# ===========================================================
 
 import torch
 import hashlib
@@ -32,30 +32,30 @@ from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
 
 
-class DIPConfig:
-    """Config class for DiP algorithm, load config file and initialize parameters."""
+class UnbiasedConfig:
+    """Config class for Unbiased watermark algorithm, load config file and initialize parameters."""
 
     def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
         """
-            Initialize the DiP configuration.
+            Initialize the Unbiased configuration.
 
             Parameters:
                 algorithm_config (str): Path to the algorithm configuration file.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
         if algorithm_config is None:
-            config_dict = load_config_file('config/DIP.json')
+            config_dict = load_config_file('config/Unbiased.json')
         else:
             config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'DIP':
-            raise AlgorithmNameMismatchError('DIP', config_dict['algorithm_name'])
+        if config_dict['algorithm_name'] != 'Unbiased':
+            raise AlgorithmNameMismatchError('Unbiased', config_dict['algorithm_name'])
         
         random.seed(config_dict['key'])
         hash_key = random.getrandbits(1024).to_bytes(128, "big")
         self.hash_key = hash_key
 
         self.gamma = config_dict['gamma']
-        self.alpha = config_dict['alpha']
+        self.alpha = 0.5
         self.ignore_history = bool(config_dict['ignore_history'])
         self.z_threshold = config_dict['z_threshold']
         self.prefix_length = config_dict['prefix_length']
@@ -66,15 +66,15 @@ class DIPConfig:
         self.device = transformers_config.device
         self.gen_kwargs = transformers_config.gen_kwargs
 
-class DIPUtils:
-    """Utility class for DiP algorithm, contains helper functions."""
+class UnbiasedUtils:
+    """Utility class for Unbiased watermark algorithm, contains helper functions."""
 
-    def __init__(self, config: DIPConfig, *args, **kwargs) -> None:
+    def __init__(self, config: UnbiasedConfig, *args, **kwargs) -> None:
         """
-            Initialize the DIP utility class.
+            Initialize the Unbiased utility class.
 
             Parameters:
-                config (DIPConfig): Configuration for the DiP algorithm.
+                config (UnbiasedConfig): Configuration for the unbiased algorithm.
         """
         self.config = config
         self.rng = torch.Generator(device=self.config.device)
@@ -179,8 +179,8 @@ class DIPUtils:
         token_quantile = [(torch.where(shuffle[0] == current_token)[0] +1)/vocab_size]
         return token_quantile
     
-    def _get_dip_score(self, input_ids: torch.LongTensor, vocab_size):
-        """Get the DiP score of the input_ids"""
+    def _get_score(self, input_ids: torch.LongTensor, vocab_size):
+        """Get the score of the input_ids"""
         scores = torch.zeros(input_ids.shape, device=input_ids.device)
         
         for i in range(input_ids.shape[-1] - 1):
@@ -193,7 +193,7 @@ class DIPUtils:
     
     def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
         """Score the input_ids and return z_score and green_token_flags."""
-        score = self._get_dip_score(input_ids, self.config.vocab_size)
+        score = self._get_score(input_ids, self.config.vocab_size)
         green_tokens = torch.sum(score >= self.config.gamma, dim=-1, keepdim=False)
         
         green_token_flags = torch.zeros_like(score)
@@ -204,16 +204,16 @@ class DIPUtils:
         z_score = (green_tokens - (1-self.config.gamma) * input_ids.size(-1)) / sqrt(input_ids.size(-1))
         return z_score.item(), green_token_flags.tolist()
 
-class DIPLogitsProcessor(LogitsProcessor):
+class UnbiasedLogitsProcessor(LogitsProcessor):
     """LogitsProcessor for DiP algorithm, process logits to add watermark."""
 
-    def __init__(self, config: DIPConfig, utils: DIPUtils, *args, **kwargs) -> None:
+    def __init__(self, config: UnbiasedConfig, utils: UnbiasedUtils, *args, **kwargs) -> None:
         """
-            Initialize the DIP logits processor.
+            Initialize the Unbiased logits processor.
 
             Parameters:
-                config (DIPConfig): Configuration for the DiP algorithm.
-                utils (DIPUtils): Utility class for the DiP algorithm.
+                config (UnbiasedConfig): Configuration for the DiP algorithm.
+                utils (UnbiasedUtils): Utility class for the DiP algorithm.
         """
         self.config = config
         self.utils = utils
@@ -247,20 +247,20 @@ class DIPLogitsProcessor(LogitsProcessor):
             return torch.where(mask[:, None], scores, reweighted_scores)
     
 
-class DIP(BaseWatermark):
-    """Top-level class for DIP algorithm."""
+class UnbiasedWatermark(BaseWatermark):
+    """Top-level class for Unbiased algorithm."""
 
     def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
         """
-            Initialize the DIP algorithm.
+            Initialize the Unbiased algorithm.
 
             Parameters:
                 algorithm_config (str): Path to the algorithm configuration file.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = DIPConfig(algorithm_config, transformers_config)
-        self.utils = DIPUtils(self.config)
-        self.logits_processor = DIPLogitsProcessor(self.config, self.utils)
+        self.config = UnbiasedConfig(algorithm_config, transformers_config)
+        self.utils = UnbiasedUtils(self.config)
+        self.logits_processor = UnbiasedLogitsProcessor(self.config, self.utils)
     
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate watermarked text."""

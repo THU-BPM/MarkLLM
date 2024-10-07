@@ -1,0 +1,9 @@
+{
+    "algorithm_name": "EXPGumbel",
+    "prefix_length": 2,
+    "eps": 1e-20,
+    "threshold": 1e-4,
+    "sequence_length": 200,
+    "temperature": 0.2,
+    "seed": 42
+}
