@@ -1,28 +1,33 @@
 # MarkLLM: An Open-Source Toolkit for LLM Watermarking
 
+<a href="https://2024.emnlp.org/program/demo/" alt="EMNLP 2024 Demo">
+    <img src="https://img.shields.io/badge/EMNLP%202024-Demo-blue" /></a>
 <a href="https://arxiv.org/abs/2405.10051" alt="arXiv">
     <img src="https://img.shields.io/badge/arXiv-2405.10051-b31b1b.svg?style=flat" /></a>
 <a href="https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing" alt="Colab">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 
+
 ### Contents
 
-- [Demo \| Paper](#demo--paper)
-- [Updates](#updates)
-- [Introduction to MarkLLM](#introduction-to-markllm)
-  - [Overview](#overview)
-  - [Key Features of MarkLLM](#key-features-of-markllm)
-- [Repo contents](#repo-contents)
-- [How to use the toolkit in your own code](#how-to-use-the-toolkit-in-your-own-code)
-  - [Setting up the environment](#setting-up-the-environment)
-  - [Invoking watermarking algorithms](#invoking-watermarking-algorithms)
-  - [Visualizing mechanisms](#visualizing-mechanisms)
-  - [Applying evaluation pipelines](#applying-evaluation-pipelines)
-- [More user examples](#more-user-examples)
-- [Demo jupyter notebooks](#demo-jupyter-notebooks)
-- [Python package](#python-package)
-- [Related Materials](#related-materials)
-- [Citations](#citations)
+- [MarkLLM: An Open-Source Toolkit for LLM Watermarking](#markllm-an-open-source-toolkit-for-llm-watermarking)
+    - [Contents](#contents)
+    - [Demo | Paper](#demo--paper)
+    - [Updates](#updates)
+    - [Introduction to MarkLLM](#introduction-to-markllm)
+      - [Overview](#overview)
+      - [Key Features of MarkLLM](#key-features-of-markllm)
+    - [Repo contents](#repo-contents)
+    - [How to use the toolkit in your own code](#how-to-use-the-toolkit-in-your-own-code)
+      - [Setting up the environment](#setting-up-the-environment)
+      - [Invoking watermarking algorithms](#invoking-watermarking-algorithms)
+      - [Visualizing mechanisms](#visualizing-mechanisms)
+      - [Applying evaluation pipelines](#applying-evaluation-pipelines)
+    - [More user examples](#more-user-examples)
+    - [Demo jupyter notebooks](#demo-jupyter-notebooks)
+    - [Python Package](#python-package)
+    - [Related Materials](#related-materials)
+    - [Citations](#citations)
 
 ### Demo | Paper
 
