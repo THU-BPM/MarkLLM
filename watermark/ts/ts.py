@@ -28,7 +28,6 @@ from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
 from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
-# from MarkLLM.watermark.TS.ts_config import TSConfig
 from transformers import AutoModel, OPTForCausalLM, AutoTokenizer, LogitsProcessorList
 from watermark.ts.TS_networks import DeltaNetwork, GammaNetwork
 
