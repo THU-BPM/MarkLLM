@@ -13,14 +13,11 @@
 # limitations under the License.
 
 # ============================================
-# kgw.py
-# Description: Implementation of KGW algorithm
+# ts.py
+# Description: Implementation of TS algorithm
 # ============================================
 
-
 import torch
-import scipy.stats
-from math import sqrt
 from functools import partial
 from watermark.base import BaseWatermark
 from utils.utils import load_config_file
@@ -28,7 +25,7 @@ from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
 from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
-from transformers import AutoModel, OPTForCausalLM, AutoTokenizer, LogitsProcessorList
+from transformers import OPTForCausalLM, AutoTokenizer, LogitsProcessorList
 from watermark.ts.TS_networks import DeltaNetwork, GammaNetwork
 
 class TSConfig:
@@ -50,32 +47,21 @@ class TSConfig:
         if config_dict['algorithm_name'] != 'TS':
             raise AlgorithmNameMismatchError('TS', config_dict['algorithm_name'])
 
- ################### TS_Watermark ###################################
-
         self.hash_key = config_dict['hash_key']
-
         self.seeding_scheme = config_dict['seeding_scheme']
-
         self.ckpt_path = config_dict['ckpt_path']
-
         self.gamma = config_dict['gamma']
-
         self.delta = config_dict['delta']
-
         self.prefix_length = config_dict['prefix_length']
-
+        self.z_threshold = config_dict['z_threshold']
+        self.tokenizer_opt = AutoTokenizer.from_pretrained("facebook/opt-1.3b", padding_side="left")
 
         self.generation_model = transformers_config.model
         self.generation_tokenizer = transformers_config.tokenizer
         self.vocab_size = transformers_config.vocab_size
-        self.z_threshold = config_dict['z_threshold']
         self.device = transformers_config.device
-
         self.gen_kwargs = transformers_config.gen_kwargs
 
-
-
- ################### TS_Watermark ###################################
 
 class TSUtils:
     """Utility class for KGW algorithm, contains helper functions."""
@@ -104,14 +90,8 @@ class TSUtils:
 
 
         self.tokenizer_llama = self.config.generation_tokenizer
-        self.tokenizer_opt = AutoTokenizer.from_pretrained("facebook/opt-1.3b", padding_side="left")
-
         self.embed_matrix = model.get_input_embeddings().weight.to(self.device)
-
         ckpt_path = self.config.ckpt_path
-
-
-        ############################ TS_Watermark ####################333#####
 
         if len(ckpt_path) > 0:
             print("checkpoint_load")
@@ -132,26 +112,18 @@ class TSUtils:
             self.delta_network.eval()
             self.gamma_network.eval()
 
-
         else:
-            self.gamma = torch.tensor([gamma]).to(device)
-            self.delta = torch.tensor([delta]).to(device)
-
-
+            self.gamma = torch.tensor([self.config.gamma]).to(self.device)
+            self.delta = torch.tensor([self.config.delta]).to(self.device)
 
         self.gamma_list = torch.empty(0, dtype=torch.float).to(self.device)
         self.delta_list = torch.empty(0, dtype=torch.float).to(self.device)
 
-
-
-
     def _seed_rng(self, input_ids: torch.LongTensor, seeding_scheme: str = None) -> None:
-
         # can optionally override the seeding scheme,
         # but uses the instance attr by default
         if seeding_scheme is None:
             seeding_scheme = self.seeding_scheme
-
 
         # using the last token and hash_key to generate random seed
         if seeding_scheme == "simple_1":
@@ -181,8 +153,6 @@ class TSUtils:
           self.gamma_list = torch.cat([self.gamma_list, gamma])
           self.delta_list = torch.cat([self.delta_list, delta])
 
-
-
         # generate greenlist, every token have different greenlist_id
         greenlist_size = int(self.vocab_size * gamma)
         vocab_permutation = torch.randperm(self.vocab_size, device=input_ids.device, generator=self.rng)
@@ -192,8 +162,6 @@ class TSUtils:
         gamma_len=len(self.gamma_list)
 
         return greenlist_ids, gamma, delta,gamma_len
-
-
 
     def _compute_z_score(self, observed_count, T):
         # count refers to number of green tokens, T is total number of tokens
@@ -218,41 +186,32 @@ class TSUtils:
             )
 
         green_token_count = 0
-        # green_token_mask = []
         green_token_mask = [-1 for _ in range(self.config.prefix_length)]
 
         for idx in range(self.config.prefix_length, len(input_ids)):
             curr_token = input_ids[idx]
             if "opt" in self.config.generation_model.name_or_path.lower():
-
-                greenlist_ids, gamma, delta,gamma_len = self._get_greenlist_ids(input_ids[:idx],"detect")
-
+                greenlist_ids, gamma, delta, gamma_len = self._get_greenlist_ids(input_ids[:idx],"detect")
 
             else:
                 llama_str = self.tokenizer_llama.decode(input_ids[max(idx-5, 0):idx], add_special_tokens=False)
-                ids_opt = self.tokenizer_opt(llama_str, add_special_tokens=False)['input_ids']
+                ids_opt = self.config.tokenizer_opt(llama_str, add_special_tokens=False)['input_ids']
                 if len(ids_opt) == 0:
                     green_token_mask.append(False)
                     continue
-                greenlist_ids, gamma, delta,gamma_len = self._get_greenlist_ids(torch.tensor(ids_opt).to(self.device),"detect")
+                greenlist_ids, gamma, delta, gamma_len = self._get_greenlist_ids(torch.tensor(ids_opt).to(self.device),"detect")
 
-
-            # exit()
             if curr_token in greenlist_ids:
                 green_token_count += 1
                 green_token_mask.append(True)
             else:
                 green_token_mask.append(False)
 
-        self.gamma_list=self.gamma_list[self.config.prefix_length:]
+        self.gamma_list = self.gamma_list[self.config.prefix_length:]
 
         z_score = self._compute_z_score(green_token_count, num_tokens_scored)
 
-
-
         return z_score, green_token_mask
-
-
 
 
 class TSLogitsProcessor(LogitsProcessor):
@@ -263,22 +222,16 @@ class TSLogitsProcessor(LogitsProcessor):
         self.config = config
         self.utils = utils
 
-################### TS_Watermark ###################################
         self.tokenizer_llama = self.config.generation_tokenizer
-        self.tokenizer_opt = AutoTokenizer.from_pretrained("facebook/opt-1.3b", padding_side="left")
 
         if "opt" not in self.config.generation_model.name_or_path.lower():
             self.vocab_size = len(self.tokenizer_llama)
-
-
-
 
     def _calc_greenlist_mask(self, logits: torch.FloatTensor, greenlist_token_ids) -> torch.BoolTensor:
         green_tokens_mask = torch.zeros_like(logits)
         green_tokens_mask[greenlist_token_ids] = 1
         final_mask = green_tokens_mask.bool()
         return final_mask
-
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
 
@@ -288,7 +241,7 @@ class TSLogitsProcessor(LogitsProcessor):
 
         if "opt" not in self.config.generation_model.name_or_path.lower():
             llama_str = self.tokenizer_llama.batch_decode(input_ids[:,-5:], add_special_tokens=False)
-            ids_opt = self.tokenizer_opt(llama_str, add_special_tokens=False)['input_ids']
+            ids_opt = self.config.tokenizer_opt(llama_str, add_special_tokens=False)['input_ids']
 
         for b_idx in range(input_ids.shape[0]):
 
@@ -299,20 +252,12 @@ class TSLogitsProcessor(LogitsProcessor):
                 greenlist_ids, gamma, delta,gamma_len = self.utils._get_greenlist_ids(input_ids[b_idx],'process')
 
             # get greenlist token mask and add bias on the each logits base on greenlist mask
-
-
-
             green_tokens_mask = self._calc_greenlist_mask(logits=scores[b_idx], greenlist_token_ids=greenlist_ids)
-
-
-
 
             delta = delta.to(dtype=scores.dtype)
             scores[b_idx][green_tokens_mask] = scores[b_idx][green_tokens_mask] + delta
 
         return scores
-
-
 
 
 class TS(BaseWatermark):
@@ -330,7 +275,6 @@ class TS(BaseWatermark):
         self.utils = TSUtils(self.config)
         self.logits_processor = TSLogitsProcessor(self.config, self.utils)
 
-
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate watermarked text."""
 
@@ -341,23 +285,20 @@ class TS(BaseWatermark):
             **self.config.gen_kwargs
         )
 
-
         # Encode prompt
         encoded_prompt = self.config.generation_tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(self.config.device)
-
-        # print(encoded_prompt)
 
         prefix_length = encoded_prompt['input_ids'].shape[1]
 
         # Generate watermarked text
         encoded_watermarked_text = generate_with_watermark(**encoded_prompt)
+
         # Decode
         watermarked_text = self.config.generation_tokenizer.batch_decode(encoded_watermarked_text[:,prefix_length:], skip_special_tokens=True)[0]
         return watermarked_text
 
     def generate_unwatermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate unwatermarked text."""
-
 
         # Encode prompt
         encoded_prompt = self.config.generation_tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(self.config.device)
@@ -369,9 +310,6 @@ class TS(BaseWatermark):
         # Decode
         unwatermarked_text = self.config.generation_tokenizer.batch_decode(encoded_unwatermarked_text[:,prefix_length:], skip_special_tokens=True)[0]
         return unwatermarked_text
-
-
-
 
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the text."""
@@ -385,6 +323,10 @@ class TS(BaseWatermark):
         # Determine if the z_score indicates a watermark
         is_watermarked = z_score > self.config.z_threshold
 
+        # Convert z_score to a float
+        z_score = z_score.item()
+        is_watermarked = bool(is_watermarked)
+                              
         # Return results based on the return_dict flag
         if return_dict:
             return {"is_watermarked": is_watermarked, "score": z_score}

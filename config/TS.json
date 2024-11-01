@@ -8,5 +8,4 @@
   "prefix_length": 1,
   "z_threshold": 4.0,
   "store_spike_ents": true
-
 }
