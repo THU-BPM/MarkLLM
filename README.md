@@ -37,7 +37,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu*
 
 ### Updates
-
+- 🎉 **(2024.11.01)** Add [TS-Watermark](https://arxiv.org/abs/2402.18059) method (ICML 2024). Thanks to Kyle Zheng and Minjia Huo for their PR! 
 - 🎉 **(2024.10.07)** Provide an alternative, equivalent implementation of the EXP watermarking algorithm (**EXPGumbel**) utilizing Gumbel noise. With this implementation, users should be able to modify the watermark strength by adjusting the sampling temperature in the configuration file.
 - 🎉 **(2024.10.07)** Add [Unbiased](https://arxiv.org/abs/2310.10669) watermarking method.
 - 🎉 **(2024.10.06)** We are excited to announce that our paper "MarkLLM: An Open-Source Toolkit for LLM Watermarking" has been accepted by **EMNLP 2024 Demo**!
@@ -81,6 +81,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | X-SIR              | KGW Family    | [\[2402.14007\] Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.14007) |
   | DiPmark            | KGW Family    | [\[2310.07710\] A Resilient and Accessible Distribution-Preserving Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.07710)                           |
   | Unbiased Watermark | KGW Family    | [\[2310.10669\] Unbiased Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.10669)                                                                     |
+  | TS Watermark | KGW Family    | [\[2402.18059\] Token-Specific Watermarking with Enhanced Detectability and Semantic Coherence for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.18059)                                                                     |
   | EXP/EXPGumbel      | Christ Family | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
   | EXP-Edit           | Christ Family | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
   | ITS-Edit           | Christ Family | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
