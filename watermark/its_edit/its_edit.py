@@ -268,28 +268,4 @@ class ITSEdit(BaseWatermark):
     def get_data_for_visualization(self, text: str, *args, **kwargs):
         """Get data for visualization."""
 
-        # Encode text
-        encoded_text = self.config.generation_tokenizer.encode(text, return_tensors='pt', add_special_tokens=False).numpy()[0]
-
-        # Find best match
-        generator = torch.Generator()
-        generator.manual_seed(int(self.config.key))
-        _, index = self.utils.phi(encoded_text,self.config.pseudo_length,self.config.sequence_length, generator, self.utils.transform_key_func, self.config.vocab_size, lambda x,y : self.utils.transform_edit_score(x,y,1), null=False, normalize=True)
-        random_numbers = self.utils.xi[(index + np.arange(len(encoded_text))) % len(self.utils.xi)]
-        
-        highlight_values = []
-
-        # Compute highlight values
-        for i in range(0, len(encoded_text)):
-            r = random_numbers[i][encoded_text[i]]
-            v = log(1/(1 - r))
-            v = self.utils.value_transformation(v)
-            highlight_values.append(v)
-
-        # Decode each token id to its corresponding string token
-        decoded_tokens = []
-        for token_id in encoded_text:
-            token = self.config.generation_tokenizer.decode(token_id.item())
-            decoded_tokens.append(token)
-        
-        return DataForVisualization(decoded_tokens, highlight_values)
+        pass
