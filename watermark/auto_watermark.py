@@ -14,8 +14,8 @@
 
 # =========================================================================
 # AutoWatermark.py
-# Description: This is a generic watermark class that will be instantiated 
-#              as one of the watermark classes of the library when created 
+# Description: This is a generic watermark class that will be instantiated
+#              as one of the watermark classes of the library when created
 #              with the [`AutoWatermark.load`] class method.
 # =========================================================================
 
@@ -34,7 +34,8 @@ WATERMARK_MAPPING_NAMES={
     'EXP': 'watermark.exp.EXP',
     'EXPGumbel': 'watermark.exp_gumbel.EXPGumbel',
     'EXPEdit': 'watermark.exp_edit.EXPEdit',
-    'ITSEdit': 'watermark.its_edit.ITSEdit'
+    'ITSEdit': 'watermark.its_edit.ITSEdit',
+    'TS':'watermark.ts.TS'
 }
 
 def watermark_name_from_alg_name(name):
