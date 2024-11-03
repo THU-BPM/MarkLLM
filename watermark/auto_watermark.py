@@ -34,7 +34,8 @@ WATERMARK_MAPPING_NAMES={
     'EXP': 'watermark.exp.EXP',
     'EXPGumbel': 'watermark.exp_gumbel.EXPGumbel',
     'EXPEdit': 'watermark.exp_edit.EXPEdit',
-    'ITSEdit': 'watermark.its_edit.ITSEdit'
+    'ITSEdit': 'watermark.its_edit.ITSEdit',
+    'SynthID': 'watermark.synthid.SynthID'
 }
 
 def watermark_name_from_alg_name(name):
