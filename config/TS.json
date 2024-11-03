@@ -1,0 +1,11 @@
+{
+  "algorithm_name": "TS",
+  "gamma": 0.5 ,
+  "delta": 2.0,
+  "ckpt_path": "./watermark/ts/model/opt/init_0.25_1.75_default.pth",
+  "hash_key": 15485863,
+  "seeding_scheme":"simple_1",
+  "prefix_length": 1,
+  "z_threshold": 4.0,
+  "store_spike_ents": true
+}
