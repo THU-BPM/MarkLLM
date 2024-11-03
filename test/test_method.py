@@ -35,11 +35,11 @@ natural_text = item['natural_text']
 def test_algorithm(algorithm_name):
     # Check algorithm name
     assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR', 'XSIR', 'DIP', 'Unbiased', 
-                              'UPV', 'TS', 'EXP', 'EXPGumbel', 'EXPEdit','ITSEdit']
+                              'UPV', 'TS', 'SynthID', 'EXP', 'EXPGumbel', 'EXPEdit','ITSEdit']
 
     # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
-
+    
     # Transformers config
     transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("/data2/shared_model/facebook/opt-1.3b/").to(device),
                                             tokenizer=AutoTokenizer.from_pretrained("/data2/shared_model/facebook/opt-1.3b/"),
@@ -56,6 +56,7 @@ def test_algorithm(algorithm_name):
                                      transformers_config=transformers_config)
 
     watermarked_text = myWatermark.generate_watermarked_text(prompt)
+    print(watermarked_text)
     unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
     detect_result = myWatermark.detect_watermark(watermarked_text)
     print(detect_result)
@@ -66,6 +67,6 @@ def test_algorithm(algorithm_name):
 
 
 if __name__ == '__main__':
-    test_algorithm('KGW')
+    test_algorithm('SynthID')
 
 

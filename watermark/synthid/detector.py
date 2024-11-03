@@ -27,7 +27,6 @@ from .detector_bayesian_torch import RawBayesianDetector
 from evaluation.dataset import C4Dataset
 
 
-
 class SynthIDDetector(abc.ABC):
     """Base class for SynthID watermark detectors.
     

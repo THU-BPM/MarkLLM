@@ -68,7 +68,6 @@ class SynthIDConfig:
         self.temperature = getattr(transformers_config, 'temperature', 0.7)
         
 
-
 class SynthIDUtils:
     """Utility class for SynthID algorithm, contains helper functions."""
 
@@ -562,7 +561,7 @@ class SynthID(BaseWatermark):
         is_watermarked = score > self.config.threshold
         
         if return_dict:
-            return {"is_watermarked": is_watermarked, "score": float(score)}
+            return {"is_watermarked": bool(is_watermarked), "score": float(score)}
         else:
             return (is_watermarked, float(score))
         
