@@ -1,0 +1,14 @@
+{
+    "algorithm_name": "SynthID",
+    "ngram_len": 5,
+    "keys": [
+        654, 400, 836, 123, 340, 443, 597, 160, 57, 29,
+        590, 639, 13, 715, 468, 990, 966, 226, 324, 585,
+        118, 504, 421, 521, 129, 669, 732, 225, 90, 960
+    ],
+    "sampling_table_size": 65536,
+    "sampling_table_seed": 0,
+    "context_history_size": 1024,
+    "detector_type": "bayesian",
+    "threshold": 0.52
+}

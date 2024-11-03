@@ -23,8 +23,14 @@ import json
 class BaseDataset:
     """Base class for dataset."""
 
-    def __init__(self):
-        """Initialize the dataset."""
+    def __init__(self, max_samples: int = 200):
+        """
+        Initialize the dataset.
+        
+        Parameters:
+            max_samples (int): Maximum number of samples to load. Default is 200.
+        """
+        self.max_samples = max_samples
         self.prompts = []
         self.natural_texts = []
         self.references = []
@@ -64,14 +70,14 @@ class BaseDataset:
 class C4Dataset(BaseDataset):
     """Dataset class for C4 dataset."""
 
-    def __init__(self, data_source: str):
+    def __init__(self, data_source: str, max_samples: int = 200):
         """
             Initialize the C4 dataset.
 
             Parameters:
                 data_source (str): The path to the C4 dataset file.
         """
-        super().__init__()
+        super().__init__(max_samples)
         self.data_source = data_source
         self.load_data()
     
@@ -79,7 +85,7 @@ class C4Dataset(BaseDataset):
         """Load data from the C4 dataset file."""
         with open(self.data_source, 'r') as f:
            lines = f.readlines()
-        for line in lines[:200]:
+        for line in lines[:self.max_samples]:
             item = json.loads(line)
             self.prompts.append(item['prompt'])
             self.natural_texts.append(item['natural_text'])
@@ -88,14 +94,14 @@ class C4Dataset(BaseDataset):
 class WMT16DE_ENDataset(BaseDataset):
     """Dataset class for WMT16 DE-EN dataset."""
 
-    def __init__(self, data_source: str) -> None:
+    def __init__(self, data_source: str, max_samples: int = 200) -> None:
         """
             Initialize the WMT16 DE-EN dataset.
 
             Parameters:
                 data_source (str): The path to the WMT16 DE-EN dataset file.
         """
-        super().__init__()
+        super().__init__(max_samples)
         self.data_source = data_source
         self.load_data()
     
@@ -103,7 +109,7 @@ class WMT16DE_ENDataset(BaseDataset):
         """Load data from the WMT16 DE-EN dataset file."""
         with open(self.data_source, 'r') as f:
             lines = f.readlines()
-        for line in lines[:200]:
+        for line in lines[:self.max_samples]:
             item = json.loads(line)
             self.prompts.append(item['de'])
             self.references.append(item['en'])
@@ -112,14 +118,14 @@ class WMT16DE_ENDataset(BaseDataset):
 class HumanEvalDataset(BaseDataset):
     """Dataset class for HumanEval dataset."""
 
-    def __init__(self, data_source: str) -> None:
+    def __init__(self, data_source: str, max_samples: int = 200) -> None:
         """
             Initialize the HumanEval dataset.
 
             Parameters:
                 data_source (str): The path to the HumanEval dataset file.
         """
-        super().__init__()
+        super().__init__(max_samples)
         self.data_source = data_source
         self.load_data()
     
@@ -127,7 +133,7 @@ class HumanEvalDataset(BaseDataset):
         """Load data from the HumanEval dataset file."""
         with open(self.data_source, 'r') as f:
             lines = f.readlines()
-        for line in lines[:100]:
+        for line in lines[:self.max_samples]:
             item = json.loads(line)
             # process prompt
             prompt = item['prompt']
@@ -141,6 +147,6 @@ class HumanEvalDataset(BaseDataset):
 
 
 if __name__ == '__main__':
-    d1 = C4Dataset('dataset/c4/processed_c4.json')
-    d2 = WMT16DE_ENDataset('dataset/wmt16_de_en/validation.jsonl')
-    d3 = HumanEvalDataset('dataset/HumanEval/test.jsonl')
+    d1 = C4Dataset('dataset/c4/processed_c4.json', max_samples=100)
+    d2 = WMT16DE_ENDataset('dataset/wmt16_de_en/validation.jsonl', max_samples=100)
+    d3 = HumanEvalDataset('dataset/HumanEval/test.jsonl', max_samples=100)
