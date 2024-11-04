@@ -201,7 +201,7 @@ class BayesianDetector(SynthIDDetector):
         Returns:
             list: List of dictionaries containing prompts and their watermarked generations
         """
-        output_dir = 'generated_texts/SynthID'
+        output_dir = 'watermark/synthid/generated_texts'
         output_path = os.path.join(output_dir, 'watermarked_texts.json')
         
         # If cached data exists, load it

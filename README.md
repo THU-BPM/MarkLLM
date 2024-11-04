@@ -1,5 +1,8 @@
 # MarkLLM: An Open-Source Toolkit for LLM Watermarking
 
+> 🎉 **We welcome PRs!** If you have implemented a LLM watermarking algorithm or are interested in contributing one, we'd love to include it in MarkLLM. Join our community and help make text watermarking more accessible to everyone!
+
+
 <a href="https://2024.emnlp.org/program/demo/" alt="EMNLP 2024 Demo">
     <img src="https://img.shields.io/badge/EMNLP%202024-Demo-blue" /></a>
 <a href="https://arxiv.org/abs/2405.10051" alt="arXiv">
@@ -37,7 +40,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu\*, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu*
 
 ### Updates
-- 🎉 **(2024.11.03)** Add [SynthID-Text](https://www.nature.com/articles/s41586-024-08025-4) method (Nature). 
+- 🎉 **(2024.11.03)** Add [SynthID-Text](https://www.nature.com/articles/s41586-024-08025-4) method (Nature) and support detection methods including mean, weighted mean, and bayesian. 
 - 🎉 **(2024.11.01)** Add [TS-Watermark](https://arxiv.org/abs/2402.18059) method (ICML 2024). Thanks to Kyle Zheng and Minjia Huo for their PR! 
 - 🎉 **(2024.10.07)** Provide an alternative, equivalent implementation of the EXP watermarking algorithm (**EXPGumbel**) utilizing Gumbel noise. With this implementation, users should be able to modify the watermark strength by adjusting the sampling temperature in the configuration file.
 - 🎉 **(2024.10.07)** Add [Unbiased](https://arxiv.org/abs/2310.10669) watermarking method.

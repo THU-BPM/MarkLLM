@@ -9,6 +9,6 @@
     "sampling_table_size": 65536,
     "sampling_table_seed": 0,
     "context_history_size": 1024,
-    "detector_type": "bayesian",
+    "detector_type": "mean",
     "threshold": 0.52
 }
