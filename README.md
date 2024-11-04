@@ -74,22 +74,22 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
 
   **Currently Supported Algorithms:**
 
-  | Algorithm Name     | Family        | Link                                                                                                                                                                       |
+  | Algorithm Name     | Publication      | Link                                                                                                                                                                       |
   | ------------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | KGW                | KGW Family    | [\[2301.10226\] A Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2301.10226)                                                                            |
-  | Unigram            | KGW Family    | [\[2306.17439\] Provable Robust Watermarking for AI-Generated Text (arxiv.org)](https://arxiv.org/abs/2306.17439)                                                               |
-  | SWEET              | KGW Family    | [\[2305.15060\] Who Wrote this Code? Watermarking for Code Generation (arxiv.org)](https://arxiv.org/abs/2305.15060)                                                            |
-  | UPV                | KGW Family    | [\[2307.16230\] An Unforgeable Publicly Verifiable Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2307.16230)                                           |
-  | EWD                | KGW Family    | [\[2403.13485\] An Entropy-based Text Watermarking Detection Method (arxiv.org)](https://arxiv.org/abs/2403.13485)                                                              |
-  | SIR                | KGW Family    | [\[2310.06356\] A Semantic Invariant Robust Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.06356)                                                  |
-  | X-SIR              | KGW Family    | [\[2402.14007\] Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.14007) |
-  | DiPmark            | KGW Family    | [\[2310.07710\] A Resilient and Accessible Distribution-Preserving Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.07710)                           |
-  | Unbiased Watermark | KGW Family    | [\[2310.10669\] Unbiased Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.10669)                                                                     |
-  | TS Watermark | KGW Family    | [\[2402.18059\] Token-Specific Watermarking with Enhanced Detectability and Semantic Coherence for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.18059)                                                                     |
-  | SynthID-Text | KGW Family    | [Scalable Watermarking for Identifying Large Language Model Outputs (*Nature*)](https://www.nature.com/articles/s41586-024-08025-4)                                                                     |
-  | EXP/EXPGumbel      | Christ Family | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
-  | EXP-Edit           | Christ Family | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
-  | ITS-Edit           | Christ Family | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
+  | KGW                | ICML 2023    | [\[2301.10226\] A Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2301.10226)                                                                            |
+  | Unigram            | ICLR 2024    | [\[2306.17439\] Provable Robust Watermarking for AI-Generated Text (arxiv.org)](https://arxiv.org/abs/2306.17439)                                                               |
+  | SWEET              | ACL 2024    | [\[2305.15060\] Who Wrote this Code? Watermarking for Code Generation (arxiv.org)](https://arxiv.org/abs/2305.15060)                                                            |
+  | UPV                | ICLR 2024    | [\[2307.16230\] An Unforgeable Publicly Verifiable Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2307.16230)                                           |
+  | EWD                | ACL 2024    | [\[2403.13485\] An Entropy-based Text Watermarking Detection Method (arxiv.org)](https://arxiv.org/abs/2403.13485)                                                              |
+  | SIR                | ICLR 2024    | [\[2310.06356\] A Semantic Invariant Robust Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.06356)                                                  |
+  | X-SIR              | ACL 2024    | [\[2402.14007\] Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.14007) |
+  | DiPmark            | ICML 2024    | [\[2310.07710\] A Resilient and Accessible Distribution-Preserving Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.07710)                           |
+  | Unbiased Watermark | ICLR 2024    | [\[2310.10669\] Unbiased Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.10669)                                                                     |
+  | TS Watermark | ICML 2024    | [\[2402.18059\] Token-Specific Watermarking with Enhanced Detectability and Semantic Coherence for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.18059)                                                                     |
+  | SynthID-Text | Nature 2024   | [Scalable Watermarking for Identifying Large Language Model Outputs (*Nature*)](https://www.nature.com/articles/s41586-024-08025-4)                                                                     |
+  | EXP/EXPGumbel      | Lecture Note | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
+  | EXP-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
+  | ITS-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
 - **Visualization Solutions:** The toolkit includes custom visualization tools that enable clear and insightful views into how different watermarking algorithms operate under various scenarios. These visualizations help demystify the algorithms' mechanisms, making them more understandable for users.
 
   <img src="images\mechanism_visualization.png" alt="mechanism_visualization" style="zoom:35%;" />
