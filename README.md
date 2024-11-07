@@ -184,6 +184,7 @@ MarkLLM/
 - python 3.9
 - pytorch
 - pip install -r requirements.txt
+- pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
 *Tips:* If you wish to utilize the EXPEdit or ITSEdit algorithm, you will need to import for .pyx file, take EXPEdit as an example:
 
