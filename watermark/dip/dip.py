@@ -56,7 +56,8 @@ class DIPConfig:
 
         self.gamma = config_dict['gamma']
         self.alpha = config_dict['alpha']
-        self.ignore_history = bool(config_dict['ignore_history'])
+        self.ignore_history_generation = bool(config_dict['ignore_history_generation'])
+        self.ignore_history_detection = bool(config_dict['ignore_history_detection'])
         self.z_threshold = config_dict['z_threshold']
         self.prefix_length = config_dict['prefix_length']
 
@@ -79,11 +80,15 @@ class DIPUtils:
         self.config = config
         self.rng = torch.Generator(device=self.config.device)
         self.cc_history = set()
+        self.state_indicator = 0 # 0 for generation, 1 for detection and visualization
         
 
     def _get_rng_seed(self, context_code: any) -> int:
         """Get the random seed from the given context code and private key."""
-        if not self.config.ignore_history:
+        if (
+            (not self.config.ignore_history_generation and self.state_indicator == 0) or 
+            (not self.config.ignore_history_detection and self.state_indicator == 1)
+        ):
             self.cc_history.add(context_code)
             
         m = hashlib.sha256()
@@ -177,7 +182,7 @@ class DIPUtils:
         )
         
         token_quantile = [(torch.where(shuffle[0] == current_token)[0] +1)/vocab_size]
-        return token_quantile
+        return token_quantile, mask
     
     def _get_dip_score(self, input_ids: torch.LongTensor, vocab_size):
         """Get the DiP score of the input_ids"""
@@ -186,22 +191,38 @@ class DIPUtils:
         for i in range(input_ids.shape[-1] - 1):
             pre = input_ids[ : i+1]
             cur = input_ids[i+1]
-            token_quantile = self._get_green_token_quantile(pre, vocab_size, cur)
-            scores[i] = torch.stack(token_quantile).reshape(-1)
+            token_quantile, mask = self._get_green_token_quantile(pre, vocab_size, cur)
+            # if the current token is in the history and ignore_history_detection is False, set the score to -1
+            if not self.config.ignore_history_detection and mask[0]: 
+                scores[i + 1] = -1
+            else:
+                scores[i + 1] = torch.stack(token_quantile).reshape(-1)
         
         return scores
     
     def score_sequence(self, input_ids: torch.LongTensor) -> tuple[float, list[int]]:
         """Score the input_ids and return z_score and green_token_flags."""
         score = self._get_dip_score(input_ids, self.config.vocab_size)
-        green_tokens = torch.sum(score >= self.config.gamma, dim=-1, keepdim=False)
         
+        green_tokens = torch.sum(score >= self.config.gamma, dim=-1, keepdim=False)
         green_token_flags = torch.zeros_like(score)
-        condition_indices = torch.nonzero(score >= self.config.gamma, as_tuple=False)
+        condition_indices = torch.nonzero(score >= self.config.gamma, as_tuple=False).reshape(-1)
         green_token_flags[condition_indices] = 1
         green_token_flags[:self.config.prefix_length] = -1
         
-        z_score = (green_tokens - (1-self.config.gamma) * input_ids.size(-1)) / sqrt(input_ids.size(-1))
+        # Use two different ways to calculate z_score depending on whether to ignore history
+        if not self.config.ignore_history_detection:
+            ignored_indices = torch.nonzero(score == -1, as_tuple=False).reshape(-1)
+            
+            # Visualize the ignored tokens as ignored
+            green_token_flags[ignored_indices] = -1
+            
+            # Calculate z_score using the sequence length after ignoring the ignored tokens
+            sequence_length_for_calculation = input_ids.size(-1) - ignored_indices.size(0)
+            z_score = (green_tokens - (1-self.config.gamma) * sequence_length_for_calculation) / sqrt(sequence_length_for_calculation)
+        else:
+            z_score = (green_tokens - (1-self.config.gamma) * input_ids.size(-1)) / sqrt(input_ids.size(-1))
+        
         return z_score.item(), green_token_flags.tolist()
 
 class DIPLogitsProcessor(LogitsProcessor):
@@ -241,7 +262,7 @@ class DIPLogitsProcessor(LogitsProcessor):
         
         mask, reweighted_scores = self._apply_watermark(input_ids, scores)
         
-        if self.config.ignore_history:
+        if self.config.ignore_history_generation:
             return reweighted_scores
         else:
             return torch.where(mask[:, None], scores, reweighted_scores)
@@ -265,6 +286,9 @@ class DIP(BaseWatermark):
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate watermarked text."""
 
+        # Set the state indicator to 0 for generation
+        self.utils.state_indicator = 0
+
         # Configure generate_with_watermark
         generate_with_watermark = partial(
             self.config.generation_model.generate,
@@ -278,10 +302,16 @@ class DIP(BaseWatermark):
         encoded_watermarked_text = generate_with_watermark(**encoded_prompt)
         # Decode
         watermarked_text = self.config.generation_tokenizer.batch_decode(encoded_watermarked_text, skip_special_tokens=True)[0]
+        # Clear the history
+        self.utils.cc_history.clear()
         return watermarked_text
     
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the text."""
+        
+        # Set the state indicator to 1 for detection
+        self.utils.state_indicator = 1
+
         encoded_text = self.config.generation_tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.config.device)
 
         # Compute z-score using a utility method
@@ -289,6 +319,9 @@ class DIP(BaseWatermark):
         
         # Determine if the z-score indicates a watermark
         is_watermarked = z_score > self.config.z_threshold
+
+        # Clear the history
+        self.utils.cc_history.clear()
 
         # Return results based on the return_dict flag
         if return_dict:
@@ -298,6 +331,9 @@ class DIP(BaseWatermark):
         
     def get_data_for_visualization(self, text: str, *args, **kwargs) -> tuple[list[str], list[int]]:
         """Get data for visualization."""
+        
+        # Set the state indicator to 1 for visualization
+        self.utils.state_indicator = 1
         
         # Encode text
         encoded_text = self.config.generation_tokenizer(text, return_tensors="pt", add_special_tokens=False)["input_ids"][0].to(self.config.device)
@@ -310,6 +346,9 @@ class DIP(BaseWatermark):
         for token_id in encoded_text:
             token = self.config.generation_tokenizer.decode(token_id.item())
             decoded_tokens.append(token)
+        
+        # Clear the history
+        self.utils.cc_history.clear()
         
         return DataForVisualization(decoded_tokens, highlight_values)
 

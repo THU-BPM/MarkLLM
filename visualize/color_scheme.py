@@ -72,7 +72,7 @@ class ColorSchemeForDiscreteVisualization(ColorScheme):
         return [
             ("Green Token", self.green_token_color),
             ("Red Token", self.red_token_color),
-            ("Prefix", self.prefix_color)
+            ("Ignored", self.prefix_color)
         ]
 
 
