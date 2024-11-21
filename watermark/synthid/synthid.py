@@ -18,17 +18,16 @@
 # ============================================
 
 import torch
+import numpy as np
 from math import sqrt
 from functools import partial
 from ..base import BaseWatermark
+from .detector import get_detector
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
-from exceptions.exceptions import AlgorithmNameMismatchError
 from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
-from typing import Dict, Tuple, Union
-import numpy as np
-from .detector import get_detector
+from exceptions.exceptions import AlgorithmNameMismatchError, InvalidWatermarkModeError
 
 
 class SynthIDConfig:
@@ -57,6 +56,12 @@ class SynthIDConfig:
         self.context_history_size = config_dict['context_history_size']
         self.detector_name = config_dict['detector_type']
         self.threshold = config_dict['threshold']
+        self.watermark_mode = config_dict['watermark_mode']
+        self.num_leaves = config_dict['num_leaves']
+
+        # Validate detect mode
+        if self.watermark_mode not in ['distortionary', 'non-distortionary']:
+            raise InvalidWatermarkModeError(self.watermark_mode)
         
         # Model configuration
         self.generation_model = transformers_config.model
@@ -177,7 +182,7 @@ class SynthIDUtils:
         )
         return log_probs
     
-    def mean_score_numpy(self,g_values, mask):
+    def mean_score_numpy(self, g_values, mask):
         """
         Args:
             g_values: shape [batch_size, seq_len, watermarking_depth]
@@ -285,7 +290,6 @@ class SynthIDLogitsProcessor(LogitsProcessor):
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
         """Process logits to add watermark."""
-        # Initialize state if needed
         scores_processed = scores / self.config.temperature
         batch_size, vocab_size = scores.shape
 
@@ -302,7 +306,7 @@ class SynthIDLogitsProcessor(LogitsProcessor):
                 for _ in range(batch_size)
             ])
         
-        
+        # Initialize state if needed
         if self.state is None:
             self.state = {
                 "context": torch.zeros((batch_size, self.ngram_len - 1), dtype=torch.int64, device=self.device),
@@ -321,15 +325,22 @@ class SynthIDLogitsProcessor(LogitsProcessor):
         ngram_keys, hash_context = self._compute_keys(self.state["context"], top_k_indices)
         g_values = self.sample_g_values(ngram_keys)
         
-        # Update scores based on g values
-        updated_scores = self.utils.update_scores(scores_top_k, g_values)
-        
-        # Check for repeated context
-        hash_context = hash_context[:, None]
-        is_repeated = (self.state["context_history"] == hash_context).any(dim=1, keepdim=True)
-        
-        # Update context history
-        self.state["context_history"] = torch.cat((hash_context, self.state["context_history"]), dim=1)[:, :-1]
+        if self.config.watermark_mode == "non-distortionary":
+            # Update scores based on g values
+            updated_scores = self.utils.update_scores(scores_top_k, g_values)
+            
+            # Check for repeated context
+            hash_context = hash_context[:, None]
+            is_repeated = (self.state["context_history"] == hash_context).any(dim=1, keepdim=True)
+            # Update context history
+            self.state["context_history"] = torch.cat((hash_context, self.state["context_history"]), dim=1)[:, :-1]
+
+        elif self.config.watermark_mode == "distortionary":
+            # Update scores based on g values
+            updated_scores = self.utils.update_scores_distortionary(scores_top_k, g_values, self.config.num_leaves)
+            
+            # Disable context repetition check
+            is_repeated = torch.tensor([False] * batch_size, device=self.device)
         
         # Return original scores if context is repeated, otherwise return updated scores
         return torch.where(is_repeated, scores, updated_scores)
@@ -494,7 +505,6 @@ class SynthIDLogitsProcessor(LogitsProcessor):
         return torch.logical_not(are_repeated_contexts)
 
 
-
 class SynthID(BaseWatermark):
     """Top-level class for SynthID algorithm."""
 
@@ -543,13 +553,17 @@ class SynthID(BaseWatermark):
             eos_token_id=self.config.generation_tokenizer.eos_token_id
         )[:, self.config.ngram_len - 1:]
         
-        # Compute context repetition mask
-        context_repetition_mask = self.logits_processor.compute_context_repetition_mask(
-            input_ids=encoded_text
-        )
+        if self.config.watermark_mode == "non-distortionary":
+            # Compute context repetition mask
+            context_repetition_mask = self.logits_processor.compute_context_repetition_mask(
+                input_ids=encoded_text
+            )
         
-        # Combine masks
-        combined_mask = context_repetition_mask * eos_mask
+            # Combine masks
+            combined_mask = context_repetition_mask * eos_mask
+        
+        elif self.config.watermark_mode == "distortionary":
+            combined_mask = eos_mask
         
         # Calculate mean score
         g_values_np = g_values.cpu().numpy()

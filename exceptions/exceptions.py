@@ -97,3 +97,10 @@ class InvalidDetectModeError(Exception):
         self.mode = mode
         self.message = message
         super().__init__(f"{message}: {mode}")
+
+class InvalidWatermarkModeError(Exception):
+    """Exception raised for errors in the input watermark mode."""
+    def __init__(self, mode, message="Invalid watermark mode configuration"):
+        self.mode = mode
+        self.message = message
+        super().__init__(f"{message}: {mode}")
