@@ -20,6 +20,9 @@
 # =========================================================================
 
 import importlib
+from typing import List
+
+import torch
 
 WATERMARK_MAPPING_NAMES={
     'KGW': 'watermark.kgw.KGW',
@@ -69,3 +72,29 @@ class AutoWatermark:
         watermark_instance = watermark_class(algorithm_config, transformers_config)
         return watermark_instance
 
+
+vllm_supported_methods = ["UPV", "KGW", "Unigram"]
+class AutoWatermarkForVLLM:
+    def __init__(self, algorithm_name, algorithm_config, transformers_config):
+        if not algorithm_name in vllm_supported_methods:
+            raise NotImplementedError(f"vllm integrating currently supports {vllm_supported_methods}, but got {algorithm_name}")
+        self.watermark = AutoWatermark.load(algorithm_name=algorithm_name, algorithm_config=algorithm_config, transformers_config=transformers_config)
+
+    def __call__(self, input_ids: List[int], scores: torch.FloatTensor) -> torch.Tensor:
+        if len(input_ids) == 0:
+            return scores
+        input_ids = torch.LongTensor(input_ids).to(self.watermark.config.device)[None, :]
+        scores = scores[None, :]
+        assert len(input_ids.shape) == 2, input_ids.shape
+        assert len(scores.shape) == 2, scores.shape
+        scores = self.watermark.logits_processor(input_ids, scores)
+        return scores[0, :]
+
+    def get_data_for_visualization(self, text):
+        data = self.watermark.get_data_for_visualization(text)
+        return data
+
+    def detect_watermark(self, text):
+        if type(text) is list:
+            return [self.watermark.detect_watermark(_) for _ in text]
+        return self.watermark.detect_watermark(text)
