@@ -106,7 +106,7 @@ class UPVUtils:
     
     def int_to_bin_list(self, n: int, length=8) -> list[int]:
         """Convert an integer to a binary list of specified length."""
-        bin_str = format(n, 'b').zfill(length)
+        bin_str = format(n, 'b')[:length].zfill(length)
         return [int(b) for b in bin_str]
     
     def _select_candidates(self, scores: torch.Tensor) -> torch.Tensor:
