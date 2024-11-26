@@ -19,10 +19,9 @@
 #              with the [`AutoWatermark.load`] class method.
 # =========================================================================
 
+import torch
 import importlib
 from typing import List
-
-import torch
 
 WATERMARK_MAPPING_NAMES={
     'KGW': 'watermark.kgw.KGW',
