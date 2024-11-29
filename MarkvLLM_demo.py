@@ -110,3 +110,17 @@ if __name__ == "__main__":
     model_path = sys.argv[-2] # "meta-llama/Meta-Llama-3-8B-Instruct"
     method = sys.argv[-1] # "UPV" "KGW" "Unigram"
     main(model_path=model_path, algorithm_name=method)
+    """
+    --------------------------------------------------------------
+    llama3-8b-instruct (vLLM)
+                           KGW               UPV           Unigram
+    PPL         1.191 -> 1.346    1.191 -> 0.926    1.191 -> 1.344
+    detect      0.001 -> 0.929    0.001 -> 0.430    0.001 -> 0.508
+    time (h)      0.19 -> 0.52      0.18 -> 2.02      0.18 -> 0.45
+    --------------------------------------------------------------
+    llama3-8b-instruct (huggingface)
+                           KGW               UPV           Unigram
+    detect      0.001 -> 0.934    0.001 -> 0.358    0.001 -> 0.505
+    time (h)    20.00 -> 20.75    19.50 -> 21.50    20.50 -> 20.50
+    --------------------------------------------------------------
+    """
