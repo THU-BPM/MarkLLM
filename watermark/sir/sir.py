@@ -126,7 +126,7 @@ class SIRUtils:
         except:
             mapping = [random.randint(0, self.config.scale_dimension - 1) for _ in range(input_size)] 
             create_directory_for_file(mapping_name)
-            with open(self.mapping_path, 'w') as f:
+            with open(mapping_name, 'w') as f:
                 json.dump(mapping, f, indent=4)
         return mapping
     
