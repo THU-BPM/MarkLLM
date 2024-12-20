@@ -4,6 +4,6 @@
     "eps": 1e-20,
     "threshold": 1e-4,
     "sequence_length": 200,
-    "temperature": 0.2,
+    "temperature": 0.7,
     "seed": 42
 }
