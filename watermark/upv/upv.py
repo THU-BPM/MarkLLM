@@ -80,8 +80,8 @@ class UPVUtils:
                 config (UPVConfig): Configuration for the UPV algorithm.
         """
         self.config = config
-        self.generator_model = self._get_generator_model(self.config.bit_number, self.config.prefix_length + 1)
-        self.detector_model = self._get_detector_model(self.config.bit_number)
+        self.generator_model = self._get_generator_model(self.config.bit_number, self.config.prefix_length + 1).to(self.config.device)
+        self.detector_model = self._get_detector_model(self.config.bit_number).to(self.config.device)
         self.cache = {}
         self.top_k = self.config.gen_kwargs.get('top_k', self.config.default_top_k)
         self.num_beams = self.config.gen_kwargs.get('num_beams', None)  
@@ -100,13 +100,14 @@ class UPVUtils:
 
     def _get_predictions_from_generator(self, input_x: torch.Tensor) -> bool:
         """Get predictions from the generator model."""
-        output = self.generator_model(input_x)  
-        output = (output > 0.5).bool().item()
+        with torch.no_grad():
+            output = self.generator_model(input_x)
+            output = (output > 0.5).bool().item()
         return output
     
     def int_to_bin_list(self, n: int, length=8) -> list[int]:
         """Convert an integer to a binary list of specified length."""
-        bin_str = format(n, 'b').zfill(length)
+        bin_str = format(n, 'b')[:length].zfill(length)
         return [int(b) for b in bin_str]
     
     def _select_candidates(self, scores: torch.Tensor) -> torch.Tensor:
@@ -129,12 +130,12 @@ class UPVUtils:
             # Now safely concatenate lists
             pair = input_ids_list[-self.config.prefix_length:] + [v.item()] if self.config.prefix_length > 0 else [v.item()]
             merged_tuple = tuple(pair)
-            bin_list = [self.int_to_bin_list(num, self.config.bit_number) for num in pair]
 
             if merged_tuple in self.cache:
                 result = self.cache[merged_tuple]
             else:
-                result = self._get_predictions_from_generator(torch.FloatTensor(bin_list).unsqueeze(0))
+                bin_list = [self.int_to_bin_list(num, self.config.bit_number) for num in pair]
+                result = self._get_predictions_from_generator(torch.tensor(bin_list, device=self.config.device).float().unsqueeze(0))
                 self.cache[merged_tuple] = result
             if result:
                 greenlist_ids.append(int(v))
@@ -155,7 +156,7 @@ class UPVUtils:
         if merged_tuple in self.cache:
             result = self.cache[merged_tuple]
         else:
-            result = self._get_predictions_from_generator(torch.FloatTensor(bin_list).unsqueeze(0))
+            result = self._get_predictions_from_generator(torch.tensor(bin_list, device=self.config.device).float().unsqueeze(0))
             self.cache[merged_tuple] = result
 
         return result
@@ -271,7 +272,7 @@ class UPV(BaseWatermark):
         """ Detect watermark using the network mode. """
         # Convert input IDs to binary sequence
         inputs_bin = [self.utils.int_to_bin_list(token_id, self.config.bit_number) for token_id in encoded_text]
-        inputs_bin = torch.tensor(inputs_bin)
+        inputs_bin = torch.tensor(inputs_bin, device=self.config.device)
 
         # Run the model on the input binary sequence
         outputs = self.utils.detector_model(inputs_bin.unsqueeze(dim=0).float())
