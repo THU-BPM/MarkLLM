@@ -14,3 +14,4 @@
 
 
 from .synthid import SynthID
+from .synthid import SynthIDConfig

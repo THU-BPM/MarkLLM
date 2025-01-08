@@ -22,6 +22,7 @@
 import torch
 import importlib
 from typing import List
+from watermark.auto_config import AutoConfig
 
 WATERMARK_MAPPING_NAMES={
     'KGW': 'watermark.kgw.KGW',
@@ -43,10 +44,10 @@ WATERMARK_MAPPING_NAMES={
 
 def watermark_name_from_alg_name(name):
     """Get the watermark class name from the algorithm name."""
-    for algorithm_name, watermark_name in WATERMARK_MAPPING_NAMES.items():
-        if name == algorithm_name:
-            return watermark_name
-    return None
+    if name in WATERMARK_MAPPING_NAMES:
+        return WATERMARK_MAPPING_NAMES[name]
+    else:
+        raise ValueError(f"Invalid algorithm name: {name}")
 
 class AutoWatermark:
     """
@@ -68,7 +69,8 @@ class AutoWatermark:
         module_name, class_name = watermark_name.rsplit('.', 1)
         module = importlib.import_module(module_name)
         watermark_class = getattr(module, class_name)
-        watermark_instance = watermark_class(algorithm_config, transformers_config)
+        watermark_config = AutoConfig.load(algorithm_name, transformers_config, algorithm_config_path=algorithm_config, **kwargs)
+        watermark_instance = watermark_class(watermark_config)
         return watermark_instance
 
 

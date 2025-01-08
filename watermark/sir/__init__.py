@@ -18,3 +18,4 @@
 # ====================================================
 
 from .sir import SIR
+from .sir import SIRConfig

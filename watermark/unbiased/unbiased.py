@@ -24,7 +24,7 @@ from typing import Tuple, Union
 import torch.nn.functional as F
 from math import sqrt
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
@@ -32,40 +32,54 @@ from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
 
 
-class UnbiasedConfig:
+class UnbiasedConfig(BaseConfig):
     """Config class for Unbiased watermark algorithm, load config file and initialize parameters."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the Unbiased configuration.
+    # def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    #     """
+    #         Initialize the Unbiased configuration.
 
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/Unbiased.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'Unbiased':
-            raise AlgorithmNameMismatchError('Unbiased', config_dict['algorithm_name'])
+    #         Parameters:
+    #             algorithm_config (str): Path to the algorithm configuration file.
+    #             transformers_config (TransformersConfig): Configuration for the transformers model.
+    #     """
+    #     if algorithm_config is None:
+    #         config_dict = load_config_file('config/Unbiased.json')
+    #     else:
+    #         config_dict = load_config_file(algorithm_config)
+    #     if config_dict['algorithm_name'] != 'Unbiased':
+    #         raise AlgorithmNameMismatchError('Unbiased', config_dict['algorithm_name'])
         
-        random.seed(config_dict['key'])
-        hash_key = random.getrandbits(1024).to_bytes(128, "big")
-        self.hash_key = hash_key
+    #     random.seed(config_dict['key'])
+    #     hash_key = random.getrandbits(1024).to_bytes(128, "big")
+    #     self.hash_key = hash_key
 
-        self.gamma = config_dict['gamma']
+    #     self.gamma = config_dict['gamma']
+    #     self.alpha = 0.5
+    #     self.ignore_history_generation = bool(config_dict['ignore_history_generation'])
+    #     self.ignore_history_detection = bool(config_dict['ignore_history_detection'])
+    #     self.z_threshold = config_dict['z_threshold']
+    #     self.prefix_length = config_dict['prefix_length']
+
+    #     self.generation_model = transformers_config.model
+    #     self.generation_tokenizer = transformers_config.tokenizer
+    #     self.vocab_size = transformers_config.vocab_size
+    #     self.device = transformers_config.device
+    #     self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.gamma = self.config_dict['gamma']
         self.alpha = 0.5
-        self.ignore_history_generation = bool(config_dict['ignore_history_generation'])
-        self.ignore_history_detection = bool(config_dict['ignore_history_detection'])
-        self.z_threshold = config_dict['z_threshold']
-        self.prefix_length = config_dict['prefix_length']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+        self.ignore_history_generation = bool(self.config_dict['ignore_history_generation'])
+        self.ignore_history_detection = bool(self.config_dict['ignore_history_detection'])
+        self.z_threshold = self.config_dict['z_threshold']
+        self.prefix_length = self.config_dict['prefix_length']  
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'Unbiased'
 
 class UnbiasedUtils:
     """Utility class for Unbiased watermark algorithm, contains helper functions."""
@@ -271,15 +285,21 @@ class UnbiasedLogitsProcessor(LogitsProcessor):
 class UnbiasedWatermark(BaseWatermark):
     """Top-level class for Unbiased algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | UnbiasedConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the Unbiased algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | UnbiasedConfig): Path to the algorithm configuration file or UnbiasedConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = UnbiasedConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = UnbiasedConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, UnbiasedConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a UnbiasedConfig instance")
+        
         self.utils = UnbiasedUtils(self.config)
         self.logits_processor = UnbiasedLogitsProcessor(self.config, self.utils)
     

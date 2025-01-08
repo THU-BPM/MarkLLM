@@ -18,3 +18,4 @@
 # ====================================================
 
 from .upv import UPV
+from .upv import UPVConfig

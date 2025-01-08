@@ -20,7 +20,7 @@
 import torch
 from math import sqrt
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
@@ -28,37 +28,23 @@ from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
 
 
-class KGWConfig:
-    """Config class for KGW algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the KGW configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/KGW.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'KGW':
-            raise AlgorithmNameMismatchError('KGW', config_dict['algorithm_name'])
-
-        self.gamma = config_dict['gamma']
-        self.delta = config_dict['delta']
-        self.hash_key = config_dict['hash_key']
-        self.z_threshold = config_dict['z_threshold']
-        self.prefix_length = config_dict['prefix_length']
-        self.f_scheme = config_dict['f_scheme']
-        self.window_scheme = config_dict['window_scheme']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+class KGWConfig(BaseConfig):
+    """Config class for KGW algorithm"""
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.gamma = self.config_dict['gamma']
+        self.delta = self.config_dict['delta']
+        self.hash_key = self.config_dict['hash_key']
+        self.z_threshold = self.config_dict['z_threshold']
+        self.prefix_length = self.config_dict['prefix_length']
+        self.f_scheme = self.config_dict['f_scheme']
+        self.window_scheme = self.config_dict['window_scheme']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'KGW'
 
 class KGWUtils:
     """Utility class for KGW algorithm, contains helper functions."""
@@ -211,15 +197,21 @@ class KGWLogitsProcessor(LogitsProcessor):
 class KGW(BaseWatermark):
     """Top-level class for KGW algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | KGWConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the KGW algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | KGWConfig): Path to the algorithm configuration file or KGWConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = KGWConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = KGWConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, KGWConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a KGWConfig instance")
+            
         self.utils = KGWUtils(self.config)
         self.logits_processor = KGWLogitsProcessor(self.config, self.utils)
     

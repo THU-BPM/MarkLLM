@@ -20,7 +20,7 @@
 import torch
 import numpy as np
 from math import log
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from .mersenne import MersenneRNG
 from utils.utils import load_config_file
 from .cython_files.levenshtein import levenshtein
@@ -29,36 +29,22 @@ from exceptions.exceptions import AlgorithmNameMismatchError
 from visualize.data_for_visualization import DataForVisualization
 
 
-class ITSEditConfig:
+class ITSEditConfig(BaseConfig):
     """Config class for EXPEdit algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the EXPEdit configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/ITSEdit.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'ITSEdit':
-            raise AlgorithmNameMismatchError('ITSEdit', config_dict['algorithm_name'])
-
-        self.pseudo_length = config_dict['pseudo_length']
-        self.sequence_length = config_dict['sequence_length']
-        self.n_runs = config_dict['n_runs']
-        self.p_threshold = config_dict['p_threshold']
-        self.key = config_dict['key']
-        self.top_k = config_dict['top_k']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.pseudo_length = self.config_dict['pseudo_length']
+        self.sequence_length = self.config_dict['sequence_length']
+        self.n_runs = self.config_dict['n_runs']
+        self.p_threshold = self.config_dict['p_threshold']
+        self.key = self.config_dict['key']
+        self.top_k = self.config_dict['top_k']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'ITSEdit'
 
 
 class ITSEditUtils:

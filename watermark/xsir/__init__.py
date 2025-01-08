@@ -18,3 +18,4 @@
 # ====================================================
 
 from .xsir import XSIR
+from .xsir import XSIRConfig

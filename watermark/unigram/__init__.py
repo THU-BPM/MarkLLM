@@ -18,3 +18,4 @@
 # ========================================================
 
 from .unigram import Unigram
+from .unigram import UnigramConfig

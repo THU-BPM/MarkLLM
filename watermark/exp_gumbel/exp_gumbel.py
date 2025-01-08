@@ -20,43 +20,29 @@
 import scipy
 import torch
 from math import log
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from transformers import LogitsProcessor
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
 from visualize.data_for_visualization import DataForVisualization
 
-class EXPGumbelConfig:
+class EXPGumbelConfig(BaseConfig):
     """Config class for EXPGumbel algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the EXPGumbel configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/EXPGumbel.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'EXPGumbel':
-            raise AlgorithmNameMismatchError('EXPGumbel', config_dict['algorithm_name'])
-
-        self.prefix_length = config_dict['prefix_length']
-        self.eps = config_dict['eps']
-        self.threshold = config_dict['threshold']
-        self.sequence_length = config_dict['sequence_length']
-        self.temperature = config_dict['temperature']
-        self.seed = config_dict['seed']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.prefix_length = self.config_dict['prefix_length']
+        self.eps = self.config_dict['eps']
+        self.threshold = self.config_dict['threshold']
+        self.sequence_length = self.config_dict['sequence_length']
+        self.temperature = self.config_dict['temperature']
+        self.seed = self.config_dict['seed']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'EXPGumbel'
 
 
 class EXPGumbelUtils:
@@ -105,15 +91,21 @@ class EXPGumbelLogitsProcessor(LogitsProcessor):
 class EXPGumbel(BaseWatermark):
     """Top-level class for the EXPGumbel algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | EXPGumbelConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the EXPGumbel algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | EXPGumbelConfig): Path to the algorithm configuration file or EXPGumbelConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = EXPGumbelConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = EXPGumbelConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, EXPGumbelConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a EXPGumbelConfig instance")
+        
         self.utils = EXPGumbelUtils(self.config)
         self.logits_processor = EXPGumbelLogitsProcessor(self.config, self.utils)
     

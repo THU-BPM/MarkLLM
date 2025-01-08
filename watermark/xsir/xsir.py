@@ -23,7 +23,7 @@ import torch
 import numpy as np
 from typing import Union
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from .transform_model import TransformModel
 from sentence_transformers import SentenceTransformer
@@ -34,41 +34,58 @@ from visualize.data_for_visualization import DataForVisualization
 from .generate_semantic_mappings import generate_semantic_mappings
 
 
-class XSIRConfig:
+class XSIRConfig(BaseConfig):
     """Config class for X-SIR algorithm, load config file and initialize parameters."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the X-SIR configuration.
+    # def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    #     """
+    #         Initialize the X-SIR configuration.
 
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/XSIR.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'XSIR':
-            raise AlgorithmNameMismatchError('XSIR', config_dict['algorithm_name'])
+    #         Parameters:
+    #             algorithm_config (str): Path to the algorithm configuration file.
+    #             transformers_config (TransformersConfig): Configuration for the transformers model.
+    #     """
+    #     if algorithm_config is None:
+    #         config_dict = load_config_file('config/XSIR.json')
+    #     else:
+    #         config_dict = load_config_file(algorithm_config)
+    #     if config_dict['algorithm_name'] != 'XSIR':
+    #         raise AlgorithmNameMismatchError('XSIR', config_dict['algorithm_name'])
 
-        # Load config
-        self.delta = config_dict['delta']
-        self.chunk_length = config_dict['chunk_length']
-        self.scale_dimension = config_dict['scale_dimension']
-        self.z_threshold = config_dict['z_threshold']
-        self.transform_model_input_dim = config_dict['transform_model_input_dim']
-        self.transform_model_name = config_dict['transform_model_name']
-        self.embedding_model_path = config_dict['embedding_model_path']
-        self.mapping_name = config_dict['mapping_name']
-        self.dictionary = config_dict.get('dictionary', None)
+    #     # Load config
+    #     self.delta = config_dict['delta']
+    #     self.chunk_length = config_dict['chunk_length']
+    #     self.scale_dimension = config_dict['scale_dimension']
+    #     self.z_threshold = config_dict['z_threshold']
+    #     self.transform_model_input_dim = config_dict['transform_model_input_dim']
+    #     self.transform_model_name = config_dict['transform_model_name']
+    #     self.embedding_model_path = config_dict['embedding_model_path']
+    #     self.mapping_name = config_dict['mapping_name']
+    #     self.dictionary = config_dict.get('dictionary', None)
 
-        # Load transformer model's configuration
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    #     # Load transformer model's configuration
+    #     self.generation_model = transformers_config.model
+    #     self.generation_tokenizer = transformers_config.tokenizer
+    #     self.vocab_size = transformers_config.vocab_size
+    #     self.device = transformers_config.device
+    #     self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.delta = self.config_dict['delta']
+        self.chunk_length = self.config_dict['chunk_length']
+        self.scale_dimension = self.config_dict['scale_dimension']
+        self.z_threshold = self.config_dict['z_threshold']
+        self.transform_model_input_dim = self.config_dict['transform_model_input_dim']
+        self.transform_model_name = self.config_dict['transform_model_name']
+        self.embedding_model_path = self.config_dict['embedding_model_path']
+        self.mapping_name = self.config_dict['mapping_name']
+        self.dictionary = self.config_dict.get('dictionary', None)  
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'XSIR'
 
 
 class XSIRUtils:
@@ -208,15 +225,21 @@ class XSIRLogitsProcessor(LogitsProcessor):
 class XSIR(BaseWatermark):
     """Top-level class for X-SIR algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | XSIRConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the X-SIR algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | XSIRConfig): Path to the algorithm configuration file or XSIRConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = XSIRConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = XSIRConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, XSIRConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a XSIRConfig instance")
+        
         self.utils = XSIRUtils(self.config)
         self.logits_processor = XSIRLogitsProcessor(self.config, self.utils)
 

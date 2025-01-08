@@ -19,7 +19,7 @@
 
 import torch
 from functools import partial
-from watermark.base import BaseWatermark
+from watermark.base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
@@ -28,39 +28,56 @@ from visualize.data_for_visualization import DataForVisualization
 from transformers import OPTForCausalLM, AutoTokenizer, LogitsProcessorList
 from watermark.ts.TS_networks import DeltaNetwork, GammaNetwork
 
-class TSConfig:
-    """Config class for KGW algorithm, load config file and initialize parameters."""
+class TSConfig(BaseConfig):
+    """Config class for TS algorithm, load config file and initialize parameters."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the KGW configuration.
+    # def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    #     """
+    #         Initialize the KGW configuration.
 
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
+    #         Parameters:
+    #             algorithm_config (str): Path to the algorithm configuration file.
+    #             transformers_config (TransformersConfig): Configuration for the transformers model.
+    #     """
 
-        if algorithm_config is None:
-            config_dict = load_config_file('config/TS.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'TS':
-            raise AlgorithmNameMismatchError('TS', config_dict['algorithm_name'])
+    #     if algorithm_config is None:
+    #         config_dict = load_config_file('config/TS.json')
+    #     else:
+    #         config_dict = load_config_file(algorithm_config)
+    #     if config_dict['algorithm_name'] != 'TS':
+    #         raise AlgorithmNameMismatchError('TS', config_dict['algorithm_name'])
 
-        self.hash_key = config_dict['hash_key']
-        self.seeding_scheme = config_dict['seeding_scheme']
-        self.ckpt_path = config_dict['ckpt_path']
-        self.gamma = config_dict['gamma']
-        self.delta = config_dict['delta']
-        self.prefix_length = config_dict['prefix_length']
-        self.z_threshold = config_dict['z_threshold']
+    #     self.hash_key = config_dict['hash_key']
+    #     self.seeding_scheme = config_dict['seeding_scheme']
+    #     self.ckpt_path = config_dict['ckpt_path']
+    #     self.gamma = config_dict['gamma']
+    #     self.delta = config_dict['delta']
+    #     self.prefix_length = config_dict['prefix_length']
+    #     self.z_threshold = config_dict['z_threshold']
+    #     self.tokenizer_opt = AutoTokenizer.from_pretrained("facebook/opt-1.3b", padding_side="left")
+
+    #     self.generation_model = transformers_config.model
+    #     self.generation_tokenizer = transformers_config.tokenizer
+    #     self.vocab_size = transformers_config.vocab_size
+    #     self.device = transformers_config.device
+    #     self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.gamma = self.config_dict['gamma']
+        self.delta = self.config_dict['delta']
+        self.hash_key = self.config_dict['hash_key']
+        self.seeding_scheme = self.config_dict['seeding_scheme']
+        self.ckpt_path = self.config_dict['ckpt_path']
+        self.prefix_length = self.config_dict['prefix_length']
+        self.z_threshold = self.config_dict['z_threshold']
+
         self.tokenizer_opt = AutoTokenizer.from_pretrained("facebook/opt-1.3b", padding_side="left")
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'TS'
 
 
 class TSUtils:
@@ -263,15 +280,21 @@ class TSLogitsProcessor(LogitsProcessor):
 class TS(BaseWatermark):
     """Top-level class for KGW algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | TSConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the KGW algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | TSConfig): Path to the algorithm configuration file or TSConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = TSConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = TSConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, TSConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a TSConfig instance")
+        
         self.utils = TSUtils(self.config)
         self.logits_processor = TSLogitsProcessor(self.config, self.utils)
 

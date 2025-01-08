@@ -20,7 +20,7 @@
 import torch
 import numpy as np
 from math import log
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from .mersenne import MersenneRNG
 from utils.utils import load_config_file
 from .cython_files.levenshtein import levenshtein
@@ -29,36 +29,22 @@ from exceptions.exceptions import AlgorithmNameMismatchError
 from visualize.data_for_visualization import DataForVisualization
 
 
-class EXPEditConfig:
+class EXPEditConfig(BaseConfig):
     """Config class for EXPEdit algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the EXPEdit configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/EXPEdit.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'EXPEdit':
-            raise AlgorithmNameMismatchError('EXPEdit', config_dict['algorithm_name'])
-
-        self.pseudo_length = config_dict['pseudo_length']
-        self.sequence_length = config_dict['sequence_length']
-        self.n_runs = config_dict['n_runs']
-        self.p_threshold = config_dict['p_threshold']
-        self.key = config_dict['key']
-        self.top_k = config_dict['top_k']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.pseudo_length = self.config_dict['pseudo_length']
+        self.sequence_length = self.config_dict['sequence_length']
+        self.n_runs = self.config_dict['n_runs']
+        self.p_threshold = self.config_dict['p_threshold']
+        self.key = self.config_dict['key']
+        self.top_k = self.config_dict['top_k']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'EXPEdit'
 
 
 class EXPEditUtils:
@@ -113,8 +99,14 @@ class EXPEditUtils:
 
 class EXPEdit(BaseWatermark):
     """Top-level class for the EXPEdit algorithm."""
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        self.config = EXPEditConfig(algorithm_config, transformers_config)
+    def __init__(self, algorithm_config: str | EXPEditConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
+        if isinstance(algorithm_config, str):
+            self.config = EXPEditConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, EXPEditConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a EXPEditConfig instance")
+        
         self.utils = EXPEditUtils(self.config)
 
     def generate_watermarked_text(self, prompt: str, *args, **kwargs):

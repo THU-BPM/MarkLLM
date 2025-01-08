@@ -18,3 +18,4 @@
 # =========================================================
 
 from .unbiased import UnbiasedWatermark
+from .unbiased import UnbiasedConfig

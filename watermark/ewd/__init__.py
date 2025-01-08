@@ -18,3 +18,4 @@
 # ====================================================
 
 from .ewd import EWD
+from .ewd import EWDConfig
