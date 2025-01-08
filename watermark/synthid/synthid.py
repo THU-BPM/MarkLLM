@@ -21,7 +21,7 @@ import torch
 import numpy as np
 from math import sqrt
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from .detector import get_detector
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
@@ -30,48 +30,32 @@ from visualize.data_for_visualization import DataForVisualization
 from exceptions.exceptions import AlgorithmNameMismatchError, InvalidWatermarkModeError
 
 
-class SynthIDConfig:
-    """Config class for Default Watermark algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str = None, transformers_config: TransformersConfig = None, *args, **kwargs) -> None:
-        """
-        Initialize the Default Watermark configuration.
-
-        Parameters:
-            algorithm_config (str): Path to the algorithm configuration file.
-            transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/SynthID.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'SynthID':
-            raise AlgorithmNameMismatchError('SynthID', config_dict['algorithm_name'])
-
-        # SynthID specific parameters
-        self.ngram_len = config_dict['ngram_len']
-        self.keys = config_dict['keys']
-        self.sampling_table_size = config_dict['sampling_table_size']
-        self.sampling_table_seed = config_dict['sampling_table_seed']
-        self.context_history_size = config_dict['context_history_size']
-        self.detector_name = config_dict['detector_type']
-        self.threshold = config_dict['threshold']
-        self.watermark_mode = config_dict['watermark_mode']
-        self.num_leaves = config_dict['num_leaves']
+class SynthIDConfig(BaseConfig):
+    """Config class for SynthID algorithm, load config file and initialize parameters."""
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.ngram_len = self.config_dict['ngram_len']
+        self.keys = self.config_dict['keys']
+        self.sampling_table_size = self.config_dict['sampling_table_size']
+        self.sampling_table_seed = self.config_dict['sampling_table_seed']
+        self.context_history_size = self.config_dict['context_history_size']
+        self.detector_name = self.config_dict['detector_type']
+        self.threshold = self.config_dict['threshold']
+        self.watermark_mode = self.config_dict['watermark_mode']
+        self.num_leaves = self.config_dict['num_leaves']
 
         # Validate detect mode
         if self.watermark_mode not in ['distortionary', 'non-distortionary']:
             raise InvalidWatermarkModeError(self.watermark_mode)
         
-        # Model configuration
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
-        self.top_k = getattr(transformers_config, 'top_k', -1)
-        self.temperature = getattr(transformers_config, 'temperature', 0.7)
+        self.top_k = getattr(self.transformers_config, 'top_k', -1)
+        self.temperature = getattr(self.transformers_config, 'temperature', 0.7)
         
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'SynthID'
 
 class SynthIDUtils:
     """Utility class for SynthID algorithm, contains helper functions."""
@@ -508,8 +492,14 @@ class SynthIDLogitsProcessor(LogitsProcessor):
 class SynthID(BaseWatermark):
     """Top-level class for SynthID algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        self.config = SynthIDConfig(algorithm_config, transformers_config)
+    def __init__(self, algorithm_config: str | SynthIDConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
+        if isinstance(algorithm_config, str):
+            self.config = SynthIDConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, SynthIDConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a SynthIDConfig instance")
+        
         self.utils = SynthIDUtils(self.config)
         self.logits_processor = SynthIDLogitsProcessor(self.config, self.utils)
         self.detector = get_detector(self.config.detector_name, self.logits_processor)

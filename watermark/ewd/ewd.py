@@ -19,7 +19,7 @@
 
 import torch
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
@@ -27,35 +27,21 @@ from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
 
 
-class EWDConfig:
+class EWDConfig(BaseConfig):
     """Config class for EWD algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the EWD configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/EWD.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'EWD':
-            raise AlgorithmNameMismatchError('EWD', config_dict['algorithm_name'])
-
-        self.gamma = config_dict['gamma']
-        self.delta = config_dict['delta']
-        self.hash_key = config_dict['hash_key']
-        self.z_threshold = config_dict['z_threshold']
-        self.prefix_length = config_dict['prefix_length']
-        
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.gamma = self.config_dict['gamma']
+        self.delta = self.config_dict['delta']
+        self.hash_key = self.config_dict['hash_key']
+        self.z_threshold = self.config_dict['z_threshold']
+        self.prefix_length = self.config_dict['prefix_length']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'EWD'
 
 
 class EWDUtils:
@@ -209,15 +195,21 @@ class EWDLogitsProcessor(LogitsProcessor):
 class EWD(BaseWatermark):
     """Top-level class for EWD algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | EWDConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the EWD algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | EWDConfig): Path to the algorithm configuration file or EWDConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = EWDConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = EWDConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, EWDConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a EWDConfig instance")
+        
         self.utils = EWDUtils(self.config)
         self.logits_processor = EWDLogitsProcessor(self.config, self.utils)
     

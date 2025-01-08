@@ -20,42 +20,29 @@
 import torch
 import scipy
 from math import log
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
 from visualize.data_for_visualization import DataForVisualization
 
 
-class EXPConfig:
+class EXPConfig(BaseConfig):
     """Config class for EXP algorithm, load config file and initialize parameters."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the EXP configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/EXP.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'EXP':
-            raise AlgorithmNameMismatchError('EXP', config_dict['algorithm_name'])
-
-        self.prefix_length = config_dict['prefix_length']
-        self.hash_key = config_dict['hash_key']
-        self.threshold = config_dict['threshold']
-        self.sequence_length = config_dict['sequence_length']
-        self.top_k = config_dict['top_k']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.prefix_length = self.config_dict['prefix_length']
+        self.hash_key = self.config_dict['hash_key']
+        self.threshold = self.config_dict['threshold']
+        self.sequence_length = self.config_dict['sequence_length']
+        self.top_k = self.config_dict['top_k']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'EXP'
 
 
 class EXPUtils:
@@ -107,15 +94,21 @@ class EXPUtils:
 class EXP(BaseWatermark):
     """Top-level class for the EXP algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | EXPConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the EXP algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | EXPConfig): Path to the algorithm configuration file or EXPConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = EXPConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = EXPConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, EXPConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a EXPConfig instance")
+        
         self.utils = EXPUtils(self.config)
 
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:

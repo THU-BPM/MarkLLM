@@ -18,3 +18,4 @@
 # ===========================================================
 
 from .exp_gumbel import EXPGumbel
+from .exp_gumbel import EXPGumbelConfig

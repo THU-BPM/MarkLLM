@@ -23,7 +23,7 @@ import jieba
 import random
 import numpy as np
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from .transform_model import TransformModel
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
@@ -32,38 +32,24 @@ from utils.utils import create_directory_for_file, load_config_file
 from transformers import LogitsProcessor, LogitsProcessorList, BertTokenizer, BertModel
 
 
-class SIRConfig:
+class SIRConfig(BaseConfig):
     """Config class for SIR algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the SIR configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/SIR.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'SIR':
-            raise AlgorithmNameMismatchError('SIR', config_dict['algorithm_name'])
-
-        self.delta = config_dict['delta']
-        self.chunk_length = config_dict['chunk_length']
-        self.scale_dimension = config_dict['scale_dimension']
-        self.z_threshold = config_dict['z_threshold']
-        self.transform_model_input_dim = config_dict['transform_model_input_dim']
-        self.transform_model_name = config_dict['transform_model_name']
-        self.embedding_model_path = config_dict['embedding_model_path']
-        self.mapping_name = config_dict['mapping_name']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.delta = self.config_dict['delta']
+        self.chunk_length = self.config_dict['chunk_length']
+        self.scale_dimension = self.config_dict['scale_dimension']
+        self.z_threshold = self.config_dict['z_threshold']
+        self.transform_model_input_dim = self.config_dict['transform_model_input_dim']
+        self.transform_model_name = self.config_dict['transform_model_name']
+        self.embedding_model_path = self.config_dict['embedding_model_path']
+        self.mapping_name = self.config_dict['mapping_name']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'SIR'
 
 
 class SIRUtils:
@@ -193,7 +179,7 @@ class SIRLogitsProcessor(LogitsProcessor):
 class SIR(BaseWatermark):
     """Top-level class for SIR algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | SIRConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the SIR algorithm.
 
@@ -201,7 +187,13 @@ class SIR(BaseWatermark):
                 algorithm_config (str): Path to the algorithm configuration file.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = SIRConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = SIRConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, SIRConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a SIRConfig instance")
+        
         self.utils = SIRUtils(self.config)
         self.logits_processor = SIRLogitsProcessor(self.config, self.utils)
 

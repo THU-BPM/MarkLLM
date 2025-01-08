@@ -20,7 +20,7 @@
 import torch
 from math import sqrt
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from .network_model import UPVGenerator, UPVDetector
 from utils.transformers_config import TransformersConfig
@@ -29,44 +29,62 @@ from visualize.data_for_visualization import DataForVisualization
 from exceptions.exceptions import AlgorithmNameMismatchError, InvalidDetectModeError
 
 
-class UPVConfig:
+class UPVConfig(BaseConfig):
     """Config class for UPV algorithm, load config file and initialize parameters."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig) -> None:
-        """
-            Initialize the UPV configuration.
+    # def __init__(self, algorithm_config: str, transformers_config: TransformersConfig) -> None:
+    #     """
+    #         Initialize the UPV configuration.
 
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/UPV.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'UPV':
-            raise AlgorithmNameMismatchError('UPV', config_dict['algorithm_name'])
+    #         Parameters:
+    #             algorithm_config (str): Path to the algorithm configuration file.
+    #             transformers_config (TransformersConfig): Configuration for the transformers model.
+    #     """
+    #     if algorithm_config is None:
+    #         config_dict = load_config_file('config/UPV.json')
+    #     else:
+    #         config_dict = load_config_file(algorithm_config)
+    #     if config_dict['algorithm_name'] != 'UPV':
+    #         raise AlgorithmNameMismatchError('UPV', config_dict['algorithm_name'])
         
-        self.gamma = config_dict['gamma']
-        self.delta = config_dict['delta']
-        self.z_threshold = config_dict['z_threshold']
-        self.prefix_length = config_dict['prefix_length']
-        self.bit_number = config_dict['bit_number']
-        self.sigma = config_dict['sigma']
-        self.default_top_k = config_dict['default_top_k']
-        self.generator_model_name = config_dict['generator_model_name']
-        self.detector_model_name = config_dict['detector_model_name']
-        self.detect_mode = config_dict['detect_mode']
+    #     self.gamma = config_dict['gamma']
+    #     self.delta = config_dict['delta']
+    #     self.z_threshold = config_dict['z_threshold']
+    #     self.prefix_length = config_dict['prefix_length']
+    #     self.bit_number = config_dict['bit_number']
+    #     self.sigma = config_dict['sigma']
+    #     self.default_top_k = config_dict['default_top_k']
+    #     self.generator_model_name = config_dict['generator_model_name']
+    #     self.detector_model_name = config_dict['detector_model_name']
+    #     self.detect_mode = config_dict['detect_mode']
 
-        # Validate detect mode
-        if self.detect_mode not in ['key', 'network']:
-            raise InvalidDetectModeError(self.detect_mode)
+    #     # Validate detect mode
+    #     if self.detect_mode not in ['key', 'network']:
+    #         raise InvalidDetectModeError(self.detect_mode)
 
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    #     self.generation_model = transformers_config.model
+    #     self.generation_tokenizer = transformers_config.tokenizer
+    #     self.vocab_size = transformers_config.vocab_size
+    #     self.device = transformers_config.device
+    #     self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.gamma = self.config_dict['gamma']
+        self.delta = self.config_dict['delta']
+        self.z_threshold = self.config_dict['z_threshold']
+        self.prefix_length = self.config_dict['prefix_length']
+        self.bit_number = self.config_dict['bit_number']
+        self.sigma = self.config_dict['sigma']
+        self.default_top_k = self.config_dict['default_top_k']
+        self.generator_model_name = self.config_dict['generator_model_name']
+        self.detector_model_name = self.config_dict['detector_model_name']
+        self.detect_mode = self.config_dict['detect_mode']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'UPV'
 
 
 class UPVUtils:
@@ -238,15 +256,21 @@ class UPVLogitsProcessor(LogitsProcessor):
 class UPV(BaseWatermark):
     """Top-level class for UPV algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | UPVConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the UPV algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | UPVConfig): Path to the algorithm configuration file or UPVConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = UPVConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = UPVConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, UPVConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a UPVConfig instance")
+        
         self.utils = UPVUtils(self.config)
         self.logits_processor = UPVLogitsProcessor(self.config, self.utils)
 
@@ -298,7 +322,7 @@ class UPV(BaseWatermark):
             is_watermarked = z_score > self.config.z_threshold
         else:
             is_watermarked, z_score = self._detect_watermark_network_mode(encoded_text)
-
+        
         # Return results based on the return_dict flag
         if return_dict:
             return {"is_watermarked": is_watermarked, "score": z_score}

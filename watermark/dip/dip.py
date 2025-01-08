@@ -24,7 +24,7 @@ from typing import Tuple, Union
 import torch.nn.functional as F
 from math import sqrt
 from functools import partial
-from ..base import BaseWatermark
+from ..base import BaseWatermark, BaseConfig
 from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
@@ -32,40 +32,22 @@ from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
 
 
-class DIPConfig:
+class DIPConfig(BaseConfig):
     """Config class for DiP algorithm, load config file and initialize parameters."""
-
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
-        """
-            Initialize the DiP configuration.
-
-            Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
-                transformers_config (TransformersConfig): Configuration for the transformers model.
-        """
-        if algorithm_config is None:
-            config_dict = load_config_file('config/DIP.json')
-        else:
-            config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'DIP':
-            raise AlgorithmNameMismatchError('DIP', config_dict['algorithm_name'])
-        
-        random.seed(config_dict['key'])
-        hash_key = random.getrandbits(1024).to_bytes(128, "big")
-        self.hash_key = hash_key
-
-        self.gamma = config_dict['gamma']
-        self.alpha = config_dict['alpha']
-        self.ignore_history_generation = bool(config_dict['ignore_history_generation'])
-        self.ignore_history_detection = bool(config_dict['ignore_history_detection'])
-        self.z_threshold = config_dict['z_threshold']
-        self.prefix_length = config_dict['prefix_length']
-
-        self.generation_model = transformers_config.model
-        self.generation_tokenizer = transformers_config.tokenizer
-        self.vocab_size = transformers_config.vocab_size
-        self.device = transformers_config.device
-        self.gen_kwargs = transformers_config.gen_kwargs
+    
+    def initialize_parameters(self) -> None:
+        """Initialize algorithm-specific parameters."""
+        self.gamma = self.config_dict['gamma']
+        self.alpha = self.config_dict['alpha']
+        self.ignore_history_generation = bool(self.config_dict['ignore_history_generation'])
+        self.ignore_history_detection = bool(self.config_dict['ignore_history_detection'])
+        self.z_threshold = self.config_dict['z_threshold']
+        self.prefix_length = self.config_dict['prefix_length']
+    
+    @property
+    def algorithm_name(self) -> str:
+        """Return the algorithm name."""
+        return 'DIP'
 
 class DIPUtils:
     """Utility class for DiP algorithm, contains helper functions."""
@@ -271,15 +253,21 @@ class DIPLogitsProcessor(LogitsProcessor):
 class DIP(BaseWatermark):
     """Top-level class for DIP algorithm."""
 
-    def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
+    def __init__(self, algorithm_config: str | DIPConfig, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> None:
         """
             Initialize the DIP algorithm.
 
             Parameters:
-                algorithm_config (str): Path to the algorithm configuration file.
+                algorithm_config (str | DIPConfig): Path to the algorithm configuration file or DIPConfig instance.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = DIPConfig(algorithm_config, transformers_config)
+        if isinstance(algorithm_config, str):
+            self.config = DIPConfig(algorithm_config, transformers_config)
+        elif isinstance(algorithm_config, DIPConfig):
+            self.config = algorithm_config
+        else:
+            raise TypeError("algorithm_config must be either a path string or a DIPConfig instance")
+        
         self.utils = DIPUtils(self.config)
         self.logits_processor = DIPLogitsProcessor(self.config, self.utils)
     

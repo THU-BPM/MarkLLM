@@ -18,3 +18,4 @@
 # ====================================================
 
 from .kgw import KGW
+from .kgw import KGWConfig

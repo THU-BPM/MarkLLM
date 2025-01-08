@@ -41,19 +41,20 @@ def test_algorithm(algorithm_name):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
     # Transformers config
-    transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("/data2/shared_model/facebook/opt-1.3b/").to(device),
-                                            tokenizer=AutoTokenizer.from_pretrained("/data2/shared_model/facebook/opt-1.3b/"),
+    transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("facebook/opt-1.3b").to(device),
+                                            tokenizer=AutoTokenizer.from_pretrained("facebook/opt-1.3b"),
                                             vocab_size=50272,
                                             device=device,
                                             max_new_tokens=200,
                                             min_length=230,
                                             do_sample=True,
                                             no_repeat_ngram_size=4)
-    
+                                            
+        
     # Load watermark algorithm
     myWatermark = AutoWatermark.load(f'{algorithm_name}', 
                                      algorithm_config=f'config/{algorithm_name}.json',
-                                     transformers_config=transformers_config)
+                                     transformers_config=transformers_config, delta=1)
 
     watermarked_text = myWatermark.generate_watermarked_text(prompt)
     print(watermarked_text)
@@ -67,6 +68,6 @@ def test_algorithm(algorithm_name):
 
 
 if __name__ == '__main__':
-    test_algorithm('SynthID')
+    test_algorithm('KGW')
 
 

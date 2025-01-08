@@ -18,3 +18,4 @@
 # ====================================================
 
 from .ts import TS
+from .ts import TSConfig

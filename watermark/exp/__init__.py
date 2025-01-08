@@ -18,3 +18,4 @@
 # ====================================================
 
 from .exp import EXP
+from .exp import EXPConfig
