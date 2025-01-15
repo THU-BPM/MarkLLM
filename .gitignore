@@ -174,4 +174,5 @@ cython_debug/
 .history
 .vscode
 .DS_Store
-watermark/XSIR/embedding/train_embeddings_10K.txt
+watermark/XSIR/embedding/train_embeddings_10K.txt\
+models

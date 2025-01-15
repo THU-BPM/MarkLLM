@@ -1,21 +1,3 @@
-# Copyright 2024 THU-BPM MarkLLM.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# ==============================================
-# sweet.py
-# Description: Implementation of SWEET algorithm
-# ==============================================
 import torch
 from math import sqrt
 
@@ -28,23 +10,23 @@ from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
 
 
-class SWEETConfig:
-    """Config class for SWEET algorithm, load config file and initialize parameters."""
+class CustomConfig:
+    """Config class for custom algorithm, load config file and initialize parameters."""
 
     def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
         """
-            Initialize the SWEET configuration.
+            Initialize the custom configuration.
 
             Parameters:
                 algorithm_config (str): Path to the algorithm configuration file.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
         if algorithm_config is None:
-            config_dict = load_config_file('config/SWEET.json')
+            config_dict = load_config_file('config/custom.json')
         else:
             config_dict = load_config_file(algorithm_config)
-        if config_dict['algorithm_name'] != 'SWEET':
-            raise AlgorithmNameMismatchError('SWEET', config_dict['algorithm_name'])
+        if config_dict['algorithm_name'] != 'custom':
+            raise AlgorithmNameMismatchError('custom', config_dict['algorithm_name'])
         
         self.gamma = config_dict['gamma']
         self.delta = config_dict['delta']
@@ -60,10 +42,10 @@ class SWEETConfig:
         self.gen_kwargs = transformers_config.gen_kwargs
 
 
-class SWEETUtils:
-    """Utility class for SWEET algorithm, contains helper functions."""
+class CustomUtils:
+    """Utility class for custom algorithm, contains helper functions."""
 
-    def __init__(self, config: SWEETConfig, *args, **kwargs):
+    def __init__(self, config: CustomConfig, *args, **kwargs):
         self.config = config
         self.rng = torch.Generator(device=self.config.device)
 
@@ -135,16 +117,16 @@ class SWEETUtils:
         return z_score, green_token_flags, weights
 
 
-class SWEETLogitsProcessor(LogitsProcessor):
-    """Logits processor for SWEET algorithm, contains the logic to bias the logits."""
+class CustomLogitsProcessor(LogitsProcessor):
+    """Logits processor for custom algorithm, contains the logic to bias the logits."""
 
-    def __init__(self, config: SWEETConfig, utils: SWEETUtils, *args, **kwargs) -> None:
+    def __init__(self, config: CustomConfig, utils: CustomUtils, *args, **kwargs) -> None:
         """
-            Initialize the SWEET logits processor.
+            Initialize the custom logits processor.
 
             Parameters:
-                config (SWEETConfig): Configuration for the SWEET algorithm.
-                utils (SWEETUtils): Utility class for the SWEET algorithm.
+                config (customConfig): Configuration for the custom algorithm.
+                utils (customUtils): Utility class for the custom algorithm.
         """
         self.config = config
         self.utils = utils
@@ -186,20 +168,20 @@ class SWEETLogitsProcessor(LogitsProcessor):
         return scores
 
 
-class SWEET(BaseWatermark):
-    """Top-level class for SWEET algorithm."""
+class Custom(BaseWatermark):
+    """Top-level class for custom algorithm."""
 
     def __init__(self, algorithm_config: str, transformers_config: TransformersConfig, *args, **kwargs) -> None:
         """
-            Initialize the SWEET algorithm.
+            Initialize the custom algorithm.
 
             Parameters:
                 algorithm_config (str): Path to the algorithm configuration file.
                 transformers_config (TransformersConfig): Configuration for the transformers model.
         """
-        self.config = SWEETConfig(algorithm_config, transformers_config)
-        self.utils = SWEETUtils(self.config)
-        self.logits_processor = SWEETLogitsProcessor(self.config, self.utils)
+        self.config = CustomConfig(algorithm_config, transformers_config)
+        self.utils = CustomUtils(self.config)
+        self.logits_processor = CustomLogitsProcessor(self.config, self.utils)
 
     def generate_watermarked_text(self, prompt: str, *args, **kwargs):
         """Generate watermarked text."""

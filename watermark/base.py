@@ -40,6 +40,17 @@ class BaseWatermark:
         # Decode
         unwatermarked_text = self.config.generation_tokenizer.batch_decode(encoded_unwatermarked_text, skip_special_tokens=True)[0]
         return unwatermarked_text
+    
+    def generate_unwatermarked_code(self, prompt: str, *args, **kwargs) -> str:
+        """Generate unwatermarked code."""
+        
+        # Encode prompt
+        encoded_prompt = self.config.generation_tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(self.config.device)
+        # Generate unwatermarked code
+        encoded_unwatermarked_code = self.config.generation_model.generate(**encoded_prompt, **self.config.gen_kwargs)
+        # Decode
+        unwatermarked_code = self.config.generation_tokenizer.batch_decode(encoded_unwatermarked_code, skip_special_tokens=True)[0]
+        return unwatermarked_code
 
     def detect_watermark(self, text:str, return_dict: bool=True, *args, **kwargs) -> Union[tuple, dict]:
         pass
