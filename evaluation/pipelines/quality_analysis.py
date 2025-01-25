@@ -38,21 +38,21 @@ class TextQualityComparisonResult:
     """Result of text quality comparison."""
 
     def __init__(self, watermarked_text: str, unwatermarked_text: str, 
-                 watermarked_quality_score: float, unwatermarked_quality_score) -> None:
+                 watermarked_quality_scores: dict[str, float], 
+                 unwatermarked_quality_scores: dict[str, float]) -> None:
         """
             Initialize the text quality comparison result.
 
             Parameters:
                 watermarked_text (str): The watermarked text.
                 unwatermarked_text (str): The unwatermarked text.
-                watermarked_quality_score (float): The quality score of the watermarked text.
-                unwatermarked_quality_score (float): The quality score of the unwatermarked text.
+                watermarked_quality_scores (dict[str, float]): The quality scores of the watermarked text.
+                unwatermarked_quality_scores (dict[str, float]): The quality scores of the unwatermarked text.
         """
         self.watermarked_text = watermarked_text
         self.unwatermarked_text = unwatermarked_text
-        self.watermarked_quality_score = watermarked_quality_score
-        self.unwatermarked_quality_score = unwatermarked_quality_score
-        pass
+        self.watermarked_quality_scores = watermarked_quality_scores
+        self.unwatermarked_quality_scores = unwatermarked_quality_scores
 
 
 class TextQualityAnalysisPipeline:
@@ -61,8 +61,10 @@ class TextQualityAnalysisPipeline:
     def __init__(self, dataset: BaseDataset, 
                  watermarked_text_editor_list: list[TextEditor] = [],
                  unwatermarked_text_editor_list: list[TextEditor] = [], 
-                 analyzer: TextQualityAnalyzer = None, unwatermarked_text_source='natural', 
-                 show_progress: bool = True, return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
+                 analyzers: list[TextQualityAnalyzer] = None, 
+                 unwatermarked_text_source='natural', 
+                 show_progress: bool = True, 
+                 return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
         """
             Initialize the text quality analysis pipeline.
 
@@ -70,23 +72,21 @@ class TextQualityAnalysisPipeline:
                 dataset (BaseDataset): The dataset for evaluation.
                 watermarked_text_editor_list (list[TextEditor]): The list of text editors for watermarked text.
                 unwatermarked_text_editor_list (list[TextEditor]): The list of text editors for unwatermarked text.
-                analyzer (TextQualityAnalyzer): The quality analyzer for text.
+                analyzers (list[TextQualityAnalyzer]): List of quality analyzers for text.
                 unwatermarked_text_source (str): The source of unwatermarked text.
                 show_progress (bool): Whether to show progress.
                 return_type (QualityPipelineReturnType): The return type of the pipeline.
         """
-        # Validate text_source_mode
         if unwatermarked_text_source not in ['natural', 'generated']:
             raise InvalidTextSourceModeError(unwatermarked_text_source)
         
         self.dataset = dataset
         self.watermarked_text_editor_list = watermarked_text_editor_list
         self.unwatermarked_text_editor_list = unwatermarked_text_editor_list
-        self.analyzer = analyzer
+        self.analyzers = analyzers or []
         self.unwatermarked_text_source = unwatermarked_text_source
         self.show_progress = show_progress
         self.return_type = return_type
-        pass
 
     def _get_iterable(self):
         """Return an iterable for the dataset."""
@@ -143,25 +143,55 @@ class TextQualityAnalysisPipeline:
             edited_watermarked_text = self._edit_watermarked_text(watermarked_text, self.dataset.get_prompt(index))
             edited_unwatermarked_text = self._edit_unwatermarked_text(unwatermarked_text, self.dataset.get_prompt(index))
 
-            # Prepare input for quality analyzer
-            prepared_data = self._prepare_input_for_quality_analyzer(edited_watermarked_text, edited_unwatermarked_text, index)
+            # Initialize scores dictionaries
+            watermarked_scores = {}
+            unwatermarked_scores = {}
 
-            # Analyze quality of watermarked and unwatermarked text
-            watermarked_quality_score, unwatermarked_quality_score = self.analyze_quality(prepared_data)
+            # Analyze quality using each analyzer
+            for analyzer in self.analyzers:
+                prepared_data = self._prepare_input_for_quality_analyzer(edited_watermarked_text, edited_unwatermarked_text, index)
+                w_score, u_score = self.analyze_quality(prepared_data, analyzer)
+                analyzer_name = analyzer.__class__.__name__
+                watermarked_scores[analyzer_name] = w_score
+                unwatermarked_scores[analyzer_name] = u_score
 
             # Append result
-            evaluation_result.append(TextQualityComparisonResult(edited_watermarked_text, edited_unwatermarked_text, 
-                                                                watermarked_quality_score, unwatermarked_quality_score))
+            evaluation_result.append(TextQualityComparisonResult(
+                edited_watermarked_text, 
+                edited_unwatermarked_text, 
+                watermarked_scores, 
+                unwatermarked_scores
+            ))
 
-        # Return result
+        # Return result based on return_type
         if self.return_type == QualityPipelineReturnType.FULL:
             return evaluation_result
         elif self.return_type == QualityPipelineReturnType.SCORES:
-            return [{'watermarked': result.watermarked_quality_score, 
-                     'unwatermarked': result.unwatermarked_quality_score} for result in evaluation_result]
+            return [{'watermarked': result.watermarked_quality_scores, 
+                    'unwatermarked': result.unwatermarked_quality_scores} 
+                   for result in evaluation_result]
         elif self.return_type == QualityPipelineReturnType.MEAN_SCORES:
-            return {'watermarked': sum([result.watermarked_quality_score for result in evaluation_result]) / len(evaluation_result), 
-                    'unwatermarked': sum([result.unwatermarked_quality_score for result in evaluation_result]) / len(evaluation_result)}
+            # Calculate mean scores for each analyzer
+            mean_watermarked = {}
+            mean_unwatermarked = {}
+            
+            if evaluation_result:
+                analyzer_names = evaluation_result[0].watermarked_quality_scores.keys()
+                for analyzer_name in analyzer_names:
+                    mean_watermarked[analyzer_name] = sum(
+                        result.watermarked_quality_scores[analyzer_name] 
+                        for result in evaluation_result
+                    ) / len(evaluation_result)
+                    
+                    mean_unwatermarked[analyzer_name] = sum(
+                        result.unwatermarked_quality_scores[analyzer_name] 
+                        for result in evaluation_result
+                    ) / len(evaluation_result)
+            
+            return {
+                'watermarked': mean_watermarked,
+                'unwatermarked': mean_unwatermarked
+            }
 
 
 class DirectTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
@@ -177,27 +207,19 @@ class DirectTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
     def __init__(self, dataset: BaseDataset, 
                  watermarked_text_editor_list: list[TextEditor] = [], 
                  unwatermarked_text_editor_list: list[TextEditor] = [],
-                 analyzer: TextQualityAnalyzer = None, unwatermarked_text_source='generated', 
-                 show_progress: bool = True, return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
-        """
-            Initialize the direct text quality analysis pipeline.
-
-            Parameters:
-                dataset (BaseDataset): The dataset for evaluation.
-                watermarked_text_editor_list (list[TextEditor]): The list of text editors for watermarked text.
-                unwatermarked_text_editor_list (list[TextEditor]): The list of text editors for unwatermarked text.
-                analyzer (TextQualityAnalyzer): The quality analyzer for text.
-                unwatermarked_text_source (str): The source of unwatermarked text.
-                show_progress (bool): Whether to show progress.
-                return_type (QualityPipelineReturnType): The return type of the pipeline.
-        """
-        # Validate analyzer
-        if not isinstance(analyzer, DirectTextQualityAnalyzer):
-            raise InvalidDirectAnalyzerTypeError
+                 analyzers: list[TextQualityAnalyzer] = None, 
+                 unwatermarked_text_source='generated', 
+                 show_progress: bool = True, 
+                 return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
+        
+        # Validate analyzers
+        if analyzers:
+            for analyzer in analyzers:
+                if not isinstance(analyzer, DirectTextQualityAnalyzer):
+                    raise InvalidDirectAnalyzerTypeError
 
         super().__init__(dataset, watermarked_text_editor_list, unwatermarked_text_editor_list, 
-                         analyzer, unwatermarked_text_source, show_progress, return_type)
-        pass
+                        analyzers, unwatermarked_text_source, show_progress, return_type)
 
     def _get_iterable(self):
         """Return an iterable for the dataset."""
@@ -207,11 +229,11 @@ class DirectTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
         """Prepare input for quality analyzer."""
         return watermarked_text, unwatermarked_text
     
-    def analyze_quality(self, prepared_data):
+    def analyze_quality(self, prepared_data, analyzer):
         """Analyze quality of watermarked and unwatermarked text."""
         watermarked_text = prepared_data[0]
         unwatermarked_text = prepared_data[1]
-        return self.analyzer.analyze(watermarked_text), self.analyzer.analyze(unwatermarked_text)
+        return analyzer.analyze(watermarked_text), analyzer.analyze(unwatermarked_text)
 
 
 class ReferencedTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
@@ -227,8 +249,10 @@ class ReferencedTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
     def __init__(self, dataset: BaseDataset, 
                  watermarked_text_editor_list: list[TextEditor] = [], 
                  unwatermarked_text_editor_list: list[TextEditor] = [],
-                 analyzer: TextQualityAnalyzer = None, unwatermarked_text_source='generated', 
-                 show_progress: bool = True, return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
+                 analyzers: list[TextQualityAnalyzer] = None, 
+                 unwatermarked_text_source='generated', 
+                 show_progress: bool = True, 
+                 return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
         """
             Initialize the referenced text quality analysis pipeline.
 
@@ -236,17 +260,19 @@ class ReferencedTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
                 dataset (BaseDataset): The dataset for evaluation.
                 watermarked_text_editor_list (list[TextEditor]): The list of text editors for watermarked text.
                 unwatermarked_text_editor_list (list[TextEditor]): The list of text editors for unwatermarked text.
-                analyzer (TextQualityAnalyzer): The quality analyzer for text.
+                analyzers (list[TextQualityAnalyzer]): List of quality analyzers for text.
                 unwatermarked_text_source (str): The source of unwatermarked text.
                 show_progress (bool): Whether to show progress.
                 return_type (QualityPipelineReturnType): The return type of the pipeline.
         """
-        # Validate analyzer
-        if not isinstance(analyzer, ReferencedTextQualityAnalyzer):
-            raise InvalidReferencedAnalyzerTypeError
+        # Validate analyzers
+        if analyzers:
+            for analyzer in analyzers:
+                if not isinstance(analyzer, ReferencedTextQualityAnalyzer):
+                    raise InvalidReferencedAnalyzerTypeError
+                    
         super().__init__(dataset, watermarked_text_editor_list, unwatermarked_text_editor_list, 
-                         analyzer, unwatermarked_text_source, show_progress, return_type)
-        pass
+                        analyzers, unwatermarked_text_source, show_progress, return_type)
 
     def _get_iterable(self):
         """Return an iterable for the dataset."""
@@ -256,12 +282,12 @@ class ReferencedTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
         """Prepare input for quality analyzer."""
         return watermarked_text, unwatermarked_text, self.dataset.get_reference(index)
     
-    def analyze_quality(self, prepared_data):
+    def analyze_quality(self, prepared_data, analyzer):
         """Analyze quality of watermarked and unwatermarked text."""
         watermarked_text = prepared_data[0]
         unwatermarked_text = prepared_data[1]
         reference = prepared_data[2]
-        return self.analyzer.analyze(watermarked_text, reference), self.analyzer.analyze(unwatermarked_text, reference)
+        return analyzer.analyze(watermarked_text, reference), analyzer.analyze(unwatermarked_text, reference)
 
 
 class ExternalDiscriminatorTextQualityAnalysisPipeline(TextQualityAnalysisPipeline):
@@ -277,8 +303,10 @@ class ExternalDiscriminatorTextQualityAnalysisPipeline(TextQualityAnalysisPipeli
     def __init__(self, dataset: BaseDataset, 
                  watermarked_text_editor_list: list[TextEditor] = [], 
                  unwatermarked_text_editor_list: list[TextEditor] = [],
-                 analyzer: TextQualityAnalyzer = None, unwatermarked_text_source='generated', 
-                 show_progress: bool = True, return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
+                 analyzers: list[TextQualityAnalyzer] = None, 
+                 unwatermarked_text_source='generated', 
+                 show_progress: bool = True, 
+                 return_type: QualityPipelineReturnType = QualityPipelineReturnType.MEAN_SCORES) -> None:
         """
             Initialize the external discriminator-based text quality analysis pipeline.
 
@@ -286,17 +314,19 @@ class ExternalDiscriminatorTextQualityAnalysisPipeline(TextQualityAnalysisPipeli
                 dataset (BaseDataset): The dataset for evaluation.
                 watermarked_text_editor_list (list[TextEditor]): The list of text editors for watermarked text.
                 unwatermarked_text_editor_list (list[TextEditor]): The list of text editors for unwatermarked text.
-                analyzer (TextQualityAnalyzer): The quality analyzer for text.
+                analyzers (list[TextQualityAnalyzer]): List of quality analyzers for text.
                 unwatermarked_text_source (str): The source of unwatermarked text.
                 show_progress (bool): Whether to show progress.
                 return_type (QualityPipelineReturnType): The return type of the pipeline.
         """
-        # Validate analyzer
-        if not isinstance(analyzer, ExternalDiscriminatorTextQualityAnalyzer):
-            raise InvalidReferencedAnalyzerTypeError
+        # Validate analyzers
+        if analyzers:
+            for analyzer in analyzers:
+                if not isinstance(analyzer, ExternalDiscriminatorTextQualityAnalyzer):
+                    raise InvalidReferencedAnalyzerTypeError
+                    
         super().__init__(dataset, watermarked_text_editor_list, unwatermarked_text_editor_list, 
-                         analyzer, unwatermarked_text_source, show_progress, return_type)
-        pass
+                        analyzers, unwatermarked_text_source, show_progress, return_type)
 
     def _get_iterable(self):
         """Return an iterable for the dataset."""
@@ -304,20 +334,4 @@ class ExternalDiscriminatorTextQualityAnalysisPipeline(TextQualityAnalysisPipeli
     
     def _prepare_input_for_quality_analyzer(self, watermarked_text: str, unwatermarked_text: str, index: int):
         """Prepare input for quality analyzer."""
-        return watermarked_text, unwatermarked_text, self.dataset.get_prompt(index)
-    
-    def _score_for_judgement(self, judgement):
-        """Return score based on judgement."""
-        if judgement == 1:
-            return 1, 0
-        elif judgement == 2:
-            return 0, 1
-        return 0.5, 0.5
-
-    def analyze_quality(self, prepared_data):
-        """Analyze quality of watermarked and unwatermarked text."""
-        watermarked_text = prepared_data[0]
-        unwatermarked_text = prepared_data[1]
-        prompt = prepared_data[2]
-        judgement = self.analyzer.analyze(watermarked_text, unwatermarked_text, prompt)
-        return self._score_for_judgement(judgement)
+        return watermarked_text, unwatermarked_text,

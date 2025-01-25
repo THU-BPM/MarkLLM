@@ -114,6 +114,30 @@ class WMT16DE_ENDataset(BaseDataset):
             self.prompts.append(item['de'])
             self.references.append(item['en'])
 
+class CNN_DailyMailDataset(BaseDataset):
+    """Dataset class for CNN/DailyMail dataset."""
+
+    def __init__(self, data_source: str, max_samples: int = 200, global_prompt="Please summarize the following article: ") -> None:
+        """
+            Initialize the CNN/DailyMail dataset.
+
+            Parameters:
+                data_source (str): The path to the CNN/DailyMail dataset file.
+        """
+        super().__init__(max_samples)
+        self.data_source = data_source
+        self.global_prompt = global_prompt
+        self.load_data()
+    
+    def load_data(self):
+        """Load data from the CNN/DailyMail dataset file."""
+        with open(self.data_source, 'r') as f:
+            lines = f.readlines()
+        for line in lines[:self.max_samples]:
+            item = json.loads(line)
+            self.prompts.append(f"{self.global_prompt}{item['article']}")
+            self.references.append(item['highlights'])
+
 
 class HumanEvalDataset(BaseDataset):
     """Dataset class for HumanEval dataset."""

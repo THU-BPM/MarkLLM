@@ -20,11 +20,13 @@
 import torch
 from watermark.auto_watermark import AutoWatermark
 from utils.transformers_config import TransformersConfig
-from evaluation.dataset import C4Dataset, WMT16DE_ENDataset, HumanEvalDataset
+from evaluation.dataset import C4Dataset, WMT16DE_ENDataset, HumanEvalDataset, CNN_DailyMailDataset
 from evaluation.tools.success_rate_calculator import DynamicThresholdSuccessRateCalculator
 from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer, LlamaTokenizer
 from evaluation.tools.text_editor import TruncatePromptTextEditor, TruncateTaskTextEditor ,CodeGenerationTextEditor, WordDeletion
-from evaluation.tools.text_quality_analyzer import PPLCalculator, LogDiversityAnalyzer, BLEUCalculator, PassOrNotJudger, GPTTextDiscriminator
+from evaluation.tools.text_quality_analyzer import (PPLCalculator, LogDiversityAnalyzer, BLEUCalculator, 
+                                                    PassOrNotJudger, GPTTextDiscriminator, ROUGE1Calculator, 
+                                                    ROUGE2Calculator, ROUGELCalculator, BERTScoreCalculator)
 from evaluation.pipelines.detection import WatermarkedTextDetectionPipeline, UnWatermarkedTextDetectionPipeline, DetectionPipelineReturnType
 from evaluation.pipelines.quality_analysis import (DirectTextQualityAnalysisPipeline, ReferencedTextQualityAnalysisPipeline, ExternalDiscriminatorTextQualityAnalysisPipeline, 
                                                    QualityPipelineReturnType)
@@ -57,9 +59,9 @@ def test_detection_pipeline():
 
 
 def test_direct_quality_analysis_pipeline_1():
-    my_dataset = C4Dataset('dataset/c4/processed_c4.json')
-    transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("/data2/shared_model/facebook/opt-1.3b/").to(device),
-                                                tokenizer=AutoTokenizer.from_pretrained("/data2/shared_model/facebook/opt-1.3b/"),
+    my_dataset = C4Dataset('dataset/c4/processed_c4.json', max_samples=10)
+    transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("/workspace/intern_ckpt/panleyi/opt-1.3b").to(device),
+                                                tokenizer=AutoTokenizer.from_pretrained("/workspace/intern_ckpt/panleyi/opt-1.3b"),
                                                 vocab_size=50272,
                                                 device=device,
                                                 max_new_tokens=200,
@@ -72,9 +74,9 @@ def test_direct_quality_analysis_pipeline_1():
     quality_pipeline = DirectTextQualityAnalysisPipeline(dataset=my_dataset, 
                                                          watermarked_text_editor_list=[TruncatePromptTextEditor()],
                                                          unwatermarked_text_editor_list=[],
-                                                         analyzer=PPLCalculator(model=AutoModelForCausalLM.from_pretrained("/data2/shared_model/llama-7b/", device_map='auto'),
-                                                                                tokenizer=LlamaTokenizer.from_pretrained("/data2/shared_model/llama-7b/"),
-                                                                                device=device),
+                                                         analyzers=[PPLCalculator(model=AutoModelForCausalLM.from_pretrained("/workspace/intern_ckpt/panleyi/Llama-7b/", device_map='auto'),
+                                                                                tokenizer=LlamaTokenizer.from_pretrained("/workspace/intern_ckpt/panleyi/Llama-7b/"),
+                                                                                device=device)],
                                                          unwatermarked_text_source='natural', show_progress=True, 
                                                          return_type=QualityPipelineReturnType.MEAN_SCORES)
     print(quality_pipeline.evaluate(my_watermark))
@@ -96,12 +98,13 @@ def test_direct_quality_analysis_pipeline_2():
     quality_pipeline = DirectTextQualityAnalysisPipeline(dataset=my_dataset, 
                                                          watermarked_text_editor_list=[TruncatePromptTextEditor()],
                                                          unwatermarked_text_editor_list=[],
-                                                         analyzer=LogDiversityAnalyzer(),
+                                                         analyzers=[LogDiversityAnalyzer()],
                                                          unwatermarked_text_source='natural', show_progress=True, 
                                                          return_type=QualityPipelineReturnType.MEAN_SCORES)
     print(quality_pipeline.evaluate(my_watermark))
 
 
+# Machine Translation
 def test_referenced_quality_analysis_pipeline_1():
     my_dataset = WMT16DE_ENDataset('dataset/wmt16_de_en/validation.jsonl')
     tokenizer= AutoTokenizer.from_pretrained("/data2/shared_model/facebook/nllb-200-distilled-600M/", src_lang="deu_Latn")
@@ -115,12 +118,13 @@ def test_referenced_quality_analysis_pipeline_1():
     quality_pipeline = ReferencedTextQualityAnalysisPipeline(dataset=my_dataset, 
                                                              watermarked_text_editor_list=[],
                                                              unwatermarked_text_editor_list=[],
-                                                             analyzer=BLEUCalculator(),
+                                                             analyzers=[BLEUCalculator()],
                                                              unwatermarked_text_source='generated', show_progress=True, 
                                                              return_type=QualityPipelineReturnType.MEAN_SCORES)
     print(quality_pipeline.evaluate(my_watermark))
 
 
+# Code Generation
 def test_referenced_quality_analysis_pipeline_2():
     my_dataset = HumanEvalDataset('dataset/human_eval/test.jsonl')
     transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("/data2/shared_model/starcoder/", device_map='auto'),
@@ -134,8 +138,33 @@ def test_referenced_quality_analysis_pipeline_2():
     quality_pipeline = ReferencedTextQualityAnalysisPipeline(dataset=my_dataset, 
                                                              watermarked_text_editor_list=[TruncateTaskTextEditor(),CodeGenerationTextEditor()],
                                                              unwatermarked_text_editor_list=[TruncateTaskTextEditor(), CodeGenerationTextEditor()],
-                                                             analyzer=PassOrNotJudger(),
+                                                             analyzers=[PassOrNotJudger()],
                                                              unwatermarked_text_source='generated', show_progress=True, 
+                                                             return_type=QualityPipelineReturnType.MEAN_SCORES)
+    print(quality_pipeline.evaluate(my_watermark))
+
+
+# Text Summarization
+def test_referenced_quality_analysis_pipeline_3():
+    my_dataset = CNN_DailyMailDataset('dataset/cnn_dailymail/test-00000-of-00001.jsonl', 
+                                      max_samples=10,
+                                      global_prompt="Please summarize the following article: ")
+    transformers_config = TransformersConfig(model=AutoModelForCausalLM.from_pretrained("/workspace/intern_ckpt/panleyi/glm-4-9b-chat/", trust_remote_code=True, device_map='auto'),
+                                             tokenizer=AutoTokenizer.from_pretrained("/workspace/intern_ckpt/panleyi/glm-4-9b-chat/", trust_remote_code=True),
+                                             device=device,
+                                             max_new_tokens=100,
+                                             top_p=0.9,
+                                             temperature=0.7)
+    my_watermark = AutoWatermark.load('KGW',
+                                       algorithm_config='config/KGW.json',
+                                       transformers_config=transformers_config)
+    
+    quality_pipeline = ReferencedTextQualityAnalysisPipeline(dataset=my_dataset,
+                                                             watermarked_text_editor_list=[TruncatePromptTextEditor()],
+                                                             unwatermarked_text_editor_list=[TruncatePromptTextEditor()],
+                                                             analyzers=[ROUGE1Calculator(), ROUGE2Calculator(), ROUGELCalculator(), 
+                                                                        BERTScoreCalculator(model_path="/workspace/intern_ckpt/panleyi/bert-base-uncased")],
+                                                             unwatermarked_text_source='generated', show_progress=True,
                                                              return_type=QualityPipelineReturnType.MEAN_SCORES)
     print(quality_pipeline.evaluate(my_watermark))
 
@@ -153,8 +182,8 @@ def test_discriminator_quality_analysis_pipeline():
     quality_pipeline = ExternalDiscriminatorTextQualityAnalysisPipeline(dataset=my_dataset, 
                                                              watermarked_text_editor_list=[],
                                                              unwatermarked_text_editor_list=[],
-                                                             analyzer=GPTTextDiscriminator(openai_model='gpt-4',
-                                                                                           task_description='Translate the following German text to English'),
+                                                             analyzers=[GPTTextDiscriminator(openai_model='gpt-4',
+                                                                                           task_description='Translate the following German text to English')],
                                                              unwatermarked_text_source='generated', show_progress=True, 
                                                              return_type=QualityPipelineReturnType.MEAN_SCORES)
     print(quality_pipeline.evaluate(my_watermark))
@@ -165,5 +194,6 @@ if __name__ == '__main__':
     # test_direct_quality_analysis_pipeline_1()
     # test_direct_quality_analysis_pipeline_2()
     # test_referenced_quality_analysis_pipeline_1()
-    test_referenced_quality_analysis_pipeline_2()
+    # test_referenced_quality_analysis_pipeline_2()
+    test_referenced_quality_analysis_pipeline_3()
     # test_discriminator_quality_analysis_pipeline()

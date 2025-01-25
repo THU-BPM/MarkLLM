@@ -20,6 +20,8 @@
 import math
 import torch
 import sacrebleu
+from bert_score import BERTScorer
+from rouge_score import rouge_scorer
 from utils.openai_utils import OpenAIAPI
 from exceptions.exceptions import CodeExecutionError, InvalidAnswerError
 
@@ -155,6 +157,68 @@ class BLEUCalculator(ReferencedTextQualityAnalyzer):
         """Calculate the BLEU score of the given text with the reference."""
         b = sacrebleu.corpus_bleu([text], [[reference]]).score
         return b
+
+
+class ROUGE1Calculator(ReferencedTextQualityAnalyzer):
+    """ROUGE1 calculator for text quality analysis."""
+
+    def __init__(self) -> None:
+        pass
+
+    def analyze(self, text: str, reference: str):
+        """Calculate the ROUGE-1 score of the given text with the reference."""
+        scorer = rouge_scorer.RougeScorer(['rouge1'], use_stemmer=True)
+        scores = scorer.score(text, reference)
+        return scores['rouge1'].fmeasure
+
+
+class ROUGE2Calculator(ReferencedTextQualityAnalyzer):
+    """ROUGE2 calculator for text quality analysis."""
+
+    def __init__(self) -> None:
+        pass
+
+    def analyze(self, text: str, reference: str):
+        """Calculate the ROUGE-2 score of the given text with the reference."""
+        scorer = rouge_scorer.RougeScorer(['rouge2'], use_stemmer=True)
+        scores = scorer.score(text, reference)
+        return scores['rouge2'].fmeasure
+
+
+class ROUGELCalculator(ReferencedTextQualityAnalyzer):
+    """ROUGEL calculator for text quality analysis."""
+
+    def __init__(self) -> None:
+        pass
+
+    def analyze(self, text: str, reference: str):
+        """Calculate the ROUGE-L score of the given text with the reference."""
+        scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
+        scores = scorer.score(text, reference)
+        return scores['rougeL'].fmeasure
+    
+
+class BERTScoreCalculator(ReferencedTextQualityAnalyzer):
+    """BERTScore calculator for text quality analysis."""
+
+    def __init__(self, model_path: str) -> None:
+        self.model_path = model_path
+        self.bert_scorer = BERTScorer(
+            model_type=model_path,
+            num_layers=8,
+            batch_size=32,
+            nthreads=4,
+            all_layers=False,
+            idf=False,
+            device='cuda' if torch.cuda.is_available() else 'cpu',
+            rescale_with_baseline=False,
+            lang="en"
+        )
+    
+    def analyze(self, text: str, reference: str):
+        """Calculate the BERTScore of the given text with the reference."""
+        P, R, F1 = self.bert_scorer.score([text], [reference])
+        return F1.tolist()[0]
 
 
 class PassOrNotJudger(ReferencedTextQualityAnalyzer):
