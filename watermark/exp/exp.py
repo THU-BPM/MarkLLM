@@ -37,7 +37,8 @@ class EXPConfig(BaseConfig):
         self.hash_key = self.config_dict['hash_key']
         self.threshold = self.config_dict['threshold']
         self.sequence_length = self.config_dict['sequence_length']
-        self.top_k = self.config_dict['top_k']
+        self.top_k = getattr(self.transformers_config, 'top_k', -1)
+        self.temperature = getattr(self.transformers_config, 'temperature', 0.7)
     
     @property
     def algorithm_name(self) -> str:
@@ -130,8 +131,8 @@ class EXP(BaseWatermark):
                 else:
                     output = self.config.generation_model(inputs)
             
-            # Get probabilities
-            probs = torch.nn.functional.softmax(output.logits[:,-1, :self.config.vocab_size], dim=-1).cpu()
+            # Get probabilities with temperature
+            probs = torch.nn.functional.softmax(output.logits[:,-1, :self.config.vocab_size] / self.config.temperature, dim=-1).cpu()
             
             # Generate r1, r2,..., rk
             self.utils.seed_rng(inputs[0])
