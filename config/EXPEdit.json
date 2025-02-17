@@ -1,6 +1,6 @@
 {
     "algorithm_name": "EXPEdit",
-    "pseudo_length": 420,
+    "pseudo_length": 256,
     "sequence_length": 200,
     "n_runs": 100,
     "key": 42,
