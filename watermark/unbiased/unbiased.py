@@ -30,7 +30,7 @@ from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
 from transformers import LogitsProcessor, LogitsProcessorList
 from visualize.data_for_visualization import DataForVisualization
-
+from .strategy import DeltaStrategy, GammaStrategy
 
 class UnbiasedConfig(BaseConfig):
     """Config class for Unbiased watermark algorithm, load config file and initialize parameters."""
@@ -75,7 +75,7 @@ class UnbiasedConfig(BaseConfig):
         self.ignore_history_detection = bool(self.config_dict['ignore_history_detection'])
         self.z_threshold = self.config_dict['z_threshold']
         self.prefix_length = self.config_dict['prefix_length']  
-    
+        self.type = self.config_dict['type']
     @property
     def algorithm_name(self) -> str:
         """Return the algorithm name."""
@@ -95,6 +95,10 @@ class UnbiasedUtils:
         self.rng = torch.Generator(device=self.config.device)
         self.cc_history = set()
         self.state_indicator = 0 # 0 for generation, 1 for detection and visualization
+        self.strategy = {
+            "delta": DeltaStrategy(),
+            "gamma": GammaStrategy()
+        }[self.config.type]
         
 
     def _get_rng_seed(self, context_code: any) -> int:
@@ -120,51 +124,51 @@ class UnbiasedUtils:
         else:
             return context[-self.config.prefix_length : ].detach().cpu().numpy().tobytes()
     
-    def from_random(self, rng: Union[torch.Generator, list[torch.Generator]], vocab_size: int) -> torch.LongTensor:
-        """Generate a permutation from the random number generator."""
-        if isinstance(rng, list):
-            batch_size = len(rng)
-            shuffle = torch.stack(
-                [
-                    torch.randperm(vocab_size, generator=rng[i], device=rng[i].device)
-                    for i in range(batch_size)
-                ]
-            )
-        else:
-            shuffle = torch.randperm(vocab_size, generator=rng, device=rng.device)
-        return shuffle
+    # def from_random(self, rng: Union[torch.Generator, list[torch.Generator]], vocab_size: int) -> torch.LongTensor:
+    #     """Generate a permutation from the random number generator."""
+    #     if isinstance(rng, list):
+    #         batch_size = len(rng)
+    #         shuffle = torch.stack(
+    #             [
+    #                 torch.randperm(vocab_size, generator=rng[i], device=rng[i].device)
+    #                 for i in range(batch_size)
+    #             ]
+    #         )
+    #     else:
+    #         shuffle = torch.randperm(vocab_size, generator=rng, device=rng.device)
+    #     return shuffle
 
-    def reweight_logits(self, shuffle: torch.LongTensor, p_logits: torch.FloatTensor) -> torch.FloatTensor:
-        """Reweight the logits using the shuffle and alpha."""
-        unshuffle = torch.argsort(shuffle, dim=-1)
+    # def reweight_logits(self, shuffle: torch.LongTensor, p_logits: torch.FloatTensor) -> torch.FloatTensor:
+    #     """Reweight the logits using the shuffle and alpha."""
+    #     unshuffle = torch.argsort(shuffle, dim=-1)
         
-        s_p_logits = torch.gather(p_logits, -1, shuffle)
-        s_log_cumsum = torch.logcumsumexp(s_p_logits, dim=-1)
+    #     s_p_logits = torch.gather(p_logits, -1, shuffle)
+    #     s_log_cumsum = torch.logcumsumexp(s_p_logits, dim=-1)
         
-        # normalize the log_cumsum to force the last element to be 0
-        s_log_cumsum = s_log_cumsum - s_log_cumsum[..., -1:]
-        s_cumsum = torch.exp(s_log_cumsum)
-        s_p = F.softmax(s_p_logits, dim=-1)
+    #     # normalize the log_cumsum to force the last element to be 0
+    #     s_log_cumsum = s_log_cumsum - s_log_cumsum[..., -1:]
+    #     s_cumsum = torch.exp(s_log_cumsum)
+    #     s_p = F.softmax(s_p_logits, dim=-1)
 
-        boundary_1 = torch.argmax((s_cumsum > self.config.alpha).to(torch.int), dim=-1, keepdim=True)
-        p_boundary_1 = torch.gather(s_p, -1, boundary_1)
-        portion_in_right_1 = (torch.gather(s_cumsum, -1, boundary_1) - self.config.alpha) / p_boundary_1
-        portion_in_right_1 = torch.clamp(portion_in_right_1, 0, 1)
-        s_all_portion_in_right_1 = (s_cumsum > self.config.alpha).type_as(p_logits)
-        s_all_portion_in_right_1.scatter_(-1, boundary_1, portion_in_right_1)
+    #     boundary_1 = torch.argmax((s_cumsum > self.config.alpha).to(torch.int), dim=-1, keepdim=True)
+    #     p_boundary_1 = torch.gather(s_p, -1, boundary_1)
+    #     portion_in_right_1 = (torch.gather(s_cumsum, -1, boundary_1) - self.config.alpha) / p_boundary_1
+    #     portion_in_right_1 = torch.clamp(portion_in_right_1, 0, 1)
+    #     s_all_portion_in_right_1 = (s_cumsum > self.config.alpha).type_as(p_logits)
+    #     s_all_portion_in_right_1.scatter_(-1, boundary_1, portion_in_right_1)
 
-        boundary_2 = torch.argmax((s_cumsum > (1-self.config.alpha)).to(torch.int), dim=-1, keepdim=True)
-        p_boundary_2 = torch.gather(s_p, -1, boundary_2)
-        portion_in_right_2 = (torch.gather(s_cumsum, -1, boundary_2) - (1-self.config.alpha)) / p_boundary_2
-        portion_in_right_2 = torch.clamp(portion_in_right_2, 0, 1)
-        s_all_portion_in_right_2 = (s_cumsum > (1-self.config.alpha)).type_as(p_logits)
-        s_all_portion_in_right_2.scatter_(-1, boundary_2, portion_in_right_2)
+    #     boundary_2 = torch.argmax((s_cumsum > (1-self.config.alpha)).to(torch.int), dim=-1, keepdim=True)
+    #     p_boundary_2 = torch.gather(s_p, -1, boundary_2)
+    #     portion_in_right_2 = (torch.gather(s_cumsum, -1, boundary_2) - (1-self.config.alpha)) / p_boundary_2
+    #     portion_in_right_2 = torch.clamp(portion_in_right_2, 0, 1)
+    #     s_all_portion_in_right_2 = (s_cumsum > (1-self.config.alpha)).type_as(p_logits)
+    #     s_all_portion_in_right_2.scatter_(-1, boundary_2, portion_in_right_2)
 
-        s_all_portion_in_right = s_all_portion_in_right_2/2 + s_all_portion_in_right_1/2
-        s_shift_logits = torch.log(s_all_portion_in_right)
-        shift_logits = torch.gather(s_shift_logits, -1, unshuffle)
+    #     s_all_portion_in_right = s_all_portion_in_right_2/2 + s_all_portion_in_right_1/2
+    #     s_shift_logits = torch.log(s_all_portion_in_right)
+    #     shift_logits = torch.gather(s_shift_logits, -1, unshuffle)
 
-        return p_logits + shift_logits
+    #     return p_logits + shift_logits
     
     def get_seed_for_cipher(self, input_ids: torch.LongTensor) -> Tuple[torch.FloatTensor, torch.FloatTensor]:
         """Get the mask and seeds for the cipher."""
@@ -247,8 +251,8 @@ class UnbiasedLogitsProcessor(LogitsProcessor):
             Initialize the Unbiased logits processor.
 
             Parameters:
-                config (UnbiasedConfig): Configuration for the DiP algorithm.
-                utils (UnbiasedUtils): Utility class for the DiP algorithm.
+                config (UnbiasedConfig): Configuration for the Unbiased algorithm.
+                utils (UnbiasedUtils): Utility class for the Unbiased algorithm.
         """
         self.config = config
         self.utils = utils
@@ -261,11 +265,11 @@ class UnbiasedLogitsProcessor(LogitsProcessor):
             torch.Generator(device=scores.device).manual_seed(seed) for seed in seeds
         ]
         mask = torch.tensor(mask, device=scores.device)
-        shuffle = self.utils.from_random(
+        shuffle = self.utils.strategy.from_random(
             rng, scores.size(1)
         )
 
-        reweighted_scores = self.utils.reweight_logits(shuffle, scores)
+        reweighted_scores = self.utils.strategy.reweight_logits(shuffle, scores)
         
         return mask, reweighted_scores
 

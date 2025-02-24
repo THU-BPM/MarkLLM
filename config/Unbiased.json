@@ -1,5 +1,6 @@
 {
     "algorithm_name": "Unbiased",
+    "type": "gamma",
     "gamma": 0.5,
     "key": 42,
     "prefix_length": 5,
