@@ -52,7 +52,9 @@ class BaseVisualizer:
     
     def _calculate_line_space(self, token: str, img_width: int, token_spacing: int, max_width: int) -> tuple:
         """Calculate new image width and check if it exceeds max width."""
-        word_width, _ = self.font_settings.font.getsize(token)
+        bbox = self.font_settings.font.getbbox(token)
+        word_width = bbox[2] - bbox[0]
+        
         new_img_width = img_width + word_width + token_spacing
         return new_img_width, new_img_width > max_width
 
@@ -152,7 +154,9 @@ class BaseVisualizer:
         for line in lines:
             x = self.page_layout_settings.margin_l  # Initial x-coordinate for each line
             for token, value in line:
-                token_width, _ = draw.textsize(token, font=self.font_settings.font)
+                # Replace getsize with getbbox
+                bbox = self.font_settings.font.getbbox(token)
+                token_width = bbox[2] - bbox[0]
 
                 # Highlight the token
                 self._highlight_single_token(draw, token, value, token_width, show_text, x, y)

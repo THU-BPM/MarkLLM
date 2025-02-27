@@ -1,10 +1,10 @@
 {
     "algorithm_name": "Unbiased",
     "type": "gamma",
-    "gamma": 0.5,
+    "n_grid": 10,
     "key": 42,
     "prefix_length": 5,
-    "z_threshold": 1.513,
-    "ignore_history_generation": 0,
-    "ignore_history_detection": 0
+    "p_threshold": 0.95,
+    "ignore_history_generation": 1,
+    "ignore_history_detection": 1
 }
