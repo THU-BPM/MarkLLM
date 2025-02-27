@@ -40,6 +40,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu\*, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu*
 
 ### Updates
+- 🎉 **(2025.02.27)** Add δ-reweight and LLR score detection for Unbiased watermarking method.
 - 🎉 **(2025.01.08)** Add AutoConfiguration for watermarking methods.
 - 🎉 **(2024.12.21)** Provide example code for integrating VLLM with MarkLLM in `MarkvLLM_demo.py`. Thanks to @zhangjf-nlp for his PR!
 - 🎉 **(2024.11.21)** Support distortionary version of [SynthID-Text](https://www.nature.com/articles/s41586-024-08025-4) method (Nature). 
