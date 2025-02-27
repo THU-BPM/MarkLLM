@@ -405,7 +405,7 @@ class UnbiasedWatermark(BaseWatermark):
         p_val, _ = self.utils.score_sequence(text)
         
         # Determine if the z-score indicates a watermark
-        is_watermarked = p_val > self.config.p_threshold
+        is_watermarked = p_val < self.config.p_threshold
 
         # Clear the history
         self.utils.cc_history.clear()

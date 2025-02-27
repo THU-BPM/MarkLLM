@@ -4,7 +4,7 @@
     "n_grid": 10,
     "key": 42,
     "prefix_length": 5,
-    "p_threshold": 0.95,
+    "p_threshold": 0.0005,
     "ignore_history_generation": 1,
     "ignore_history_detection": 1
 }
