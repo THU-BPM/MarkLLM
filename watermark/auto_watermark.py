@@ -81,13 +81,16 @@ class AutoWatermarkForVLLM:
             raise NotImplementedError(f"vllm integrating currently supports {vllm_supported_methods}, but got {algorithm_name}")
         self.watermark = AutoWatermark.load(algorithm_name=algorithm_name, algorithm_config=algorithm_config, transformers_config=transformers_config)
 
-    def __call__(self, input_ids: List[int], scores: torch.FloatTensor) -> torch.Tensor:
-        if len(input_ids) == 0:
+    def __call__(self, prompt_tokens: List[int], generated_tokens: List[int], scores: torch.FloatTensor) -> torch.Tensor:
+        if len(prompt_tokens) == 0:
             return scores
-        input_ids = torch.LongTensor(input_ids).to(self.watermark.config.device)[None, :]
+        
+        # concencate prompt_tokens and generated_tokens
+        input_ids = torch.LongTensor(prompt_tokens + generated_tokens).to(self.watermark.config.device)[None, :]
         scores = scores[None, :]
         assert len(input_ids.shape) == 2, input_ids.shape
         assert len(scores.shape) == 2, scores.shape
+        
         scores = self.watermark.logits_processor(input_ids, scores)
         return scores[0, :]
 
