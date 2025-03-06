@@ -68,6 +68,6 @@ def test_algorithm(algorithm_name):
 
 
 if __name__ == '__main__':
-    test_algorithm('KGW')
+    test_algorithm('PF')
 
 
