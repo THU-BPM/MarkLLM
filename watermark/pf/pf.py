@@ -2,6 +2,7 @@ from typing import List
 import torch
 import numpy as np
 from scipy.stats import gamma
+
 from ..base import BaseConfig, BaseWatermark
 from utils.transformers_config import TransformersConfig
 
@@ -64,14 +65,15 @@ class PFUtils:
             seed = torch.min(seed).item()
         return seed
 
-
-    def sample_next(self,
-                    logits: torch.FloatTensor,
-                    ngram_tokens: torch.LongTensor,
-                    temperature: float,
-                    top_p: float) -> torch.LongTensor:
+    def sample_next(
+            self,
+            logits: torch.FloatTensor,
+            ngram_tokens: torch.LongTensor,
+            temperature: float,
+            top_p: float
+    ) -> torch.LongTensor:
         """
-        根据 ngram tokens 生成下一个 token
+        生成下一个 token（修改后适配单个文本，不再使用 batch 维度）
         """
         if temperature > 0:
             probs = torch.softmax(logits / temperature, dim=-1)
@@ -82,23 +84,25 @@ class PFUtils:
             probs_sort.div_(probs_sort.sum(dim=-1, keepdim=True))
             log_probs = probs_sort.log()
 
-            for ii in range(ngram_tokens.shape[0]):  # batch of texts
-                # seed with hash of ngram tokens
-                seed = self.get_seed_rng(ngram_tokens[ii])
-                self.rng.manual_seed(seed)
-                # generate rs randomly between [0,1]
-                rs = torch.rand(self.config.generation_tokenizer.vocab_size, generator=self.rng, device=self.rng.device)
-                rs = rs.roll(-self.config.payload)
-                rs = torch.Tensor(rs).to(probs_sort.device)
-                rs = rs[probs_idx[ii]]
-                # add watermark
-                log_probs[ii] = log_probs[ii] - rs.log()
+            seed = self.get_seed_rng(ngram_tokens)  # 直接传入
+            self.rng.manual_seed(seed)
+
+            rs = torch.rand(self.config.vocab_size, generator=self.rng, device=self.rng.device)
+            rs = rs.roll(-self.config.payload)
+            rs = torch.Tensor(rs).to(probs_sort.device)
+            rs = rs[probs_idx]
+
+            log_probs = log_probs - rs.log()
+
+
             next_token = torch.argmax(log_probs, dim=-1, keepdim=True)
             next_token = torch.gather(probs_idx, -1, next_token)
         else:
             next_token = torch.argmax(logits, dim=-1)
-        next_token = next_token.reshape(-1)
-        return next_token
+
+        return next_token.reshape(-1)  # 保持输出格式一致
+
+
 
     def score_tok(self, ngram_tokens: List[int], token_id: int) -> torch.Tensor:
         """
@@ -106,7 +110,7 @@ class PFUtils:
         """
         seed = self.get_seed_rng(torch.tensor(ngram_tokens))
         self.rng.manual_seed(seed)
-        rs = torch.rand(self.config.generation_tokenizer.vocab_size, generator=self.rng, device=self.rng.device)
+        rs = torch.rand(self.config.vocab_size, generator=self.rng, device=self.rng.device)
         rs[rs == 0] = 1e-4  # 避免 log(0)
         scores = -rs.log().roll(-token_id)  # 先取 log 再 roll
         return scores
@@ -121,11 +125,11 @@ class PFUtils:
 
     def get_scores_by_t(
             self,
-            texts: List[str],
+            text: str,
             scoring_method: str = "none",
             ntoks_max: int = None,
             payload_max: int = 0
-    ) -> List[np.array]:
+    ) -> np.array :
         """
         Get score increment for each token in list of texts.
         Args:
@@ -139,43 +143,39 @@ class PFUtils:
         Output:
             score_lists: list of [np array of score increments for every token and payload] for each text
         """
-        bsz = len(texts)
-        tokens_id = [self.config.generation_tokenizer.encode(x, add_special_tokens=False) for x in texts]
+        tokens_id = self.config.generation_tokenizer.encode(text, add_special_tokens=False)
         if ntoks_max is not None:
-            tokens_id = [x[:ntoks_max] for x in tokens_id]
-        score_lists = []
-        for ii in range(bsz):
-            total_len = len(tokens_id[ii])
-            start_pos = self.config.ngram + 1
-            rts = []
-            seen_ntuples = set()
-            for cur_pos in range(start_pos, total_len):
-                ngram_tokens = tokens_id[ii][cur_pos - self.config.ngram:cur_pos]  # h
-                if scoring_method == 'v1':
-                    tup_for_unique = tuple(ngram_tokens)
-                    if tup_for_unique in seen_ntuples:
-                        continue
-                    seen_ntuples.add(tup_for_unique)
-                elif scoring_method == 'v2':
-                    tup_for_unique = tuple(ngram_tokens + tokens_id[ii][cur_pos:cur_pos + 1])
-                    if tup_for_unique in seen_ntuples:
-                        continue
-                    seen_ntuples.add(tup_for_unique)
-                rt = self.score_tok(ngram_tokens, tokens_id[ii][cur_pos])
-                rt = rt[:payload_max + 1]
-                rts.append(rt)
-            score_lists.append(rts)
-        return score_lists
+            tokens_id = tokens_id[:ntoks_max]  # 限制最大 token 数量
 
-    def get_scores(self,score_lists: List[np.array]) -> List:
-        test_scores = []
-        for scores in score_lists:
-            if len(scores) == 0:
-                test_scores.append(0)  # 处理空文本情况
-                continue
-            aggregated_score = sum(scores)
-            test_scores.append(aggregated_score)
-        return test_scores
+        total_len = len(tokens_id)
+        start_pos = self.config.ngram + 1
+        rts = []
+        seen_ntuples = set()
+
+        for cur_pos in range(start_pos, total_len):
+            ngram_tokens = tokens_id[cur_pos - self.config.ngram: cur_pos]  # 取 ngram
+            if scoring_method == 'v1':
+                tup_for_unique = tuple(ngram_tokens)
+                if tup_for_unique in seen_ntuples:
+                    continue
+                seen_ntuples.add(tup_for_unique)
+            elif scoring_method == 'v2':
+                tup_for_unique = tuple(ngram_tokens + [tokens_id[cur_pos]])
+                if tup_for_unique in seen_ntuples:
+                    continue
+                seen_ntuples.add(tup_for_unique)
+
+            rt = self.score_tok(ngram_tokens, tokens_id[cur_pos])
+            rt = rt[:payload_max + 1]
+            rts.append(rt)
+
+        return np.array([rt.cpu().numpy() for rt in rts])
+
+    def get_scores(self,score_lists: np.array) -> float:
+        if len(score_lists) == 0:
+            return 0
+        aggregated_score = sum(score_lists)
+        return aggregated_score
 
 
 
@@ -200,54 +200,56 @@ class PF(BaseWatermark):
 
 
     @torch.no_grad()
-    def generate_watermarked_text(self, prompts: List[str], max_gen_len: int, temperature: float = 0.9,
-                                  top_p: float = 1.0) -> List[str]:
+    def generate_watermarked_text(self, prompt: str, max_gen_len: int=200, temperature: float = 0.9,
+                                  top_p: float = 1.0) -> str:
         """
         生成带水印的文本
         """
-        bsz = len(prompts)
-        prompt_tokens = [self.utils.config.generation_tokenizer.encode(x, add_special_tokens=False) for x in prompts]
-        min_prompt_size = min([len(t) for t in prompt_tokens])
-        max_prompt_size = max([len(t) for t in prompt_tokens])
-        total_len = min(self.utils.config.max_seq_len, max_gen_len + max_prompt_size)
+        prompt_tokens = self.utils.config.generation_tokenizer.encode(prompt, add_special_tokens=False)
+        min_prompt_size = len(prompt_tokens)
+        total_len = min(self.utils.config.max_seq_len, max_gen_len + min_prompt_size)
 
-        tokens = torch.full((bsz, total_len), self.utils.pad_id).to(self.utils.config.generation_model.device).long()
-        for k, t in enumerate(prompt_tokens):
-            tokens[k, : len(t)] = torch.tensor(t).long()
+        tokens = torch.full((total_len,), self.utils.pad_id).to(self.utils.config.generation_model.device).long()
+        tokens[: len(prompt_tokens)] = torch.tensor(prompt_tokens).long()
         input_text_mask = tokens != self.utils.pad_id
 
         start_pos = min_prompt_size
         prev_pos = 0
         for cur_pos in range(start_pos, total_len):
             outputs = self.utils.config.generation_model.forward(
-                tokens[:, prev_pos:cur_pos], use_cache=True,
+                tokens[prev_pos:cur_pos].unsqueeze(0), use_cache=True,
                 past_key_values=outputs.past_key_values if prev_pos > 0 else None
             )
-            ngram_tokens = tokens[:, cur_pos - self.utils.config.ngram:cur_pos]
+            ngram_tokens = tokens[cur_pos - self.utils.config.ngram:cur_pos]
             next_toks = self.utils.sample_next(outputs.logits[:, -1, :], ngram_tokens, temperature, top_p)
-            tokens[:, cur_pos] = torch.where(input_text_mask[:, cur_pos], tokens[:, cur_pos], next_toks)
+            tokens[cur_pos] = torch.where(input_text_mask[cur_pos], tokens[cur_pos], next_toks)
             prev_pos = cur_pos
 
-        decoded = []
-        for i, t in enumerate(tokens.tolist()):
-            # cut to max gen len
-            t = t[: len(prompt_tokens[i]) + max_gen_len]
-            # cut to eos tok if any
-            try:
-                t = t[: t.index(self.utils.eos_id)]
-            except ValueError:
-                pass
-            decoded.append(self.utils.config.generation_tokenizer.decode(t))
+        tokens = tokens.tolist()
 
-        return decoded
+        # 截取最大生成长度
+        tokens = tokens[: len(prompt_tokens) + max_gen_len]
 
-    def detect_watermark(self, text: List[str], alpha: float = 0.01, scoring_method: str = "none",
-                         ntoks_max: int = None) -> int:
+        # 如果有 EOS token，则截断
+        try:
+            tokens = tokens[: tokens.index(self.utils.eos_id)]
+        except ValueError:
+            pass
+
+        # 直接返回解码后的文本
+        return self.utils.config.generation_tokenizer.decode(tokens)
+
+
+
+    def detect_watermark(self, text: str, alpha: float = 0.01, scoring_method: str = "none",
+                         ntoks_max: int = None):
         scores = self.utils.get_scores_by_t(text, ntoks_max=ntoks_max)
         score = self.utils.get_scores(scores)
-        threshold = self.utils.get_threshold(len(scores[0]),alpha)
-        result = 1 if score[0] > threshold else 0
-        return result
+        threshold = self.utils.get_threshold(len(scores),alpha)
+        result = bool(score > threshold)  # 转换布尔值
+        score = float(score)  # 转换为 Python float
+        threshold = float(threshold)
+        return {"is_watermarked": result, "score": score, "threshold": threshold}
 
 
 
