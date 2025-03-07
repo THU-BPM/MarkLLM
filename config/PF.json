@@ -5,8 +5,5 @@
     "seeding": "hash",
     "salt_key": 35317,
     "payload": 0,
-    "max_seq_len": 1024,
-    "alpha": 0.01,
-    "top_p": 1.0,
-    "temperature": 0.9
+    "max_seq_len": 1024
 }

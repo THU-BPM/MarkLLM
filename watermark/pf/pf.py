@@ -2,6 +2,7 @@ from typing import List
 import torch
 import numpy as np
 from scipy.stats import gamma
+from sympy.physics.units import temperature
 
 from ..base import BaseConfig, BaseWatermark
 from utils.transformers_config import TransformersConfig
@@ -17,9 +18,6 @@ class PFConfig(BaseConfig):
         self.seed = self.config_dict['seed']
         self.seeding = self.config_dict['seeding']
         self.max_seq_len = self.config_dict['max_seq_len']
-        self.alpha = self.config_dict['alpha']
-        self.temperature = self.config_dict['temperature']
-        self.top_p = self.config_dict['top_p']
 
 
     @property
@@ -224,7 +222,9 @@ class PF(BaseWatermark):
                 past_key_values=outputs.past_key_values if prev_pos > 0 else None
             )
             ngram_tokens = tokens[cur_pos - self.config.ngram:cur_pos]
-            next_toks = self.utils.sample_next(outputs.logits[:, -1, :], ngram_tokens, self.config.temperature, self.config.top_p)
+            temperature = self.config.gen_kwargs.get("temperature", 0.9)
+            top_p = self.config.gen_kwargs.get("top_p", 1.0)
+            next_toks = self.utils.sample_next(outputs.logits[:, -1, :], ngram_tokens, temperature, top_p)
             tokens[cur_pos] = torch.where(input_text_mask[cur_pos], tokens[cur_pos], next_toks)
             prev_pos = cur_pos
 
@@ -247,7 +247,8 @@ class PF(BaseWatermark):
     def detect_watermark(self, text: str, *args, **kwargs):
         scores = self.utils.get_scores_by_t(text)
         score = self.utils.get_scores(scores)
-        threshold = self.utils.get_threshold(len(scores),self.config.alpha)
+        alpha = self.config.gen_kwargs.get("alpha", 0.01)
+        threshold = self.utils.get_threshold(len(scores), alpha)
         result = bool(score > threshold)  # 转换布尔值
         score = float(score)  # 转换为 Python float
         threshold = float(threshold)
