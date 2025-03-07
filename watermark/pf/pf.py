@@ -17,6 +17,10 @@ class PFConfig(BaseConfig):
         self.seed = self.config_dict['seed']
         self.seeding = self.config_dict['seeding']
         self.max_seq_len = self.config_dict['max_seq_len']
+        self.alpha = self.config_dict['alpha']
+        self.temperature = self.config_dict['temperature']
+        self.top_p = self.config_dict['top_p']
+
 
     @property
     def algorithm_name(self) -> str:
@@ -200,35 +204,34 @@ class PF(BaseWatermark):
 
 
     @torch.no_grad()
-    def generate_watermarked_text(self, prompt: str, max_gen_len: int=200, temperature: float = 0.9,
-                                  top_p: float = 1.0) -> str:
+    def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """
         生成带水印的文本
         """
-        prompt_tokens = self.utils.config.generation_tokenizer.encode(prompt, add_special_tokens=False)
+        prompt_tokens = self.config.generation_tokenizer.encode(prompt, add_special_tokens=False)
         min_prompt_size = len(prompt_tokens)
-        total_len = min(self.utils.config.max_seq_len, max_gen_len + min_prompt_size)
+        total_len = min(self.config.max_seq_len, self.config.gen_kwargs["max_new_tokens"] + min_prompt_size)
 
-        tokens = torch.full((total_len,), self.utils.pad_id).to(self.utils.config.generation_model.device).long()
+        tokens = torch.full((total_len,), self.utils.pad_id).to(self.config.generation_model.device).long()
         tokens[: len(prompt_tokens)] = torch.tensor(prompt_tokens).long()
         input_text_mask = tokens != self.utils.pad_id
 
         start_pos = min_prompt_size
         prev_pos = 0
         for cur_pos in range(start_pos, total_len):
-            outputs = self.utils.config.generation_model.forward(
+            outputs = self.config.generation_model.forward(
                 tokens[prev_pos:cur_pos].unsqueeze(0), use_cache=True,
                 past_key_values=outputs.past_key_values if prev_pos > 0 else None
             )
-            ngram_tokens = tokens[cur_pos - self.utils.config.ngram:cur_pos]
-            next_toks = self.utils.sample_next(outputs.logits[:, -1, :], ngram_tokens, temperature, top_p)
+            ngram_tokens = tokens[cur_pos - self.config.ngram:cur_pos]
+            next_toks = self.utils.sample_next(outputs.logits[:, -1, :], ngram_tokens, self.config.temperature, self.config.top_p)
             tokens[cur_pos] = torch.where(input_text_mask[cur_pos], tokens[cur_pos], next_toks)
             prev_pos = cur_pos
 
         tokens = tokens.tolist()
 
         # 截取最大生成长度
-        tokens = tokens[: len(prompt_tokens) + max_gen_len]
+        tokens = tokens[: len(prompt_tokens) + self.config.gen_kwargs["max_new_tokens"]]
 
         # 如果有 EOS token，则截断
         try:
@@ -237,15 +240,14 @@ class PF(BaseWatermark):
             pass
 
         # 直接返回解码后的文本
-        return self.utils.config.generation_tokenizer.decode(tokens)
+        return self.config.generation_tokenizer.decode(tokens)
 
 
 
-    def detect_watermark(self, text: str, alpha: float = 0.01, scoring_method: str = "none",
-                         ntoks_max: int = None):
-        scores = self.utils.get_scores_by_t(text, ntoks_max=ntoks_max)
+    def detect_watermark(self, text: str, *args, **kwargs):
+        scores = self.utils.get_scores_by_t(text)
         score = self.utils.get_scores(scores)
-        threshold = self.utils.get_threshold(len(scores),alpha)
+        threshold = self.utils.get_threshold(len(scores),self.config.alpha)
         result = bool(score > threshold)  # 转换布尔值
         score = float(score)  # 转换为 Python float
         threshold = float(threshold)
