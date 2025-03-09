@@ -9,12 +9,12 @@ from utils.transformers_config import TransformersConfig
 
 # PF 方法的配置类
 class PFConfig(BaseConfig):
-    """PF 算法的配置类"""
+    """Config class for PF algorithm, load config file and initialize parameters."""
     def initialize_parameters(self) -> None:
-        # 从配置字典中加载 PF 算法的参数
-        self.payload = self.config_dict['payload']                 # 水印负载
-        self.salt_key = self.config_dict['salt_key']               # 哈希密钥
-        self.ngram = self.config_dict['ngram']                     # 用于生成种子的 ngram 大小
+        """Initialize algorithm-specific parameters."""
+        self.payload = self.config_dict['payload']
+        self.salt_key = self.config_dict['salt_key']
+        self.ngram = self.config_dict['ngram']
         self.seed = self.config_dict['seed']
         self.seeding = self.config_dict['seeding']
         self.max_seq_len = self.config_dict['max_seq_len']
@@ -22,21 +22,20 @@ class PFConfig(BaseConfig):
 
     @property
     def algorithm_name(self) -> str:
-        """返回算法名称"""
+        """Return algorithm name."""
         return 'PF'
 
 
 class PFUtils:
-    """PF 算法的工具类，包含辅助函数"""
+    """Utility class for PF algorithm, contains helper functions."""
     def __init__(self, config: PFConfig, *args, **kwargs) -> None:
         """
-        初始化 PF 工具类。
+            Initialize the PF utility class.
 
-        参数：
-            config (PFConfig): PF 算法的配置实例。
+            Parameters:
+                config (PFConfig): Configuration for the PF algorithm.
         """
         self.config = config
-        # 初始化随机数生成器，并以 hash_key 作为初始种子
         self.pad_id = config.generation_tokenizer.pad_token_id if config.generation_tokenizer.pad_token_id is not None else config.generation_tokenizer.eos_token_id
         self.eos_id = config.generation_tokenizer.eos_token_id
         self.hashtable = torch.randperm(1000003)
@@ -49,9 +48,7 @@ class PFUtils:
 
 
     def get_seed_rng(self, input_ids: torch.LongTensor) -> int:
-        """
-        根据输入的 tokens 获取一个随机数种子
-        """
+        """get a random seed according to input tokens."""
         if self.config.seeding == 'hash':
             seed = self.config.seed
             for i in input_ids:
@@ -74,9 +71,7 @@ class PFUtils:
             temperature: float,
             top_p: float
     ) -> torch.LongTensor:
-        """
-        生成下一个 token（修改后适配单个文本，不再使用 batch 维度）
-        """
+        """generate next token from logits."""
         if temperature > 0:
             probs = torch.softmax(logits / temperature, dim=-1)
             probs_sort, probs_idx = torch.sort(probs, dim=-1, descending=True)
@@ -86,7 +81,7 @@ class PFUtils:
             probs_sort.div_(probs_sort.sum(dim=-1, keepdim=True))
             log_probs = probs_sort.log()
 
-            seed = self.get_seed_rng(ngram_tokens)  # 直接传入
+            seed = self.get_seed_rng(ngram_tokens)
             self.rng.manual_seed(seed)
 
             rs = torch.rand(self.config.vocab_size, generator=self.rng, device=self.rng.device)
@@ -102,27 +97,27 @@ class PFUtils:
         else:
             next_token = torch.argmax(logits, dim=-1)
 
-        return next_token.reshape(-1)  # 保持输出格式一致
+        return next_token.reshape(-1)
 
 
 
     def score_tok(self, ngram_tokens: List[int], token_id: int) -> torch.Tensor:
-        """
-        对文本中的每个 token 计算得分增量
-        """
+        """calculate scores of each token."""
         seed = self.get_seed_rng(torch.tensor(ngram_tokens))
         self.rng.manual_seed(seed)
         rs = torch.rand(self.config.vocab_size, generator=self.rng, device=self.rng.device)
-        rs[rs == 0] = 1e-4  # 避免 log(0)
-        scores = -rs.log().roll(-token_id)  # 先取 log 再 roll
+        # avoid log(0)
+        rs[rs == 0] = 1e-4
+        scores = -rs.log().roll(-token_id)
         return scores
 
     def get_threshold(self, n_tokens: int, alpha: float = 0.01) -> float:
+        """calculate threshold for PF algorithm."""
         if n_tokens <= self.config.ngram:
-            return float('inf')  # 如果文本太短，不进行检测
+            return float('inf')
 
-        k = n_tokens - self.config.ngram  # Gamma 分布的 shape 参数
-        threshold = gamma.ppf(1 - alpha, a=k, scale=1)  # 计算阈值
+        k = n_tokens - self.config.ngram
+        threshold = gamma.ppf(1 - alpha, a=k, scale=1)
         return threshold
 
     def get_scores_by_t(
@@ -147,7 +142,7 @@ class PFUtils:
         """
         tokens_id = self.config.generation_tokenizer.encode(text, add_special_tokens=False)
         if ntoks_max is not None:
-            tokens_id = tokens_id[:ntoks_max]  # 限制最大 token 数量
+            tokens_id = tokens_id[:ntoks_max]
 
         total_len = len(tokens_id)
         start_pos = self.config.ngram + 1
@@ -155,7 +150,7 @@ class PFUtils:
         seen_ntuples = set()
 
         for cur_pos in range(start_pos, total_len):
-            ngram_tokens = tokens_id[cur_pos - self.config.ngram: cur_pos]  # 取 ngram
+            ngram_tokens = tokens_id[cur_pos - self.config.ngram: cur_pos]
             if scoring_method == 'v1':
                 tup_for_unique = tuple(ngram_tokens)
                 if tup_for_unique in seen_ntuples:
@@ -174,6 +169,7 @@ class PFUtils:
         return np.array([rt.cpu().numpy() for rt in rts])
 
     def get_scores(self,score_lists: np.array) -> float:
+        """calculate sum of PF score."""
         if len(score_lists) == 0:
             return 0
         aggregated_score = sum(score_lists)
@@ -203,9 +199,8 @@ class PF(BaseWatermark):
 
     @torch.no_grad()
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
-        """
-        生成带水印的文本
-        """
+        """Generate watermarked text using the PF algorithm."""
+
         prompt_tokens = self.config.generation_tokenizer.encode(prompt, add_special_tokens=False)
         min_prompt_size = len(prompt_tokens)
         total_len = min(self.config.max_seq_len, self.config.gen_kwargs["max_new_tokens"] + min_prompt_size)
@@ -230,27 +225,26 @@ class PF(BaseWatermark):
 
         tokens = tokens.tolist()
 
-        # 截取最大生成长度
         tokens = tokens[: len(prompt_tokens) + self.config.gen_kwargs["max_new_tokens"]]
 
-        # 如果有 EOS token，则截断
         try:
             tokens = tokens[: tokens.index(self.utils.eos_id)]
         except ValueError:
             pass
 
-        # 直接返回解码后的文本
         return self.config.generation_tokenizer.decode(tokens)
 
 
 
     def detect_watermark(self, text: str, *args, **kwargs):
+        """Detect watermark in the text."""
+
         scores = self.utils.get_scores_by_t(text)
         score = self.utils.get_scores(scores)
         alpha = self.config.gen_kwargs.get("alpha", 0.01)
         threshold = self.utils.get_threshold(len(scores), alpha)
-        result = bool(score > threshold)  # 转换布尔值
-        score = float(score)  # 转换为 Python float
+        result = bool(score > threshold)
+        score = float(score)
         threshold = float(threshold)
         return {"is_watermarked": result, "score": score, "threshold": threshold}
 

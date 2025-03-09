@@ -14,7 +14,7 @@
 
 # ====================================================
 # __init__.py
-# Description: Initialization file for the kgw package
+# Description: Initialization file for the pf package
 # ====================================================
 
 from .pf import PF
