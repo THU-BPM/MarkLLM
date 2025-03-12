@@ -40,6 +40,7 @@
 - [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu\*, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu*
 
 ### Updates
+- 🎉 **(2025.03.12)** Add [Permute-and-Flip](https://arxiv.org/abs/2402.05864) (PF) watermarking method. Thanks Zian Wang for his PR!
 - 🎉 **(2025.02.27)** Add δ-reweight and LLR score detection for Unbiased watermarking method.
 - 🎉 **(2025.01.08)** Add AutoConfiguration for watermarking methods.
 - 🎉 **(2024.12.21)** Provide example code for integrating VLLM with MarkLLM in `MarkvLLM_demo.py`. Thanks to @zhangjf-nlp for his PR!
@@ -91,6 +92,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | Unbiased Watermark | ICLR 2024    | [\[2310.10669\] Unbiased Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.10669)                                                                     |
   | TS Watermark | ICML 2024    | [\[2402.18059\] Token-Specific Watermarking with Enhanced Detectability and Semantic Coherence for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.18059)                                                                     |
   | SynthID-Text | Nature 2024   | [Scalable Watermarking for Identifying Large Language Model Outputs (*Nature*)](https://www.nature.com/articles/s41586-024-08025-4)                                                                     |
+  | PF Watermark | ICLR 2025   | [\[2402.05864\] Permute-and-Flip: An Optimally Stable and Watermarkable Decoder for LLMs](https://arxiv.org/abs/2402.05864)                                                                     |
   | EXP/EXPGumbel      | Lecture Note | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
   | EXP-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
   | ITS-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |

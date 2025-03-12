@@ -1,3 +1,22 @@
+# Copyright 2024 THU-BPM MarkLLM.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# ==============================================
+# pf.py
+# Description: Implementation of PF algorithm
+# ==============================================
+
 from typing import List
 import torch
 import numpy as np
@@ -7,7 +26,7 @@ from sympy.physics.units import temperature
 from ..base import BaseConfig, BaseWatermark
 from utils.transformers_config import TransformersConfig
 
-# PF 方法的配置类
+# PF algorithm configuration class
 class PFConfig(BaseConfig):
     """Config class for PF algorithm, load config file and initialize parameters."""
     def initialize_parameters(self) -> None:
@@ -196,8 +215,6 @@ class PF(BaseWatermark):
 
         self.utils = PFUtils(self.config)
 
-
-    @torch.no_grad()
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate watermarked text using the PF algorithm."""
 
@@ -234,9 +251,7 @@ class PF(BaseWatermark):
 
         return self.config.generation_tokenizer.decode(tokens)
 
-
-
-    def detect_watermark(self, text: str, *args, **kwargs):
+    def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the text."""
 
         scores = self.utils.get_scores_by_t(text)
@@ -245,8 +260,13 @@ class PF(BaseWatermark):
         threshold = self.utils.get_threshold(len(scores), alpha)
         result = bool(score > threshold)
         score = float(score)
-        threshold = float(threshold)
-        return {"is_watermarked": result, "score": score, "threshold": threshold}
+        if return_dict:
+            return {"is_watermarked": result, "score": score}
+        else:
+            return (result, score)
+
+    def get_data_for_visualize(self, text, *args, **kwargs):
+        pass
 
 
 
