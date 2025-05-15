@@ -1,0 +1,16 @@
+{
+    "algorithm_name": "MorphMark",
+    "gamma": 0.50,
+    "type": "exp",
+    "k_linear": 1.55,
+    "k_exp": 1.30,
+    "k_log": 2.15,
+    "p_0": 0.15,
+    "ewd": false,
+    "delta_ewd": 1.25,
+    "hash_key": 15485863,
+    "prefix_length": 1,
+    "z_threshold": 2.0,
+    "f_scheme": "time",
+    "window_scheme": "left"
+}

@@ -39,7 +39,8 @@ CONFIG_MAPPING_NAMES = {
     'ITSEdit': 'watermark.its_edit.ITSEditConfig',
     'SynthID': 'watermark.synthid.SynthIDConfig',
     'TS': 'watermark.ts.TSConfig',
-    'PF': 'watermark.pf.PFConfig'
+    'PF': 'watermark.pf.PFConfig',
+    'MorphMark': 'watermark.morphmark.MorphMarkConfig',
 }
 
 def config_name_from_alg_name(name: str) -> Optional[str]:
