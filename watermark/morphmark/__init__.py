@@ -14,7 +14,7 @@
 
 # ====================================================
 # __init__.py
-# Description: Initialization file for the kgw package
+# Description: Initialization file for the morphmark package
 # ====================================================
 
 from .morphmark import MorphMark
