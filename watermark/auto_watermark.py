@@ -40,7 +40,8 @@ WATERMARK_MAPPING_NAMES={
     'ITSEdit': 'watermark.its_edit.ITSEdit',
     'SynthID': 'watermark.synthid.SynthID',
     'TS':'watermark.ts.TS',
-    'PF':'watermark.pf.PF'
+    'PF':'watermark.pf.PF',
+    'MorphMark':'watermark.morphmark.MorphMark',
 }
 
 def watermark_name_from_alg_name(name):
