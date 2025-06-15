@@ -10,9 +10,7 @@
 <a href="https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing" alt="Colab">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 
-<br>
-
-💡 **Some other watermark papers from our team that may interest you** ✨
+### 💡 Some other watermark papers from our team that may interest you ✨
 
 1. [<u>**(ICLR 2024) A Semantic Invariant Robust Watermark for Large Language Models</u>**](https://arxiv.org/abs/2310.06356)
    
