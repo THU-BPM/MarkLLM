@@ -10,6 +10,66 @@
 <a href="https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing" alt="Colab">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 
+<br>
+
+💡 **Some other watermark papers from our team that may interest you** ✨
+
+1. [<u>**(ICLR 2024) A Semantic Invariant Robust Watermark for Large Language Models</u>**](https://arxiv.org/abs/2310.06356)
+   
+   <span style="color:gray">Aiwei Liu, Leyi Pan, Xuming Hu, Shiao Meng, Lijie Wen</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/THU-BPM/Robust_Watermark?style=social&logo=github)](https://github.com/THU-BPM/Robust_Watermark)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2310.06356-red)](#)
+
+2. [<u>**(ICLR 2024) An Unforgeable Publicly Verifiable Watermark for Large Language Models</u>**](https://arxiv.org/abs/2307.16230)
+   
+   <span style="color:gray">Aiwei Liu, Leyi Pan, Xuming Hu, Shu'ang Li, Lijie Wen, Irwin King, Philip S. Yu</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/THU-BPM/unforgeable_watermark?style=social&logo=github)](https://github.com/THU-BPM/unforgeable_watermark)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2307.16230-red)](#)
+
+3. [<u>**(ACM Computing Surveys) A Survey of Text Watermarking in the Era of Large Language Models</u>**](https://dl.acm.org/doi/pdf/10.1145/3691626)
+   
+   <span style="color:gray">Aiwei Liu*, Leyi Pan*, Yijian Lu, Jingjing Li, Xuming Hu, Xi Zhang, Lijie Wen, Irwin King, Hui Xiong, Philip S. Yu</span>
+   
+   [![Home](https://img.shields.io/badge/Home-Text_Watermarking_Survey-blue?style=flat&logo=html5)](https://survey-text-watermark.github.io/)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2312.07913-red)](#)
+
+4. [<u>**(ICLR 2025 Spotlight) Can Watermarked LLMs be Identified by Users via Crafted Prompts?</u>**](https://arxiv.org/abs/2410.03168)
+   
+   <span style="color:gray">Aiwei Liu, Sheng Guan, Yiming Liu, Leyi Pan, Yifei Zhang, Liancheng Fang, Lijie Wen, Philip S. Yu, Xuming Hu</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/THU-BPM/Watermarked_LLM_Identification?style=social&logo=github)](https://github.com/THU-BPM/Watermarked_LLM_Identification)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2410.03168-red)](#)
+
+5. [<u>**(ACL 2025 Main) Can LLM Watermarks Robustly Prevent Unauthorized Knowledge Distillation?</u>**](https://arxiv.org/abs/2502.11598)
+   
+   <span style="color:gray">Leyi Pan, Aiwei Liu, Shiyu Huang, Yijian Lu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/THU-BPM/Watermark-Radioactivity-Attack?style=social&logo=github)](https://github.com/THU-BPM/Watermark-Radioactivity-Attack)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2502.11598-red)](#)
+
+6. [<u>**(NAACL 2025 Findings) WaterSeeker: Pioneering Efficient Detection of Watermarked Segments in Large Documents</u>**](https://arxiv.org/abs/2409.05112)
+   
+   <span style="color:gray">Leyi Pan, Aiwei Liu, Yijian Lu, Zitian Gao, Yichen Di, Lijie Wen, Irwin King, Philip S. Yu</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/THU-BPM/WaterSeeker?style=social&logo=github)](https://github.com/THU-BPM/WaterSeeker)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2409.05112-red)](#)
+
+7. [<u>**(ACL 2024 Main) An Entropy-based Text Watermarking Detection Method</u>**](https://arxiv.org/abs/2403.13485)
+   
+   <span style="color:gray">Yijian Lu, AIwei Liu, Dianzhi Yu, Jingjing Li, Irwin King</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/luyijian3/EWD?style=social&logo=github)](https://github.com/luyijian3/EWD)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2403.13485-red)](#)
+  
+8. [<u>**(ACL 2024 Main) Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models</u>**](https://arxiv.org/abs/2402.14007)
+   
+   <span style="color:gray">Zhiwei He, Binglin Zhou, Hongkun Hao, Aiwei Liu, Xing Wang, Zhaopeng Tu, Zhuosheng Zhang, Rui Wang</span>
+   
+   [![GitHub Stars](https://img.shields.io/github/stars/zwhe99/X-SIR?style=social&logo=github)](https://github.com/zwhe99/X-SIR)
+     [![Arxiv](https://img.shields.io/badge/Arxiv-2402.14007-red)](#)
+
 
 ### Contents
 
@@ -20,7 +80,6 @@
     - [Introduction to MarkLLM](#introduction-to-markllm)
       - [Overview](#overview)
       - [Key Features of MarkLLM](#key-features-of-markllm)
-    - [Repo contents](#repo-contents)
     - [How to use the toolkit in your own code](#how-to-use-the-toolkit-in-your-own-code)
       - [Setting up the environment](#setting-up-the-environment)
       - [Invoking watermarking algorithms](#invoking-watermarking-algorithms)
@@ -113,77 +172,6 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
 
   - **Watermark Detection Pipeline:** WatermarkedTextDetectionPipeline, UnwatermarkedTextDetectionPipeline
   - **Text Quality Pipeline:** DirectTextQualityAnalysisPipeline, ReferencedTextQualityAnalysisPipeline, ExternalDiscriminatorTextQualityAnalysisPipeline
-
-### Repo contents
-
-Below is the directory structure of the MarkLLM project, which encapsulates its three core functionalities within the `watermark/`, `visualize/`, and `evaluation/` directories. To facilitate user understanding and demonstrate the toolkit's ease of use, we provide a variety of test cases. The test code can be found in the `test/` directory.
-
-```plaintext
-MarkLLM/
-├── config/                     # Configuration files for various watermark algorithms
-│   ├── EWD.json         
-│   ├── EXPEdit.json     
-│   ├── EXP.json         
-│   ├── KGW.json
-│   ├── ITSEdit.json          
-│   ├── SIR.json          
-│   ├── SWEET.json       
-│   ├── Unigram.json      
-│   ├── UPV.json         
-│   └── XSIR.json         
-├── dataset/                    # Datasets used in the project
-│   ├── c4/
-│   ├── human_eval/
-│   └── wmt16_de_en/
-├── evaluation/                 # Evaluation module of MarkLLM, including tools and pipelines
-│   ├── dataset.py              # Script for handling dataset operations within evaluations
-│   ├── examples/               # Scripts for automated evaluations using pipelines
-│   │   ├── assess_detectability.py  
-│   │   ├── assess_quality.py  
-│   │   └── assess_robustness.py   
-│   ├── pipelines/              # Pipelines for structured evaluation processes
-│   │   ├── detection.py  
-│   │   └── quality_analysis.py 
-│   └── tools/                  # Evaluation tools
-│       ├── oracle.py
-│       ├── success_rate_calculator.py  
-        ├── text_editor.py       
-│       └── text_quality_analyzer.py   
-├── exceptions/                 # Custom exception definitions for error handling
-│   └── exceptions.py
-├── font/                       # Fonts needed for visualization purposes
-├── MarkLLM_demo.ipynb          # Jupyter Notebook
-├── test/                       # Test cases and examples for user testing
-│   ├── test_method.py    
-│   ├── test_pipeline.py  
-│   └── test_visualize.py   
-├── utils/                      # Helper classes and functions supporting various operations
-│   ├── openai_utils.py   
-│   ├── transformers_config.py 
-│   └── utils.py          
-├── visualize/                  # Visualization Solutions module of MarkLLM
-│   ├── color_scheme.py  
-│   ├── data_for_visualization.py  
-│   ├── font_settings.py  
-│   ├── legend_settings.py  
-│   ├── page_layout_settings.py 
-│   └── visualizer.py     
-├── watermark/                  # Implementation framework for watermark algorithms
-│   ├── auto_watermark.py       # AutoWatermark class
-│   ├── base.py                 # Base classes and functions for watermarking
-│   ├── ewd/              
-│   ├── exp/             
-│   ├── exp_edit/        
-│   ├── kgw/
-│   ├── its_edit/               
-│   ├── sir/             
-│   ├── sweet/            
-│   ├── unigram/         
-│   ├── upv/              
-│   └── xsir/             
-├── README.md                   # Main project documentation
-└── requirements.txt            # Dependencies required for the project
-```
 
 ### How to use the toolkit in your own code
 
