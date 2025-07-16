@@ -41,6 +41,7 @@ CONFIG_MAPPING_NAMES = {
     'TS': 'watermark.ts.TSConfig',
     'PF': 'watermark.pf.PFConfig',
     'MorphMark': 'watermark.morphmark.MorphMarkConfig',
+    'Adaptive': 'watermark.adaptive.AdaptiveConfig'
 }
 
 def config_name_from_alg_name(name: str) -> Optional[str]:

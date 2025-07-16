@@ -42,6 +42,7 @@ WATERMARK_MAPPING_NAMES={
     'TS':'watermark.ts.TS',
     'PF':'watermark.pf.PF',
     'MorphMark':'watermark.morphmark.MorphMark',
+    'Adaptive': 'watermark.adaptive.Adaptive',
 }
 
 def watermark_name_from_alg_name(name):
