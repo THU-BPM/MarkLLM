@@ -153,7 +153,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | SynthID-Text | Nature 2024   | [Scalable Watermarking for Identifying Large Language Model Outputs (*Nature*)](https://www.nature.com/articles/s41586-024-08025-4)                                                                     |
   | PF Watermark | ICLR 2025   | [\[2402.05864\] Permute-and-Flip: An Optimally Stable and Watermarkable Decoder for LLMs](https://arxiv.org/abs/2402.05864)  
   | MorphMark | ACL 2025   | [\[2505.11541\] MorphMark: Flexible Adaptive Watermarking for Large Language Models](https://arxiv.org/abs/2505.11541)                                                                     |
-  | Adaptive Watermark | ICML 2024   | [\[2401.13927\] Adaptive Text Watermark for Large Language Models](ttps://arxiv.org/abs/2401.13927)
+  | Adaptive Watermark | ICML 2024   | [\[2401.13927\] Adaptive Text Watermark for Large Language Models](https://arxiv.org/abs/2401.13927)
   | EXP/EXPGumbel      | Lecture Note | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
   | EXP-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
   | ITS-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
