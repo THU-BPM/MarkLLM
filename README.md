@@ -124,7 +124,7 @@
 
 MarkLLM is an open-source toolkit developed to facilitate the research and application of watermarking technologies within large language models (LLMs). As the use of large language models (LLMs) expands, ensuring the authenticity and origin of machine-generated text becomes critical. MarkLLM simplifies the access, understanding, and assessment of watermarking technologies, making it accessible to both researchers and the broader community.
 
-<img src="images\overview.png" alt="overview" style="zoom:35%;" />
+<img src="images\overview.png"  alt="overview" style="zoom:35%;" />
 
 #### Key Features of MarkLLM
 
