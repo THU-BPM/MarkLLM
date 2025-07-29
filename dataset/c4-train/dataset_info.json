@@ -1,0 +1,2178 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "realnewslike",
+  "dataset_name": "c4",
+  "dataset_size": 38189703534,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00000-of-00512.json.gz": {
+      "num_bytes": 30085821,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00001-of-00512.json.gz": {
+      "num_bytes": 30065900,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00002-of-00512.json.gz": {
+      "num_bytes": 30028880,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00003-of-00512.json.gz": {
+      "num_bytes": 30136880,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00004-of-00512.json.gz": {
+      "num_bytes": 30110499,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00005-of-00512.json.gz": {
+      "num_bytes": 30097927,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00006-of-00512.json.gz": {
+      "num_bytes": 30013820,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00007-of-00512.json.gz": {
+      "num_bytes": 30557005,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00008-of-00512.json.gz": {
+      "num_bytes": 30369535,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00009-of-00512.json.gz": {
+      "num_bytes": 30033048,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00010-of-00512.json.gz": {
+      "num_bytes": 29948345,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00011-of-00512.json.gz": {
+      "num_bytes": 30558885,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00012-of-00512.json.gz": {
+      "num_bytes": 29888513,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00013-of-00512.json.gz": {
+      "num_bytes": 29936292,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00014-of-00512.json.gz": {
+      "num_bytes": 30169338,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00015-of-00512.json.gz": {
+      "num_bytes": 30071363,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00016-of-00512.json.gz": {
+      "num_bytes": 30451660,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00017-of-00512.json.gz": {
+      "num_bytes": 29940254,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00018-of-00512.json.gz": {
+      "num_bytes": 30282186,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00019-of-00512.json.gz": {
+      "num_bytes": 30373907,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00020-of-00512.json.gz": {
+      "num_bytes": 30104199,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00021-of-00512.json.gz": {
+      "num_bytes": 29733696,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00022-of-00512.json.gz": {
+      "num_bytes": 30012894,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00023-of-00512.json.gz": {
+      "num_bytes": 30024851,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00024-of-00512.json.gz": {
+      "num_bytes": 29906809,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00025-of-00512.json.gz": {
+      "num_bytes": 30332268,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00026-of-00512.json.gz": {
+      "num_bytes": 30288490,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00027-of-00512.json.gz": {
+      "num_bytes": 29897688,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00028-of-00512.json.gz": {
+      "num_bytes": 30201690,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00029-of-00512.json.gz": {
+      "num_bytes": 30237920,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00030-of-00512.json.gz": {
+      "num_bytes": 30048903,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00031-of-00512.json.gz": {
+      "num_bytes": 30294528,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00032-of-00512.json.gz": {
+      "num_bytes": 29868168,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00033-of-00512.json.gz": {
+      "num_bytes": 30105916,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00034-of-00512.json.gz": {
+      "num_bytes": 30126174,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00035-of-00512.json.gz": {
+      "num_bytes": 30084101,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00036-of-00512.json.gz": {
+      "num_bytes": 30095974,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00037-of-00512.json.gz": {
+      "num_bytes": 30239345,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00038-of-00512.json.gz": {
+      "num_bytes": 30247683,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00039-of-00512.json.gz": {
+      "num_bytes": 30057005,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00040-of-00512.json.gz": {
+      "num_bytes": 30185136,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00041-of-00512.json.gz": {
+      "num_bytes": 30314653,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00042-of-00512.json.gz": {
+      "num_bytes": 30123256,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00043-of-00512.json.gz": {
+      "num_bytes": 30057043,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00044-of-00512.json.gz": {
+      "num_bytes": 30029900,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00045-of-00512.json.gz": {
+      "num_bytes": 30367170,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00046-of-00512.json.gz": {
+      "num_bytes": 30105866,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00047-of-00512.json.gz": {
+      "num_bytes": 29957618,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00048-of-00512.json.gz": {
+      "num_bytes": 30329887,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00049-of-00512.json.gz": {
+      "num_bytes": 30116207,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00050-of-00512.json.gz": {
+      "num_bytes": 30236341,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00051-of-00512.json.gz": {
+      "num_bytes": 30357091,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00052-of-00512.json.gz": {
+      "num_bytes": 29944959,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00053-of-00512.json.gz": {
+      "num_bytes": 30240416,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00054-of-00512.json.gz": {
+      "num_bytes": 30174556,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00055-of-00512.json.gz": {
+      "num_bytes": 30134394,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00056-of-00512.json.gz": {
+      "num_bytes": 29891026,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00057-of-00512.json.gz": {
+      "num_bytes": 29920525,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00058-of-00512.json.gz": {
+      "num_bytes": 30060421,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00059-of-00512.json.gz": {
+      "num_bytes": 30038488,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00060-of-00512.json.gz": {
+      "num_bytes": 30129718,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00061-of-00512.json.gz": {
+      "num_bytes": 30130505,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00062-of-00512.json.gz": {
+      "num_bytes": 29968130,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00063-of-00512.json.gz": {
+      "num_bytes": 30116532,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00064-of-00512.json.gz": {
+      "num_bytes": 30236194,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00065-of-00512.json.gz": {
+      "num_bytes": 30077312,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00066-of-00512.json.gz": {
+      "num_bytes": 29920862,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00067-of-00512.json.gz": {
+      "num_bytes": 30278223,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00068-of-00512.json.gz": {
+      "num_bytes": 29940464,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00069-of-00512.json.gz": {
+      "num_bytes": 29903118,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00070-of-00512.json.gz": {
+      "num_bytes": 30082323,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00071-of-00512.json.gz": {
+      "num_bytes": 30128276,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00072-of-00512.json.gz": {
+      "num_bytes": 30458419,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00073-of-00512.json.gz": {
+      "num_bytes": 30366974,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00074-of-00512.json.gz": {
+      "num_bytes": 29987779,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00075-of-00512.json.gz": {
+      "num_bytes": 30070204,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00076-of-00512.json.gz": {
+      "num_bytes": 30129238,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00077-of-00512.json.gz": {
+      "num_bytes": 30051399,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00078-of-00512.json.gz": {
+      "num_bytes": 30144230,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00079-of-00512.json.gz": {
+      "num_bytes": 30544297,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00080-of-00512.json.gz": {
+      "num_bytes": 30188866,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00081-of-00512.json.gz": {
+      "num_bytes": 30418881,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00082-of-00512.json.gz": {
+      "num_bytes": 30086460,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00083-of-00512.json.gz": {
+      "num_bytes": 30138639,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00084-of-00512.json.gz": {
+      "num_bytes": 30228150,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00085-of-00512.json.gz": {
+      "num_bytes": 30004564,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00086-of-00512.json.gz": {
+      "num_bytes": 29696360,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00087-of-00512.json.gz": {
+      "num_bytes": 29927300,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00088-of-00512.json.gz": {
+      "num_bytes": 30038333,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00089-of-00512.json.gz": {
+      "num_bytes": 30223506,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00090-of-00512.json.gz": {
+      "num_bytes": 30266969,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00091-of-00512.json.gz": {
+      "num_bytes": 29885840,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00092-of-00512.json.gz": {
+      "num_bytes": 29942337,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00093-of-00512.json.gz": {
+      "num_bytes": 30129376,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00094-of-00512.json.gz": {
+      "num_bytes": 29613450,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00095-of-00512.json.gz": {
+      "num_bytes": 30469526,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00096-of-00512.json.gz": {
+      "num_bytes": 30126036,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00097-of-00512.json.gz": {
+      "num_bytes": 30374980,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00098-of-00512.json.gz": {
+      "num_bytes": 29928579,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00099-of-00512.json.gz": {
+      "num_bytes": 29901456,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00100-of-00512.json.gz": {
+      "num_bytes": 30033459,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00101-of-00512.json.gz": {
+      "num_bytes": 30280468,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00102-of-00512.json.gz": {
+      "num_bytes": 29805195,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00103-of-00512.json.gz": {
+      "num_bytes": 29995494,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00104-of-00512.json.gz": {
+      "num_bytes": 30318447,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00105-of-00512.json.gz": {
+      "num_bytes": 30209523,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00106-of-00512.json.gz": {
+      "num_bytes": 30476739,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00107-of-00512.json.gz": {
+      "num_bytes": 30203291,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00108-of-00512.json.gz": {
+      "num_bytes": 30265100,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00109-of-00512.json.gz": {
+      "num_bytes": 30342649,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00110-of-00512.json.gz": {
+      "num_bytes": 30152418,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00111-of-00512.json.gz": {
+      "num_bytes": 30160329,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00112-of-00512.json.gz": {
+      "num_bytes": 30428351,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00113-of-00512.json.gz": {
+      "num_bytes": 30200133,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00114-of-00512.json.gz": {
+      "num_bytes": 30205273,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00115-of-00512.json.gz": {
+      "num_bytes": 30164849,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00116-of-00512.json.gz": {
+      "num_bytes": 30117752,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00117-of-00512.json.gz": {
+      "num_bytes": 30062588,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00118-of-00512.json.gz": {
+      "num_bytes": 30125828,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00119-of-00512.json.gz": {
+      "num_bytes": 30156741,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00120-of-00512.json.gz": {
+      "num_bytes": 30489925,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00121-of-00512.json.gz": {
+      "num_bytes": 29606989,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00122-of-00512.json.gz": {
+      "num_bytes": 29770557,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00123-of-00512.json.gz": {
+      "num_bytes": 30248121,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00124-of-00512.json.gz": {
+      "num_bytes": 30131013,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00125-of-00512.json.gz": {
+      "num_bytes": 30348971,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00126-of-00512.json.gz": {
+      "num_bytes": 30370074,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00127-of-00512.json.gz": {
+      "num_bytes": 30320846,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00128-of-00512.json.gz": {
+      "num_bytes": 30076235,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00129-of-00512.json.gz": {
+      "num_bytes": 30569486,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00130-of-00512.json.gz": {
+      "num_bytes": 30280169,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00131-of-00512.json.gz": {
+      "num_bytes": 30338899,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00132-of-00512.json.gz": {
+      "num_bytes": 29969011,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00133-of-00512.json.gz": {
+      "num_bytes": 30179558,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00134-of-00512.json.gz": {
+      "num_bytes": 30080257,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00135-of-00512.json.gz": {
+      "num_bytes": 30284972,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00136-of-00512.json.gz": {
+      "num_bytes": 30130265,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00137-of-00512.json.gz": {
+      "num_bytes": 30146793,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00138-of-00512.json.gz": {
+      "num_bytes": 30180265,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00139-of-00512.json.gz": {
+      "num_bytes": 30398387,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00140-of-00512.json.gz": {
+      "num_bytes": 29652990,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00141-of-00512.json.gz": {
+      "num_bytes": 30083642,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00142-of-00512.json.gz": {
+      "num_bytes": 30131064,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00143-of-00512.json.gz": {
+      "num_bytes": 30244435,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00144-of-00512.json.gz": {
+      "num_bytes": 29725094,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00145-of-00512.json.gz": {
+      "num_bytes": 30335033,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00146-of-00512.json.gz": {
+      "num_bytes": 29905680,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00147-of-00512.json.gz": {
+      "num_bytes": 29852459,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00148-of-00512.json.gz": {
+      "num_bytes": 30364788,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00149-of-00512.json.gz": {
+      "num_bytes": 30096278,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00150-of-00512.json.gz": {
+      "num_bytes": 29776995,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00151-of-00512.json.gz": {
+      "num_bytes": 30205172,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00152-of-00512.json.gz": {
+      "num_bytes": 29845034,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00153-of-00512.json.gz": {
+      "num_bytes": 30258796,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00154-of-00512.json.gz": {
+      "num_bytes": 30249734,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00155-of-00512.json.gz": {
+      "num_bytes": 30198742,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00156-of-00512.json.gz": {
+      "num_bytes": 30168323,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00157-of-00512.json.gz": {
+      "num_bytes": 30241978,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00158-of-00512.json.gz": {
+      "num_bytes": 29959715,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00159-of-00512.json.gz": {
+      "num_bytes": 30109595,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00160-of-00512.json.gz": {
+      "num_bytes": 30201741,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00161-of-00512.json.gz": {
+      "num_bytes": 30176266,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00162-of-00512.json.gz": {
+      "num_bytes": 30018118,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00163-of-00512.json.gz": {
+      "num_bytes": 30236016,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00164-of-00512.json.gz": {
+      "num_bytes": 30150055,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00165-of-00512.json.gz": {
+      "num_bytes": 30348056,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00166-of-00512.json.gz": {
+      "num_bytes": 30015834,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00167-of-00512.json.gz": {
+      "num_bytes": 30282254,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00168-of-00512.json.gz": {
+      "num_bytes": 29815124,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00169-of-00512.json.gz": {
+      "num_bytes": 30346843,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00170-of-00512.json.gz": {
+      "num_bytes": 30175685,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00171-of-00512.json.gz": {
+      "num_bytes": 30145505,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00172-of-00512.json.gz": {
+      "num_bytes": 30009998,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00173-of-00512.json.gz": {
+      "num_bytes": 30062185,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00174-of-00512.json.gz": {
+      "num_bytes": 30055129,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00175-of-00512.json.gz": {
+      "num_bytes": 30091082,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00176-of-00512.json.gz": {
+      "num_bytes": 30235767,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00177-of-00512.json.gz": {
+      "num_bytes": 30071950,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00178-of-00512.json.gz": {
+      "num_bytes": 29932121,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00179-of-00512.json.gz": {
+      "num_bytes": 30119251,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00180-of-00512.json.gz": {
+      "num_bytes": 30175456,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00181-of-00512.json.gz": {
+      "num_bytes": 30029564,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00182-of-00512.json.gz": {
+      "num_bytes": 30437016,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00183-of-00512.json.gz": {
+      "num_bytes": 29994048,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00184-of-00512.json.gz": {
+      "num_bytes": 30338616,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00185-of-00512.json.gz": {
+      "num_bytes": 30088874,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00186-of-00512.json.gz": {
+      "num_bytes": 30193681,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00187-of-00512.json.gz": {
+      "num_bytes": 30171163,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00188-of-00512.json.gz": {
+      "num_bytes": 30060432,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00189-of-00512.json.gz": {
+      "num_bytes": 30180741,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00190-of-00512.json.gz": {
+      "num_bytes": 30207152,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00191-of-00512.json.gz": {
+      "num_bytes": 30143987,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00192-of-00512.json.gz": {
+      "num_bytes": 30072097,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00193-of-00512.json.gz": {
+      "num_bytes": 30172886,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00194-of-00512.json.gz": {
+      "num_bytes": 30037105,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00195-of-00512.json.gz": {
+      "num_bytes": 30014854,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00196-of-00512.json.gz": {
+      "num_bytes": 30020510,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00197-of-00512.json.gz": {
+      "num_bytes": 30072566,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00198-of-00512.json.gz": {
+      "num_bytes": 30036679,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00199-of-00512.json.gz": {
+      "num_bytes": 30195178,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00200-of-00512.json.gz": {
+      "num_bytes": 30064374,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00201-of-00512.json.gz": {
+      "num_bytes": 30136711,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00202-of-00512.json.gz": {
+      "num_bytes": 29962983,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00203-of-00512.json.gz": {
+      "num_bytes": 30178998,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00204-of-00512.json.gz": {
+      "num_bytes": 29988832,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00205-of-00512.json.gz": {
+      "num_bytes": 30229414,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00206-of-00512.json.gz": {
+      "num_bytes": 29914929,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00207-of-00512.json.gz": {
+      "num_bytes": 29912800,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00208-of-00512.json.gz": {
+      "num_bytes": 29900590,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00209-of-00512.json.gz": {
+      "num_bytes": 30242768,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00210-of-00512.json.gz": {
+      "num_bytes": 30039857,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00211-of-00512.json.gz": {
+      "num_bytes": 29846856,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00212-of-00512.json.gz": {
+      "num_bytes": 30022172,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00213-of-00512.json.gz": {
+      "num_bytes": 29877918,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00214-of-00512.json.gz": {
+      "num_bytes": 29906552,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00215-of-00512.json.gz": {
+      "num_bytes": 30075441,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00216-of-00512.json.gz": {
+      "num_bytes": 30507152,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00217-of-00512.json.gz": {
+      "num_bytes": 30044236,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00218-of-00512.json.gz": {
+      "num_bytes": 30047926,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00219-of-00512.json.gz": {
+      "num_bytes": 30349211,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00220-of-00512.json.gz": {
+      "num_bytes": 30063445,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00221-of-00512.json.gz": {
+      "num_bytes": 30115660,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00222-of-00512.json.gz": {
+      "num_bytes": 30134562,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00223-of-00512.json.gz": {
+      "num_bytes": 30120819,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00224-of-00512.json.gz": {
+      "num_bytes": 30371365,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00225-of-00512.json.gz": {
+      "num_bytes": 30319212,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00226-of-00512.json.gz": {
+      "num_bytes": 30020940,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00227-of-00512.json.gz": {
+      "num_bytes": 30109958,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00228-of-00512.json.gz": {
+      "num_bytes": 29940895,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00229-of-00512.json.gz": {
+      "num_bytes": 30080588,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00230-of-00512.json.gz": {
+      "num_bytes": 30376399,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00231-of-00512.json.gz": {
+      "num_bytes": 30031670,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00232-of-00512.json.gz": {
+      "num_bytes": 30132612,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00233-of-00512.json.gz": {
+      "num_bytes": 30178285,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00234-of-00512.json.gz": {
+      "num_bytes": 29991258,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00235-of-00512.json.gz": {
+      "num_bytes": 30045172,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00236-of-00512.json.gz": {
+      "num_bytes": 30403542,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00237-of-00512.json.gz": {
+      "num_bytes": 30242989,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00238-of-00512.json.gz": {
+      "num_bytes": 30214634,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00239-of-00512.json.gz": {
+      "num_bytes": 30255546,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00240-of-00512.json.gz": {
+      "num_bytes": 30347604,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00241-of-00512.json.gz": {
+      "num_bytes": 30135691,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00242-of-00512.json.gz": {
+      "num_bytes": 30229834,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00243-of-00512.json.gz": {
+      "num_bytes": 30053753,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00244-of-00512.json.gz": {
+      "num_bytes": 30216889,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00245-of-00512.json.gz": {
+      "num_bytes": 29887569,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00246-of-00512.json.gz": {
+      "num_bytes": 29906815,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00247-of-00512.json.gz": {
+      "num_bytes": 30074896,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00248-of-00512.json.gz": {
+      "num_bytes": 30108081,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00249-of-00512.json.gz": {
+      "num_bytes": 29957882,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00250-of-00512.json.gz": {
+      "num_bytes": 29822284,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00251-of-00512.json.gz": {
+      "num_bytes": 29956462,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00252-of-00512.json.gz": {
+      "num_bytes": 29733712,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00253-of-00512.json.gz": {
+      "num_bytes": 30450662,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00254-of-00512.json.gz": {
+      "num_bytes": 29944765,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00255-of-00512.json.gz": {
+      "num_bytes": 30321363,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00256-of-00512.json.gz": {
+      "num_bytes": 29982818,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00257-of-00512.json.gz": {
+      "num_bytes": 30338592,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00258-of-00512.json.gz": {
+      "num_bytes": 29911193,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00259-of-00512.json.gz": {
+      "num_bytes": 30227794,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00260-of-00512.json.gz": {
+      "num_bytes": 30206902,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00261-of-00512.json.gz": {
+      "num_bytes": 30035514,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00262-of-00512.json.gz": {
+      "num_bytes": 30406718,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00263-of-00512.json.gz": {
+      "num_bytes": 30266531,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00264-of-00512.json.gz": {
+      "num_bytes": 30100823,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00265-of-00512.json.gz": {
+      "num_bytes": 29957109,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00266-of-00512.json.gz": {
+      "num_bytes": 30196603,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00267-of-00512.json.gz": {
+      "num_bytes": 30304605,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00268-of-00512.json.gz": {
+      "num_bytes": 30312562,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00269-of-00512.json.gz": {
+      "num_bytes": 30045257,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00270-of-00512.json.gz": {
+      "num_bytes": 30027628,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00271-of-00512.json.gz": {
+      "num_bytes": 30014730,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00272-of-00512.json.gz": {
+      "num_bytes": 30145705,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00273-of-00512.json.gz": {
+      "num_bytes": 30165945,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00274-of-00512.json.gz": {
+      "num_bytes": 30097947,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00275-of-00512.json.gz": {
+      "num_bytes": 30296359,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00276-of-00512.json.gz": {
+      "num_bytes": 30311407,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00277-of-00512.json.gz": {
+      "num_bytes": 30372345,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00278-of-00512.json.gz": {
+      "num_bytes": 30379507,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00279-of-00512.json.gz": {
+      "num_bytes": 30195406,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00280-of-00512.json.gz": {
+      "num_bytes": 29902057,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00281-of-00512.json.gz": {
+      "num_bytes": 29779702,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00282-of-00512.json.gz": {
+      "num_bytes": 30063500,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00283-of-00512.json.gz": {
+      "num_bytes": 29956350,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00284-of-00512.json.gz": {
+      "num_bytes": 30146285,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00285-of-00512.json.gz": {
+      "num_bytes": 30160056,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00286-of-00512.json.gz": {
+      "num_bytes": 29844025,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00287-of-00512.json.gz": {
+      "num_bytes": 30089218,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00288-of-00512.json.gz": {
+      "num_bytes": 30092170,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00289-of-00512.json.gz": {
+      "num_bytes": 30365397,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00290-of-00512.json.gz": {
+      "num_bytes": 30275920,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00291-of-00512.json.gz": {
+      "num_bytes": 30125784,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00292-of-00512.json.gz": {
+      "num_bytes": 30201021,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00293-of-00512.json.gz": {
+      "num_bytes": 30124224,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00294-of-00512.json.gz": {
+      "num_bytes": 30074708,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00295-of-00512.json.gz": {
+      "num_bytes": 29990007,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00296-of-00512.json.gz": {
+      "num_bytes": 30093755,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00297-of-00512.json.gz": {
+      "num_bytes": 30078472,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00298-of-00512.json.gz": {
+      "num_bytes": 30327122,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00299-of-00512.json.gz": {
+      "num_bytes": 30214180,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00300-of-00512.json.gz": {
+      "num_bytes": 29895171,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00301-of-00512.json.gz": {
+      "num_bytes": 30131063,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00302-of-00512.json.gz": {
+      "num_bytes": 30184609,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00303-of-00512.json.gz": {
+      "num_bytes": 29956412,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00304-of-00512.json.gz": {
+      "num_bytes": 29974071,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00305-of-00512.json.gz": {
+      "num_bytes": 30338106,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00306-of-00512.json.gz": {
+      "num_bytes": 30178986,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00307-of-00512.json.gz": {
+      "num_bytes": 29493455,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00308-of-00512.json.gz": {
+      "num_bytes": 30228844,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00309-of-00512.json.gz": {
+      "num_bytes": 30351688,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00310-of-00512.json.gz": {
+      "num_bytes": 29993012,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00311-of-00512.json.gz": {
+      "num_bytes": 30448951,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00312-of-00512.json.gz": {
+      "num_bytes": 30034189,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00313-of-00512.json.gz": {
+      "num_bytes": 30066486,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00314-of-00512.json.gz": {
+      "num_bytes": 30397706,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00315-of-00512.json.gz": {
+      "num_bytes": 30219107,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00316-of-00512.json.gz": {
+      "num_bytes": 30098661,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00317-of-00512.json.gz": {
+      "num_bytes": 30178992,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00318-of-00512.json.gz": {
+      "num_bytes": 30022982,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00319-of-00512.json.gz": {
+      "num_bytes": 30360409,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00320-of-00512.json.gz": {
+      "num_bytes": 30347267,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00321-of-00512.json.gz": {
+      "num_bytes": 29967877,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00322-of-00512.json.gz": {
+      "num_bytes": 29885538,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00323-of-00512.json.gz": {
+      "num_bytes": 30308848,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00324-of-00512.json.gz": {
+      "num_bytes": 30351634,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00325-of-00512.json.gz": {
+      "num_bytes": 30077168,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00326-of-00512.json.gz": {
+      "num_bytes": 30031750,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00327-of-00512.json.gz": {
+      "num_bytes": 29845765,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00328-of-00512.json.gz": {
+      "num_bytes": 30253188,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00329-of-00512.json.gz": {
+      "num_bytes": 30124922,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00330-of-00512.json.gz": {
+      "num_bytes": 30026414,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00331-of-00512.json.gz": {
+      "num_bytes": 29961847,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00332-of-00512.json.gz": {
+      "num_bytes": 30167166,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00333-of-00512.json.gz": {
+      "num_bytes": 30192963,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00334-of-00512.json.gz": {
+      "num_bytes": 29847008,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00335-of-00512.json.gz": {
+      "num_bytes": 30262244,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00336-of-00512.json.gz": {
+      "num_bytes": 30262910,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00337-of-00512.json.gz": {
+      "num_bytes": 30155329,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00338-of-00512.json.gz": {
+      "num_bytes": 29952961,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00339-of-00512.json.gz": {
+      "num_bytes": 30403399,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00340-of-00512.json.gz": {
+      "num_bytes": 29917484,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00341-of-00512.json.gz": {
+      "num_bytes": 29905522,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00342-of-00512.json.gz": {
+      "num_bytes": 30022369,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00343-of-00512.json.gz": {
+      "num_bytes": 30229313,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00344-of-00512.json.gz": {
+      "num_bytes": 29924335,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00345-of-00512.json.gz": {
+      "num_bytes": 30229482,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00346-of-00512.json.gz": {
+      "num_bytes": 30029147,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00347-of-00512.json.gz": {
+      "num_bytes": 29808182,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00348-of-00512.json.gz": {
+      "num_bytes": 30091116,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00349-of-00512.json.gz": {
+      "num_bytes": 29867618,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00350-of-00512.json.gz": {
+      "num_bytes": 29723106,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00351-of-00512.json.gz": {
+      "num_bytes": 30047620,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00352-of-00512.json.gz": {
+      "num_bytes": 29808328,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00353-of-00512.json.gz": {
+      "num_bytes": 30040117,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00354-of-00512.json.gz": {
+      "num_bytes": 29953984,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00355-of-00512.json.gz": {
+      "num_bytes": 30179912,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00356-of-00512.json.gz": {
+      "num_bytes": 30312163,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00357-of-00512.json.gz": {
+      "num_bytes": 29931515,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00358-of-00512.json.gz": {
+      "num_bytes": 29739788,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00359-of-00512.json.gz": {
+      "num_bytes": 29913841,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00360-of-00512.json.gz": {
+      "num_bytes": 29805295,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00361-of-00512.json.gz": {
+      "num_bytes": 29839676,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00362-of-00512.json.gz": {
+      "num_bytes": 30154783,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00363-of-00512.json.gz": {
+      "num_bytes": 30126118,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00364-of-00512.json.gz": {
+      "num_bytes": 30184894,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00365-of-00512.json.gz": {
+      "num_bytes": 30386766,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00366-of-00512.json.gz": {
+      "num_bytes": 30208411,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00367-of-00512.json.gz": {
+      "num_bytes": 30266003,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00368-of-00512.json.gz": {
+      "num_bytes": 29993752,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00369-of-00512.json.gz": {
+      "num_bytes": 29833222,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00370-of-00512.json.gz": {
+      "num_bytes": 29988999,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00371-of-00512.json.gz": {
+      "num_bytes": 29866636,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00372-of-00512.json.gz": {
+      "num_bytes": 30296883,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00373-of-00512.json.gz": {
+      "num_bytes": 30310322,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00374-of-00512.json.gz": {
+      "num_bytes": 30340527,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00375-of-00512.json.gz": {
+      "num_bytes": 30193692,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00376-of-00512.json.gz": {
+      "num_bytes": 30184130,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00377-of-00512.json.gz": {
+      "num_bytes": 30259301,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00378-of-00512.json.gz": {
+      "num_bytes": 29650049,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00379-of-00512.json.gz": {
+      "num_bytes": 30265211,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00380-of-00512.json.gz": {
+      "num_bytes": 30429631,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00381-of-00512.json.gz": {
+      "num_bytes": 29889471,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00382-of-00512.json.gz": {
+      "num_bytes": 30029894,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00383-of-00512.json.gz": {
+      "num_bytes": 30249255,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00384-of-00512.json.gz": {
+      "num_bytes": 30362665,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00385-of-00512.json.gz": {
+      "num_bytes": 30080234,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00386-of-00512.json.gz": {
+      "num_bytes": 29897704,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00387-of-00512.json.gz": {
+      "num_bytes": 30072139,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00388-of-00512.json.gz": {
+      "num_bytes": 30123843,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00389-of-00512.json.gz": {
+      "num_bytes": 30278955,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00390-of-00512.json.gz": {
+      "num_bytes": 30013591,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00391-of-00512.json.gz": {
+      "num_bytes": 29925212,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00392-of-00512.json.gz": {
+      "num_bytes": 30016498,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00393-of-00512.json.gz": {
+      "num_bytes": 30061083,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00394-of-00512.json.gz": {
+      "num_bytes": 30043459,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00395-of-00512.json.gz": {
+      "num_bytes": 29921106,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00396-of-00512.json.gz": {
+      "num_bytes": 30024980,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00397-of-00512.json.gz": {
+      "num_bytes": 30096825,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00398-of-00512.json.gz": {
+      "num_bytes": 30059739,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00399-of-00512.json.gz": {
+      "num_bytes": 30049826,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00400-of-00512.json.gz": {
+      "num_bytes": 29953506,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00401-of-00512.json.gz": {
+      "num_bytes": 30271141,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00402-of-00512.json.gz": {
+      "num_bytes": 29861236,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00403-of-00512.json.gz": {
+      "num_bytes": 30175831,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00404-of-00512.json.gz": {
+      "num_bytes": 30097682,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00405-of-00512.json.gz": {
+      "num_bytes": 29810961,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00406-of-00512.json.gz": {
+      "num_bytes": 29963498,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00407-of-00512.json.gz": {
+      "num_bytes": 30089554,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00408-of-00512.json.gz": {
+      "num_bytes": 30148002,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00409-of-00512.json.gz": {
+      "num_bytes": 29989174,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00410-of-00512.json.gz": {
+      "num_bytes": 30519580,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00411-of-00512.json.gz": {
+      "num_bytes": 30408107,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00412-of-00512.json.gz": {
+      "num_bytes": 29699198,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00413-of-00512.json.gz": {
+      "num_bytes": 30065457,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00414-of-00512.json.gz": {
+      "num_bytes": 30342960,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00415-of-00512.json.gz": {
+      "num_bytes": 30201576,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00416-of-00512.json.gz": {
+      "num_bytes": 30021170,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00417-of-00512.json.gz": {
+      "num_bytes": 30237505,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00418-of-00512.json.gz": {
+      "num_bytes": 29999334,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00419-of-00512.json.gz": {
+      "num_bytes": 30194801,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00420-of-00512.json.gz": {
+      "num_bytes": 29903898,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00421-of-00512.json.gz": {
+      "num_bytes": 30015573,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00422-of-00512.json.gz": {
+      "num_bytes": 29966521,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00423-of-00512.json.gz": {
+      "num_bytes": 29972805,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00424-of-00512.json.gz": {
+      "num_bytes": 30317886,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00425-of-00512.json.gz": {
+      "num_bytes": 30059310,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00426-of-00512.json.gz": {
+      "num_bytes": 30182498,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00427-of-00512.json.gz": {
+      "num_bytes": 30253874,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00428-of-00512.json.gz": {
+      "num_bytes": 30055421,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00429-of-00512.json.gz": {
+      "num_bytes": 29830674,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00430-of-00512.json.gz": {
+      "num_bytes": 29938000,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00431-of-00512.json.gz": {
+      "num_bytes": 29829687,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00432-of-00512.json.gz": {
+      "num_bytes": 30006209,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00433-of-00512.json.gz": {
+      "num_bytes": 30656456,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00434-of-00512.json.gz": {
+      "num_bytes": 30138891,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00435-of-00512.json.gz": {
+      "num_bytes": 30430276,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00436-of-00512.json.gz": {
+      "num_bytes": 30173309,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00437-of-00512.json.gz": {
+      "num_bytes": 30142240,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00438-of-00512.json.gz": {
+      "num_bytes": 29979673,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00439-of-00512.json.gz": {
+      "num_bytes": 30169105,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00440-of-00512.json.gz": {
+      "num_bytes": 30107004,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00441-of-00512.json.gz": {
+      "num_bytes": 30324563,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00442-of-00512.json.gz": {
+      "num_bytes": 30335681,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00443-of-00512.json.gz": {
+      "num_bytes": 30155655,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00444-of-00512.json.gz": {
+      "num_bytes": 30340540,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00445-of-00512.json.gz": {
+      "num_bytes": 30248960,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00446-of-00512.json.gz": {
+      "num_bytes": 30316703,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00447-of-00512.json.gz": {
+      "num_bytes": 30184407,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00448-of-00512.json.gz": {
+      "num_bytes": 30238484,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00449-of-00512.json.gz": {
+      "num_bytes": 30143151,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00450-of-00512.json.gz": {
+      "num_bytes": 30122606,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00451-of-00512.json.gz": {
+      "num_bytes": 30128179,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00452-of-00512.json.gz": {
+      "num_bytes": 29979326,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00453-of-00512.json.gz": {
+      "num_bytes": 30118272,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00454-of-00512.json.gz": {
+      "num_bytes": 30018294,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00455-of-00512.json.gz": {
+      "num_bytes": 30155903,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00456-of-00512.json.gz": {
+      "num_bytes": 30282104,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00457-of-00512.json.gz": {
+      "num_bytes": 29920723,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00458-of-00512.json.gz": {
+      "num_bytes": 30163167,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00459-of-00512.json.gz": {
+      "num_bytes": 30248893,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00460-of-00512.json.gz": {
+      "num_bytes": 29840067,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00461-of-00512.json.gz": {
+      "num_bytes": 30179062,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00462-of-00512.json.gz": {
+      "num_bytes": 30266398,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00463-of-00512.json.gz": {
+      "num_bytes": 30158800,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00464-of-00512.json.gz": {
+      "num_bytes": 30393915,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00465-of-00512.json.gz": {
+      "num_bytes": 30148939,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00466-of-00512.json.gz": {
+      "num_bytes": 30268228,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00467-of-00512.json.gz": {
+      "num_bytes": 30121937,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00468-of-00512.json.gz": {
+      "num_bytes": 30004669,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00469-of-00512.json.gz": {
+      "num_bytes": 30049860,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00470-of-00512.json.gz": {
+      "num_bytes": 29961380,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00471-of-00512.json.gz": {
+      "num_bytes": 30449164,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00472-of-00512.json.gz": {
+      "num_bytes": 30312620,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00473-of-00512.json.gz": {
+      "num_bytes": 30406764,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00474-of-00512.json.gz": {
+      "num_bytes": 30078563,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00475-of-00512.json.gz": {
+      "num_bytes": 29860761,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00476-of-00512.json.gz": {
+      "num_bytes": 30199778,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00477-of-00512.json.gz": {
+      "num_bytes": 30130742,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00478-of-00512.json.gz": {
+      "num_bytes": 29901444,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00479-of-00512.json.gz": {
+      "num_bytes": 30587214,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00480-of-00512.json.gz": {
+      "num_bytes": 30145237,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00481-of-00512.json.gz": {
+      "num_bytes": 30204159,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00482-of-00512.json.gz": {
+      "num_bytes": 30430794,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00483-of-00512.json.gz": {
+      "num_bytes": 30102412,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00484-of-00512.json.gz": {
+      "num_bytes": 30171871,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00485-of-00512.json.gz": {
+      "num_bytes": 30049539,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00486-of-00512.json.gz": {
+      "num_bytes": 29949995,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00487-of-00512.json.gz": {
+      "num_bytes": 30345072,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00488-of-00512.json.gz": {
+      "num_bytes": 30300622,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00489-of-00512.json.gz": {
+      "num_bytes": 29949909,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00490-of-00512.json.gz": {
+      "num_bytes": 29995429,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00491-of-00512.json.gz": {
+      "num_bytes": 30293919,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00492-of-00512.json.gz": {
+      "num_bytes": 30115831,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00493-of-00512.json.gz": {
+      "num_bytes": 30187809,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00494-of-00512.json.gz": {
+      "num_bytes": 30149878,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00495-of-00512.json.gz": {
+      "num_bytes": 29711944,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00496-of-00512.json.gz": {
+      "num_bytes": 30114815,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00497-of-00512.json.gz": {
+      "num_bytes": 30048480,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00498-of-00512.json.gz": {
+      "num_bytes": 29934973,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00499-of-00512.json.gz": {
+      "num_bytes": 29796509,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00500-of-00512.json.gz": {
+      "num_bytes": 30221736,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00501-of-00512.json.gz": {
+      "num_bytes": 30108320,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00502-of-00512.json.gz": {
+      "num_bytes": 30381907,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00503-of-00512.json.gz": {
+      "num_bytes": 29983805,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00504-of-00512.json.gz": {
+      "num_bytes": 30041413,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00505-of-00512.json.gz": {
+      "num_bytes": 30021620,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00506-of-00512.json.gz": {
+      "num_bytes": 30260343,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00507-of-00512.json.gz": {
+      "num_bytes": 30173739,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00508-of-00512.json.gz": {
+      "num_bytes": 29903443,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00509-of-00512.json.gz": {
+      "num_bytes": 29862664,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00510-of-00512.json.gz": {
+      "num_bytes": 29744368,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-train.00511-of-00512.json.gz": {
+      "num_bytes": 29896714,
+      "checksum": null
+    },
+    "hf://datasets/allenai/c4@1588ec454efa1a09f29cd18ddd04fe05fc8653a2/realnewslike/c4-validation.00000-of-00001.json.gz": {
+      "num_bytes": 15284943,
+      "checksum": null
+    }
+  },
+  "download_size": 15435025687,
+  "features": {
+    "text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "timestamp": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "url": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 53624729221,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 38151841548,
+      "num_examples": 13799838,
+      "shard_lengths": [
+        184157,
+        181296,
+        181090,
+        184992,
+        184146,
+        181051,
+        181448,
+        181062,
+        184098,
+        181212,
+        181034,
+        181263,
+        184454,
+        185153,
+        184287,
+        181310,
+        181233,
+        184696,
+        180786,
+        180909,
+        181339,
+        183851,
+        181464,
+        181217,
+        181109,
+        184393,
+        180845,
+        181319,
+        181280,
+        184342,
+        184585,
+        184855,
+        181388,
+        181181,
+        183959,
+        181416,
+        185022,
+        184631,
+        181434,
+        184194,
+        180936,
+        181354,
+        181240,
+        184206,
+        181203,
+        180943,
+        181319,
+        183964,
+        181390,
+        181345,
+        184746,
+        185033,
+        184509,
+        184285,
+        181350,
+        181351,
+        180400,
+        184855,
+        185015,
+        184934,
+        181132,
+        181169,
+        183994,
+        184758,
+        181500,
+        181224,
+        184137,
+        181281,
+        181051,
+        181217,
+        184161,
+        181116,
+        181298,
+        184880,
+        181230,
+        107811
+      ],
+      "dataset_name": "c4"
+    },
+    "validation": {
+      "name": "validation",
+      "num_bytes": 37861986,
+      "num_examples": 13863,
+      "dataset_name": "c4"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "algorithm_name": "KSEMSTAMP",
+    "domain_data": "dataset/c4-train",
+    "max_new_tokens": 205,
+    "min_new_tokens": 195,
+    "path_to_embedder": "AbeHou/SemStamp-c4-sbert",
+    "N_max": 100,
+    "gamma": 0.25,
+    "margin_m": 0.01,
+    "k": 8,
+    "prime_P": 15485863,
+    "threshold": 3.0,
+    "path_to_centroids": "watermark/k_semstamp/centroids/c4-cluster_8_centers"
+}
