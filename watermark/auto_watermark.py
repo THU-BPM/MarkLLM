@@ -24,26 +24,27 @@ import importlib
 from typing import List
 from watermark.auto_config import AutoConfig
 
-WATERMARK_MAPPING_NAMES={
-    'KGW': 'watermark.kgw.KGW',
-    'Unigram': 'watermark.unigram.Unigram',
-    'SWEET': 'watermark.sweet.SWEET',
-    'UPV': 'watermark.upv.UPV',
-    'SIR': 'watermark.sir.SIR',
-    'XSIR': 'watermark.xsir.XSIR',
-    'Unbiased': 'watermark.unbiased.UnbiasedWatermark',
-    'DIP': 'watermark.dip.DIP',
-    'EWD': 'watermark.ewd.EWD',
-    'EXP': 'watermark.exp.EXP',
-    'EXPGumbel': 'watermark.exp_gumbel.EXPGumbel',
-    'EXPEdit': 'watermark.exp_edit.EXPEdit',
-    'ITSEdit': 'watermark.its_edit.ITSEdit',
-    'SynthID': 'watermark.synthid.SynthID',
-    'TS':'watermark.ts.TS',
-    'PF':'watermark.pf.PF',
-    'MorphMark':'watermark.morphmark.MorphMark',
-    'Adaptive': 'watermark.adaptive.Adaptive',
-    "KSEMSTAMP": 'watermark.k_semstamp.KSemStamp',
+WATERMARK_MAPPING_NAMES = {
+    "KGW": "watermark.kgw.KGW",
+    "Unigram": "watermark.unigram.Unigram",
+    "SWEET": "watermark.sweet.SWEET",
+    "UPV": "watermark.upv.UPV",
+    "SIR": "watermark.sir.SIR",
+    "XSIR": "watermark.xsir.XSIR",
+    "Unbiased": "watermark.unbiased.UnbiasedWatermark",
+    "DIP": "watermark.dip.DIP",
+    "EWD": "watermark.ewd.EWD",
+    "EXP": "watermark.exp.EXP",
+    "EXPGumbel": "watermark.exp_gumbel.EXPGumbel",
+    "EXPEdit": "watermark.exp_edit.EXPEdit",
+    "ITSEdit": "watermark.its_edit.ITSEdit",
+    "SynthID": "watermark.synthid.SynthID",
+    "STEAL": "watermark.steal.STEAL",
+    "TS": "watermark.ts.TS",
+    "PF": "watermark.pf.PF",
+    "MorphMark": "watermark.morphmark.MorphMark",
+    "Adaptive": "watermark.adaptive.Adaptive",
+    "KSEMSTAMP": "watermark.k_semstamp.KSemStamp",
 }
 
 def watermark_name_from_alg_name(name):

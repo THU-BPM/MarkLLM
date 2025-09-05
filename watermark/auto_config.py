@@ -14,7 +14,7 @@
 
 # ===============================================================
 # auto_config.py
-# Description: This is a generic configuration class that will be 
+# Description: This is a generic configuration class that will be
 #              inherited by the configuration classes of the library.
 # ===============================================================
 
@@ -24,25 +24,26 @@ from typing import Dict, Optional, Any
 from utils.transformers_config import TransformersConfig
 
 CONFIG_MAPPING_NAMES = {
-    'KGW': 'watermark.kgw.KGWConfig',
-    'Unigram': 'watermark.unigram.UnigramConfig',
-    'SWEET': 'watermark.sweet.SWEETConfig',
-    'UPV': 'watermark.upv.UPVConfig',
-    'SIR': 'watermark.sir.SIRConfig',
-    'XSIR': 'watermark.xsir.XSIRConfig',
-    'Unbiased': 'watermark.unbiased.UnbiasedConfig',
-    'DIP': 'watermark.dip.DIPConfig',
-    'EWD': 'watermark.ewd.EWDConfig',
-    'EXP': 'watermark.exp.EXPConfig',
-    'EXPGumbel': 'watermark.exp_gumbel.EXPGumbelConfig',
-    'EXPEdit': 'watermark.exp_edit.EXPEditConfig',
-    'ITSEdit': 'watermark.its_edit.ITSEditConfig',
-    'SynthID': 'watermark.synthid.SynthIDConfig',
-    'TS': 'watermark.ts.TSConfig',
-    'PF': 'watermark.pf.PFConfig',
-    'MorphMark': 'watermark.morphmark.MorphMarkConfig',
-    'Adaptive': 'watermark.adaptive.AdaptiveConfig',
-    "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
+    "KGW": "watermark.kgw.KGWConfig",
+    "Unigram": "watermark.unigram.UnigramConfig",
+    "SWEET": "watermark.sweet.SWEETConfig",
+    "UPV": "watermark.upv.UPVConfig",
+    "SIR": "watermark.sir.SIRConfig",
+    "XSIR": "watermark.xsir.XSIRConfig",
+    "Unbiased": "watermark.unbiased.UnbiasedConfig",
+    "DIP": "watermark.dip.DIPConfig",
+    "EWD": "watermark.ewd.EWDConfig",
+    "EXP": "watermark.exp.EXPConfig",
+    "EXPGumbel": "watermark.exp_gumbel.EXPGumbelConfig",
+    "EXPEdit": "watermark.exp_edit.EXPEditConfig",
+    "ITSEdit": "watermark.its_edit.ITSEditConfig",
+    "SynthID": "watermark.synthid.SynthIDConfig",
+    "STEAL": "watermark.steal.STEALConfig",
+    "TS": "watermark.ts.TSConfig",
+    "PF": "watermark.pf.PFConfig",
+    "MorphMark": "watermark.morphmark.MorphMarkConfig",
+    "Adaptive": "watermark.adaptive.AdaptiveConfig",
+    "KSEMSTAMP": "watermark.k_semstamp.KSemStampConfig",
 }
 
 def config_name_from_alg_name(name: str) -> Optional[str]:
