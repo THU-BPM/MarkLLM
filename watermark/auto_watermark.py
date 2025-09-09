@@ -44,6 +44,7 @@ WATERMARK_MAPPING_NAMES={
     'MorphMark':'watermark.morphmark.MorphMark',
     'Adaptive': 'watermark.adaptive.Adaptive',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStamp',
+    "IE": "watermark.ie.IE"
 }
 
 def watermark_name_from_alg_name(name):

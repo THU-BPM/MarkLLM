@@ -43,6 +43,7 @@ CONFIG_MAPPING_NAMES = {
     'MorphMark': 'watermark.morphmark.MorphMarkConfig',
     'Adaptive': 'watermark.adaptive.AdaptiveConfig',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
+    "IE": "watermark.ie.IEConfig"
 }
 
 def config_name_from_alg_name(name: str) -> Optional[str]:
