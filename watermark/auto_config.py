@@ -14,7 +14,7 @@
 
 # ===============================================================
 # auto_config.py
-# Description: This is a generic configuration class that will be 
+# Description: This is a generic configuration class that will be
 #              inherited by the configuration classes of the library.
 # ===============================================================
 
@@ -43,7 +43,9 @@ CONFIG_MAPPING_NAMES = {
     'MorphMark': 'watermark.morphmark.MorphMarkConfig',
     'Adaptive': 'watermark.adaptive.AdaptiveConfig',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
+    "SemStamp": 'watermark.semstamp.SemStampConfig',
 }
+
 
 def config_name_from_alg_name(name: str) -> Optional[str]:
     """Get the config class name from the algorithm name."""
@@ -51,6 +53,7 @@ def config_name_from_alg_name(name: str) -> Optional[str]:
         return CONFIG_MAPPING_NAMES[name]
     else:
         raise ValueError(f"Invalid algorithm name: {name}")
+
 
 class AutoConfig:
     """
@@ -83,11 +86,12 @@ class AutoConfig:
         config_name = config_name_from_alg_name(algorithm_name)
         if config_name is None:
             raise ValueError(f"Unknown algorithm name: {algorithm_name}")
-            
+
         module_name, class_name = config_name.rsplit('.', 1)
         module = importlib.import_module(module_name)
         config_class = getattr(module, class_name)
         if algorithm_config_path is None:
             algorithm_config_path = f'config/{algorithm_name}.json'
-        config_instance = config_class(algorithm_config_path, transformers_config, **kwargs)
+        config_instance = config_class(
+            algorithm_config_path, transformers_config, **kwargs)
         return config_instance
