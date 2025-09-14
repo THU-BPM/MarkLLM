@@ -4,7 +4,7 @@
 
 # An Open-Source Toolkit for LLM Watermarking
 
-[![Paper](https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2405.10051) [![HF Models](https://img.shields.io/badge/HF--Models-%23FFD14D?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/MarkLLM-models)  [![EMNLP](https://img.shields.io/badge/EMNLP--Demo-%230C2E82.svg?style=for-the-badge&logo=conferene&logoColor=white)](https://aclanthology.org/2024.emnlp-demo.7/) [![colab](https://img.shields.io/badge/Google--Colab-%23D97700?style=for-the-badge&logo=Google-colab&logoColor=white)](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing) [![video](https://img.shields.io/badge/Video--Description-%23000000?style=for-the-badge&logo=Airplay-Video&logoColor=white)](https://www.youtube.com/watch?v=QN3BhNvw14E&t=4s)
+[![Paper](https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2405.10051) [![HF Models](https://img.shields.io/badge/HF--Models-%23FFD14D?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/MarkLLM-models)  [![EMNLP](https://img.shields.io/badge/EMNLP--Demo-%230C2E82.svg?style=for-the-badge&logo=conferene&logoColor=white)](https://aclanthology.org/2024.emnlp-demo.7/) [![colab](https://img.shields.io/badge/Google--Colab-%23D97700?style=for-the-badge&logo=Google-colab&logoColor=white)](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing) [![video](https://img.shields.io/badge/Video--Description-%23000000?style=for-the-badge&logo=Airplay-Video&logoColor=white)](https://www.youtube.com/watch?v=QN3BhNvw14E&)
 
 </div>
 
