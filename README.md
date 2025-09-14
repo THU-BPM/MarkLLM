@@ -1,14 +1,15 @@
-# MarkLLM: An Open-Source Toolkit for LLM Watermarking
+<div align="center">
+
+<img src="images/markllm-color.jpg" style="width: 40%;"/>
+
+# An Open-Source Toolkit for LLM Watermarking
+
+[![Paper](https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2405.10051) [![HF Models](https://img.shields.io/badge/HF--Models-%23FFD14D?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/MarkLLM-models)  [![EMNLP](https://img.shields.io/badge/EMNLP--Demo-%230C2E82.svg?style=for-the-badge&logo=conferene&logoColor=white)](https://aclanthology.org/2024.emnlp-demo.7/) [![colab](https://img.shields.io/badge/Google--Colab-%23D97700?style=for-the-badge&logo=Google-colab&logoColor=white)](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing) [![video](https://img.shields.io/badge/Video--Description-%23000000?style=for-the-badge&logo=Airplay-Video&logoColor=white)](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing)
+
+</div>
+
 
 > 🎉 **We welcome PRs!** If you have implemented a LLM watermarking algorithm or are interested in contributing one, we'd love to include it in MarkLLM. Join our community and help make text watermarking more accessible to everyone!
-
-
-<a href="https://2024.emnlp.org/program/demo/" alt="EMNLP 2024 Demo">
-    <img src="https://img.shields.io/badge/EMNLP%202024-Demo-blue" /></a>
-<a href="https://arxiv.org/abs/2405.10051" alt="arXiv">
-    <img src="https://img.shields.io/badge/arXiv-2405.10051-b31b1b.svg?style=flat" /></a>
-<a href="https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing" alt="Colab">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 
 ### 💡 Some other watermark papers from our team that may interest you ✨
 
@@ -73,7 +74,7 @@
 
 - [MarkLLM: An Open-Source Toolkit for LLM Watermarking](#markllm-an-open-source-toolkit-for-llm-watermarking)
     - [Contents](#contents)
-    - [Demo | Paper](#demo--paper)
+    - [Notes](#notes)
     - [Updates](#updates)
     - [Introduction to MarkLLM](#introduction-to-markllm)
       - [Overview](#overview)
@@ -85,18 +86,13 @@
       - [Applying evaluation pipelines](#applying-evaluation-pipelines)
     - [More user examples](#more-user-examples)
     - [Demo jupyter notebooks](#demo-jupyter-notebooks)
-    - [Python Package](#python-package)
-    - [Related Materials](#related-materials)
     - [Citations](#citations)
 
-### Demo | Paper
-
-- [**Google Colab**](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing): We utilize Google Colab as our platform to fully publicly demonstrate the capabilities of MarkLLM through a Jupyter Notebook.
-- [**Video Introduction**](https://www.youtube.com/watch?v=QN3BhNvw14E&t=4s): We provide a video introduction of our system on YouTube to faciliate easy understanding.
-- [**Website Demo**](https://drive.google.com/file/d/1sLI7BOR6Qrs-qeBor0ieh0k6vUZe-I59/view?usp=sharing): We have also developed a website to facilitate interaction. Due to resource limitations, we cannot offer live access to everyone. Instead, we provide a demonstration video.
-- [**Paper**](https://arxiv.org/abs/2405.10051)：''MarkLLM: An Open-source toolkit for LLM Watermarking'' by *Leyi Pan, Aiwei Liu\*, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, Philip S. Yu*
+### Notes
+As the MarkLLM repository content becomes increasingly rich and its size grows larger, we have created a model storage repository on Hugging Face called [MarkLLM-models](https://huggingface.co/MarkLLM-models) to facilitate usage. This repository contains various default models for watermarking algorithms that involve self-trained models. We have removed the model weights from the corresponding `model/` folders of these watermarking algorithms in the main repository. **When using the code, please first download the corresponding models from the Hugging Face repository according to the config paths and save them to the `model/` directory before running the code.**
 
 ### Updates
+- 🎉 **(2025.09.14)** Add [Watermark Stealing](https://arxiv.org/abs/2402.19361) attack method. Thanks Shuhao Zhang for his PR!
 - 🎉 **(2025.07.17)** Add [k-SemStamp](https://arxiv.org/abs/2402.11399) watermarking method. Thanks Huan Wang for her PR!
 - 🎉 **(2025.07.17)** Add [Adaptive Watermark](https://arxiv.org/abs/2401.13927) watermarking method. Thanks Yepeng Liu for his PR!
 - 🎉 **(2025.05.24)** Add [MorphMark](https://arxiv.org/abs/2505.11541) watermarking method. Thanks Zongqi Wang for his PR!
@@ -466,61 +462,6 @@ export PYTHONPATH="path_to_the_MarkLLM_project:$PYTHONPATH"
 
 In addition to the Colab Jupyter notebook we provide (some models cannot be downloaded due to storage limits), you can also easily deploy using `MarkLLM_demo.ipynb` on your local machine.
 
-### Python Package
-
-A user example:
-
-```python
-import torch, random
-import numpy as np
-from markllm.watermark.auto_watermark import AutoWatermark
-from markllm.utils.transformers_config import TransformersConfig
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Setting random seed for reproducibility
-seed = 30
-torch.manual_seed(seed)
-if torch.cuda.is_available():
-    torch.cuda.manual_seed_all(seed)
-np.random.seed(seed)
-random.seed(seed)
-
-# Device
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
-# Transformers config
-model_name = 'facebook/opt-1.3b'
-transformers_config = TransformersConfig(
-    model=AutoModelForCausalLM.from_pretrained(model_name).to(device),
-    tokenizer=AutoTokenizer.from_pretrained(model_name),
-    vocab_size=50272,
-    device=device,
-    max_new_tokens=200,
-    min_length=230,
-    do_sample=True,
-    no_repeat_ngram_size=4
-)
-
-# Load watermark algorithm
-myWatermark = AutoWatermark.load('KGW', transformers_config=transformers_config)
-
-# Prompt and generation
-prompt = 'Good Morning.'
-watermarked_text = myWatermark.generate_watermarked_text(prompt)
-# How would I get started with Python...
-unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
-# I am happy that you are back with ...
-
-# Detection
-detect_result_watermarked = myWatermark.detect_watermark(watermarked_text)
-# {'is_watermarked': True, 'score': 9.287487590439852}
-detect_result_unwatermarked = myWatermark.detect_watermark(unwatermarked_text)
-# {'is_watermarked': False, 'score': -0.8443170536763502}
-```
-
-### Related Materials
-
-If you are interested in text watermarking for large language models, please read our survey: [[2312.07913\] A Survey of Text Watermarking in the Era of Large Language Models (arxiv.org)](https://arxiv.org/pdf/2312.07913). We detail various text watermarking algorithms, evaluation methods, applications, current challenges, and future directions in this survey.
 
 ### Citations
 
