@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="images/markllm-color.jpg" style="width: 40%;"/>
+<img src="images/markllm-color-1.jpg" style="width: 40%;"/>
 
 # An Open-Source Toolkit for LLM Watermarking
 
