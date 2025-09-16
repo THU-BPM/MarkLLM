@@ -43,7 +43,7 @@ CONFIG_MAPPING_NAMES = {
     'MorphMark': 'watermark.morphmark.MorphMarkConfig',
     'Adaptive': 'watermark.adaptive.AdaptiveConfig',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
-    "SemStamp": 'watermark.semstamp.SemStampConfig',
+    "SEMSTAMP": 'watermark.semstamp.SemStampConfig',
 }
 
 

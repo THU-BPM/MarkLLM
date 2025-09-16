@@ -5,7 +5,7 @@
     "path_to_embedder": "AbeHou/SemStamp-c4-sbert",
     "N_max": 100,
     "gamma": 0.25,
-    "margin_m": 0.02,
+    "margin_m": 0.01,
     "dimension_d": 3,
     "prime_P": 15485863,
     "threshold": 3.0

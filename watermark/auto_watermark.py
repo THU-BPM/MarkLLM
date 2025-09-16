@@ -44,7 +44,7 @@ WATERMARK_MAPPING_NAMES = {
     'MorphMark': 'watermark.morphmark.MorphMark',
     'Adaptive': 'watermark.adaptive.Adaptive',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStamp',
-    "SemStamp": 'watermark.semstamp.SemStamp',
+    "SEMSTAMP": 'watermark.semstamp.SemStamp',
 }
 
 

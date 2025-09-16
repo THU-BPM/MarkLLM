@@ -17,34 +17,19 @@
 # Description: Implementation of SEMSTAMP algorithm
 # ============================================
 
-import pickle
-import queue
-from SemStamp.contrastive_trainer import cosine_distance_matrix
-from SemStamp.sampling_utils import SentenceEndCriteria
 import torch
-import os
 import numpy as np
-from tqdm import tqdm
-import torch.multiprocessing as mp
 from sentence_transformers import SentenceTransformer, models
 from ..base import BaseWatermark, BaseConfig
-from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
-from exceptions.exceptions import AlgorithmNameMismatchError
-from datasets import load_from_disk
 from transformers import StoppingCriteria
 from transformers.tokenization_utils import PreTrainedTokenizer
 from nltk.tokenize import sent_tokenize
-from transformers import StoppingCriteriaList, GenerationConfig
-from tqdm import trange
+from transformers import StoppingCriteriaList
 from typing import Callable, Iterator
 from nearpy.hashes import RandomBinaryProjections
-from scipy.spatial.distance import hamming, cosine
-
-if torch.cuda.is_available():
-    rng = torch.Generator("cuda")
-else:
-    rng = torch.Generator("cpu")
+from scipy.spatial.distance import cosine
+import torch.nn.functional as F
 
 
 class SemStampConfig(BaseConfig):
@@ -81,6 +66,7 @@ class SemStampUtils:
                 config (SemStampConfig): Configuration for the SEMSTAMP algorithm.
         """
         self.config = config
+        self.rng = torch.Generator(device=self.config.device)
 
     class SBERTLSHModel:
         """Helper class for SBERTLSHModel"""
@@ -101,7 +87,12 @@ class SemStampUtils:
 
             print(f'loading SBERT {self.sbert_type} model...')
             if lsh_model_path is not None:
-                self.embedder = SentenceTransformer(lsh_model_path)
+                word_embedding_model = models.Transformer(lsh_model_path)
+                pooling_model = models.Pooling(
+                    word_embedding_model.get_word_embedding_dimension(),
+                    pooling_mode_mean_tokens=True
+                )
+                self.embedder = SentenceTransformer(modules=[word_embedding_model, pooling_model])
                 self.dimension = self.embedder.get_sentence_embedding_dimension()
             else:
                 self.embedder = SentenceTransformer(
@@ -209,17 +200,17 @@ class SemStamp(BaseWatermark):
         lsh_seed = lsh_model.get_hash([prompt])[0]
         n_bins = 2**self.config.dimension_d
         n_accept = int(n_bins * self.config.gamma)
-        rng.manual_seed(self.config.prime_P * lsh_seed)
+        self.utils.rng.manual_seed(self.config.prime_P * lsh_seed)
         # randomization
         vocab_permutation = torch.randperm(
-            n_bins, device='cuda', generator=rng)
+            n_bins, device=self.config.device, generator=self.utils.rng)
         accept_mask = vocab_permutation[:n_accept]
 
         # start sampling
         text = prompt
         new_text = prompt
         text_ids = self.config.generation_tokenizer.encode(
-            prompt, return_tensors='pt')
+            prompt, return_tensors='pt').to(self.config.device)
         prompt_length = len(text_ids[0])
         sent_end_criteria.update(new_text)
 
@@ -229,6 +220,7 @@ class SemStamp(BaseWatermark):
         while True:
             stopping_criteria = StoppingCriteriaList([sent_end_criteria])
             if "opt" in self.config.generation_model.config._name_or_path:
+                num_candidates = 8
                 outputs = self.config.generation_model.generate(text_ids,
                                                                 max_new_tokens=self.config.max_new_tokens,
                                                                 min_new_tokens=self.config.min_new_tokens,
@@ -250,10 +242,16 @@ class SemStamp(BaseWatermark):
             total_trials += 1
             current_trials += 1
             embeds = lsh_model.get_embeddings([new_text])
-            embeds = torch.tensor(embeds, device='cuda')
-            normals = torch.tensor(lsh_model.hasher.normals, device='cuda')
+            embeds = torch.tensor(embeds, device=self.config.device)
+            normals = torch.tensor(lsh_model.hasher.normals, device=self.config.device)
             # sims[i, j] is the cosine similarity between the ith generation and the jth normal vec
-            sims = cosine_distance_matrix(embeds, normals)
+            sims=F.cosine_similarity(
+        embeds.view(embeds.size(0), 1, embeds.size(1))
+        .expand(embeds.size(0), normals.size(0), embeds.size(1))
+        .contiguous()
+        .view(-1, embeds.size(1)),
+        normals.expand(embeds.size(0), normals.size(0), normals.size(1)).flatten(end_dim=1),
+    ).view(embeds.size(0), normals.size(0))
             sims_abs = torch.abs(sims)
             min_sims = sims_abs.min(dim=1).values
             select = []
@@ -261,6 +259,8 @@ class SemStamp(BaseWatermark):
                 min_sim = min_sims[i].item()
                 if (abs(min_sim) >= self.config.margin_m):
                     select.append(i)
+            if(len(select)==0):
+                continue
             [new_text] = np.array([new_text])[select]
             accepted_text = list(new_text)
             if (len(accepted_text) == 0 and current_trials < self.config.N_max):
@@ -279,12 +279,12 @@ class SemStamp(BaseWatermark):
                 current_trials = 0
                 # passed, proceed to next sentence
                 lsh_seed = lsh_candidate
-                rng.manual_seed(self.config.prime_P * lsh_seed)
+                self.utils.rng.manual_seed(self.config.prime_P * lsh_seed)
                 vocab_permutation = torch.randperm(
-                    n_bins, device='cuda', generator=rng)
+                    n_bins, device=self.config.device, generator=self.utils.rng)
                 accept_mask = vocab_permutation[:n_accept]
                 text += new_text
-                text_ids = new_text_ids
+                text_ids = new_text_ids.to(self.config.device)
                 sent_end_criteria.update(text)
                 if (len(text_ids[0]) - prompt_length) >= self.config.max_new_tokens-1:
                     break
@@ -293,8 +293,6 @@ class SemStamp(BaseWatermark):
 
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the input text."""
-        # get cluster
-        cluster_centers = torch.load(self.config.path_to_centroids)
         # get embedder
         word_embedding_model = models.Transformer(self.config.path_to_embedder)
         pooling_model = models.Pooling(
@@ -307,21 +305,27 @@ class SemStamp(BaseWatermark):
         sentences = sent_tokenize(text)
         n_sent = len(sentences)
         n_watermark = 0
-        curr_cluster_id = SemStampUtils.get_cluster_id(
-            sentences[0], embedder=embedder, cluster_centers=cluster_centers)
-        cluster_mask = self.utils.get_cluster_mask(
-            curr_cluster_id, self.config.k, self.config.gamma)
+
+        lsh_model = self.utils.SBERTLSHModel(
+            lsh_model_path=self.config.path_to_embedder, batch_size=1, lsh_dim=self.config.dimension_d, sbert_type='base')
+        lsh_seed = lsh_model.get_hash([sentences[0]])[0]
+        n_bins = 2**self.config.dimension_d
+        n_accept = int(n_bins * self.config.gamma)
+        self.utils.rng.manual_seed(self.config.prime_P * lsh_seed)
+        vocab_permutation = torch.randperm(n_bins, device=self.config.device, generator=self.utils.rng)
+        accept_mask = vocab_permutation[:n_accept]
+        
         for i in range(1, n_sent):
-            curr_cluster_id = SemStampUtils.get_cluster_id(
-                sentences[i], embedder=embedder, cluster_centers=cluster_centers)
-            if curr_cluster_id in cluster_mask:
+            lsh_candidate = lsh_model.get_hash([sentences[i]])[0]
+            if lsh_candidate in accept_mask:
                 n_watermark += 1
-            cluster_mask = self.utils.get_cluster_mask(
-                curr_cluster_id, self.config.k, self.config.gamma)
-        n_test_sent = n_sent - 1  # exclude the prompt
+            lsh_seed = lsh_candidate
+            self.utils.rng.manual_seed(self.config.prime_P * lsh_seed)
+            vocab_permutation = torch.randperm(n_bins, device=self.config.device, generator=self.utils.rng)
+            accept_mask = vocab_permutation[:n_accept]
+        n_test_sent = n_sent - 1  # exclude the prompt and the ending
         num = n_watermark - self.config.gamma * (n_test_sent)
-        denom = np.sqrt((n_test_sent) * self.config.gamma *
-                        (1-self.config.gamma))
+        denom = np.sqrt((n_test_sent) * self.config.gamma * (1-self.config.gamma))
         z_score = num / denom
 
         # Determine if the computed score exceeds the threshold for watermarking
