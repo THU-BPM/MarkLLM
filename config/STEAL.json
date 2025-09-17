@@ -1,0 +1,23 @@
+{
+    "algorithm_name": "STEAL",
+    "prevctx_width": 1,
+    "counts_base": "watermark/steal/counts/counts_base_c4_opt27_p1.pkl",
+    "counts_wm": "watermark/steal/counts/counts_wm_c4opt27_kgw_p1_opt27_p1.pkl",
+    "spoofer_strength": 4,
+    "ordered":false,
+    "w_abcd": 2.0,
+    "w_partials": 0.0,
+    "w_empty": 0.0,
+    "w_future": 0.0,
+    "future_num_cands": 5,
+    "future_local_w_decay": 0.9,
+    "future_prefix_size": 10,
+    "future_num_options_per_fillin": 10,
+    "prevent_eos_if_zest_bad":true,
+    "ppl_model_name_or_path": "xlm-roberta-large",
+    "min_wm_mass_empty": 0.00007,
+    "min_wm_count_nonempty": 2,
+    "use_predict": true,
+    "predict_gamma": 0.25,
+    "clip_at": 2.0
+}

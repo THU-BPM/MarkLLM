@@ -14,7 +14,7 @@
 
 # ===============================================================
 # auto_config.py
-# Description: This is a generic configuration class that will be 
+# Description: This is a generic configuration class that will be
 #              inherited by the configuration classes of the library.
 # ===============================================================
 
@@ -38,6 +38,7 @@ CONFIG_MAPPING_NAMES = {
     'EXPEdit': 'watermark.exp_edit.EXPEditConfig',
     'ITSEdit': 'watermark.its_edit.ITSEditConfig',
     'SynthID': 'watermark.synthid.SynthIDConfig',
+    'STEAL': "watermark.steal.STEALConfig",
     'TS': 'watermark.ts.TSConfig',
     'PF': 'watermark.pf.PFConfig',
     'MorphMark': 'watermark.morphmark.MorphMarkConfig',
