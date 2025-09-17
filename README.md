@@ -93,6 +93,7 @@
 As the MarkLLM repository content becomes increasingly rich and its size grows larger, we have created a model storage repository on Hugging Face called [MarkLLM-models](https://huggingface.co/MarkLLM-models) to facilitate usage. This repository contains various default models for watermarking algorithms that involve self-trained models. We have removed the model weights from the corresponding `model/` folders of these watermarking algorithms in the main repository. **When using the code, please first download the corresponding models from the Hugging Face repository according to the config paths and save them to the `model/` directory before running the code.**
 
 ### Updates
+- 🎉 **(2025.09.17)** Add [IE](https://arxiv.org/abs/2505.14112) attack method. Thanks Tianle Gu for her PR!
 - 🎉 **(2025.09.14)** Add [Watermark Stealing](https://arxiv.org/abs/2402.19361) attack method. Thanks Shuhao Zhang for his PR!
 - 🎉 **(2025.07.17)** Add [k-SemStamp](https://arxiv.org/abs/2402.11399) watermarking method. Thanks Huan Wang for her PR!
 - 🎉 **(2025.07.17)** Add [Adaptive Watermark](https://arxiv.org/abs/2401.13927) watermarking method. Thanks Yepeng Liu for his PR!
@@ -156,6 +157,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | EXP/EXPGumbel      | Lecture Note | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
   | EXP-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
   | ITS-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
+  | IE           | Arxiv Preprint | [\[2505.14112\] Invisible Entropy: Towards Safe and Efficient Low-Entropy LLM Watermarking (arxiv.org)](https://arxiv.org/abs/2505.14112)                                                           |
 - **Visualization Solutions:** The toolkit includes custom visualization tools that enable clear and insightful views into how different watermarking algorithms operate under various scenarios. These visualizations help demystify the algorithms' mechanisms, making them more understandable for users.
 
   <img src="images\mechanism_visualization.png" alt="mechanism_visualization" style="zoom:35%;" />
