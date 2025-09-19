@@ -288,7 +288,7 @@ class SemStamp(BaseWatermark):
                 sent_end_criteria.update(text)
                 if (len(text_ids[0]) - prompt_length) >= self.config.max_new_tokens-1:
                     break
-            watermarked_text = text.strip()
+        watermarked_text = text.strip()   
         return watermarked_text
 
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):

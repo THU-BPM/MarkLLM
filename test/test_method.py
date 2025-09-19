@@ -37,7 +37,7 @@ def test_algorithm(algorithm_name):
     assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR',
                               'XSIR', 'DIP', 'Unbiased', 'UPV', 'TS',
                               'SynthID', 'EXP', 'EXPGumbel', 'EXPEdit',
-                              'ITSEdit', 'PF', 'MorphMark', 'Adaptive', 'KSEMSTAMP']
+                              'ITSEdit', 'PF', 'MorphMark', 'Adaptive', 'KSEMSTAMP','SEMSTAMP']
 
     # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -61,14 +61,13 @@ def test_algorithm(algorithm_name):
     watermarked_text = myWatermark.generate_watermarked_text(prompt)
     print(watermarked_text)
     unwatermarked_text = myWatermark.generate_unwatermarked_text(prompt)
-    print(unwatermarked_text)
-    # detect_result = myWatermark.detect_watermark(watermarked_text)
-    # print(detect_result)
-    # detect_result = myWatermark.detect_watermark(unwatermarked_text)
-    # print(detect_result)
-    # detect_result = myWatermark.detect_watermark(natural_text)
-    # print(detect_result)
+    detect_result = myWatermark.detect_watermark(watermarked_text)
+    print(detect_result)
+    detect_result = myWatermark.detect_watermark(unwatermarked_text)
+    print(detect_result)
+    detect_result = myWatermark.detect_watermark(natural_text)
+    print(detect_result)
 
 
 if __name__ == '__main__':
-    test_algorithm('SEMSTAMP')
+    test_algorithm('KGW')

@@ -205,7 +205,7 @@ class KSemStampUtils:
         embedding = embedding.float()
         # transfer to device
         embedding = embedding.to(self.config.device)
-        dis =self.utils.pairwise_cosine(embedding, cluster_centers)
+        dis =self.pairwise_cosine(embedding, cluster_centers)
         choice_cluster = torch.argmin(dis, dim=-1)
         cluster_id=choice_cluster.cpu()
         return cluster_id
@@ -244,7 +244,7 @@ class KSemStampUtils:
         gen_embed = embedder.encode(text, convert_to_tensor=True)
         gen_embed = gen_embed.reshape(1, -1)
         cluster_centers = torch.tensor(np.array(cluster_centers))
-        dis = self.utils.pairwise_cosine(gen_embed, cluster_centers, device=self.config.device)
+        dis = self.pairwise_cosine(gen_embed, cluster_centers)
 
         # each row of ranking corresponds to the cluster distance closeness of a generation
         ranked_dis = torch.argsort(dis, dim=-1)
