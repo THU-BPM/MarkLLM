@@ -1,0 +1,15 @@
+{
+    "algorithm_name": "IE",
+    "gamma": 0.5,
+    "delta": 3.0,
+    "hash_key": 15485863,
+    "z_threshold": 4.0,
+    "prefix_length": 1,
+    "embedding_model_path": "princeton-nlp/sup-simcse-roberta-base",
+    "entropy_tagger_path": "watermark/ie/model/",
+    "entropy_threshold": 0.3,
+    "start_entropy": 0.6,
+    "interval": 0.3,
+    "end_entropy": 1.5,
+    "direction": "left"
+}

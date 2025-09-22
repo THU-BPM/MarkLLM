@@ -38,12 +38,14 @@ CONFIG_MAPPING_NAMES = {
     'EXPEdit': 'watermark.exp_edit.EXPEditConfig',
     'ITSEdit': 'watermark.its_edit.ITSEditConfig',
     'SynthID': 'watermark.synthid.SynthIDConfig',
+    'STEAL': "watermark.steal.STEALConfig",
     'TS': 'watermark.ts.TSConfig',
     'PF': 'watermark.pf.PFConfig',
     'MorphMark': 'watermark.morphmark.MorphMarkConfig',
     'Adaptive': 'watermark.adaptive.AdaptiveConfig',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
     "SEMSTAMP": 'watermark.semstamp.SemStampConfig',
+    "IE": "watermark.ie.IEConfig"
 }
 
 
@@ -92,6 +94,6 @@ class AutoConfig:
         config_class = getattr(module, class_name)
         if algorithm_config_path is None:
             algorithm_config_path = f'config/{algorithm_name}.json'
-        config_instance = config_class(
-            algorithm_config_path, transformers_config, **kwargs)
+
+        config_instance = config_class(algorithm_config_path, transformers_config, **kwargs)
         return config_instance

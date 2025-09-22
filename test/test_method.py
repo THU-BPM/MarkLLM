@@ -37,7 +37,7 @@ def test_algorithm(algorithm_name):
     assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'EWD', 'SIR',
                               'XSIR', 'DIP', 'Unbiased', 'UPV', 'TS',
                               'SynthID', 'EXP', 'EXPGumbel', 'EXPEdit',
-                              'ITSEdit', 'PF', 'MorphMark', 'Adaptive', 'KSEMSTAMP','SEMSTAMP']
+                              'ITSEdit', 'PF', 'MorphMark', 'Adaptive', 'KSEMSTAMP','SEMSTAMP', 'IE']
 
     # Device
     device = "cuda" if torch.cuda.is_available() else "cpu"

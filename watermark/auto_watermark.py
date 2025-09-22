@@ -45,6 +45,7 @@ WATERMARK_MAPPING_NAMES = {
     'Adaptive': 'watermark.adaptive.Adaptive',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStamp',
     "SEMSTAMP": 'watermark.semstamp.SemStamp',
+    "IE": "watermark.ie.IE"
 }
 
 
