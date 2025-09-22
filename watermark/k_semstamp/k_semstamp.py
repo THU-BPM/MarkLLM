@@ -37,11 +37,6 @@ from nltk.tokenize import sent_tokenize
 from transformers import StoppingCriteriaList,GenerationConfig
 from tqdm import trange
 
-if torch.cuda.is_available():
-    rng = torch.Generator("cuda")
-else: 
-    rng = torch.Generator("cpu")
-
 class KSemStampConfig(BaseConfig):
     """Config class for KSEMSTAMP algorithm.load config file and initialize parameters."""
     
@@ -79,6 +74,7 @@ class KSemStampUtils:
                 config (KSemStampConfig): Configuration for the K_SEMSTAMP algorithm.
         """
         self.config = config
+        self.rng = torch.Generator(device=self.config.device)
 
     @staticmethod
     def worker(rank, text_chunk, embedder_path, queue, encode_batch_size):
@@ -156,12 +152,11 @@ class KSemStampUtils:
         return name
 
     # load embeddings
-    @staticmethod
-    def load_embeds(embed_path):
+    def load_embeds(self,embed_path):
         with open(embed_path, 'rb') as f:
             d = pickle.load(f)
         # move all embeddings to the same device
-        gen_embeds = torch.stack([torch.tensor(t).to('cuda') if not isinstance(t, torch.Tensor) else t.to('cuda') for t in d['text']])
+        gen_embeds = torch.stack([torch.tensor(t).to(self.config.device) if not isinstance(t, torch.Tensor) else t.to(self.config.device) for t in d['text']])
 
         return gen_embeds
 
@@ -173,7 +168,7 @@ class KSemStampUtils:
         4. save centroids to self.config.path_to_centroids
         """
         embed_path = KSemStampUtils.embed_gen_list(self.config.domain_data, self.config.path_to_embedder)
-        embeds = KSemStampUtils.load_embeds(embed_path)
+        embeds = self.utils.load_embeds(embed_path)
         cluster_ids, cluster_centers = kmeans(
             embeds,
             num_clusters=self.config.k,
@@ -184,10 +179,8 @@ class KSemStampUtils:
         print(f"cluster centers saved to {self.config.path_to_centroids}")
         return cluster_centers
 
-
-    @staticmethod
-    def pairwise_cosine(data1, data2, device=torch.device('cpu')):
-        data1, data2 = data1.to(device), data2.to(device)
+    def pairwise_cosine(self,data1, data2):
+        data1, data2 = data1.to(self.config.device), data2.to(self.config.device)
 
         # N*1*M
         A = data1.unsqueeze(dim=1)
@@ -205,24 +198,23 @@ class KSemStampUtils:
         cosine_dis = 1 - cosine.sum(dim=-1).squeeze()
         return cosine_dis
 
-    @staticmethod
-    def get_cluster_id(text, cluster_centers, embedder):
+    def get_cluster_id(self,text, cluster_centers, embedder):
         embedding = embedder.encode(text, convert_to_tensor=True)
         embedding = embedding.reshape(1, -1)
         # convert to float
         embedding = embedding.float()
         # transfer to device
-        embedding = embedding.to('cuda')
-        dis = KSemStampUtils.pairwise_cosine(embedding, cluster_centers)
+        embedding = embedding.to(self.config.device)
+        dis =self.pairwise_cosine(embedding, cluster_centers)
         choice_cluster = torch.argmin(dis, dim=-1)
         cluster_id=choice_cluster.cpu()
         return cluster_id
 
     def get_cluster_mask(self,curr_cluster_id, k_dim, lmbd):
-        rng.manual_seed(curr_cluster_id.item() * self.config.prime_P)
+        self.rng.manual_seed(curr_cluster_id.item() * self.config.prime_P)
         num_accept = int(k_dim * lmbd)
-        mask = torch.randperm(k_dim, device='cuda', generator=rng)[:num_accept]
-        return mask.to('cuda')
+        mask = torch.randperm(k_dim, device=self.config.device, generator=self.rng)[:num_accept]
+        return mask.to(self.config.device)
     
     class SentenceEndCriteria(StoppingCriteria):
         """
@@ -248,12 +240,11 @@ class KSemStampUtils:
             text = self.tokenizer.decode(input_ids[0], skip_special_tokens=True)
             return len(sent_tokenize(text)) > self.current_num_sentences + 1
 
-    @staticmethod
-    def kmeans_reject_overlap(text, embedder, cluster_centers, margin):
+    def kmeans_reject_overlap(self,text, embedder, cluster_centers, margin):
         gen_embed = embedder.encode(text, convert_to_tensor=True)
         gen_embed = gen_embed.reshape(1, -1)
         cluster_centers = torch.tensor(np.array(cluster_centers))
-        dis = KSemStampUtils.pairwise_cosine(gen_embed, cluster_centers, device='cuda')
+        dis = self.pairwise_cosine(gen_embed, cluster_centers)
 
         # each row of ranking corresponds to the cluster distance closeness of a generation
         ranked_dis = torch.argsort(dis, dim=-1)
@@ -311,7 +302,7 @@ class KSemStamp(BaseWatermark):
         sent_end_criteria = KSemStampUtils.SentenceEndCriteria(self.config.generation_tokenizer)
 
         # get current cluster id
-        curr_cluster_id = KSemStampUtils.get_cluster_id(prompt, cluster_centers, embedder)
+        curr_cluster_id = self.utils.get_cluster_id(prompt, cluster_centers, embedder)
         # get cluster mask
         mask = self.utils.get_cluster_mask(curr_cluster_id, self.config.k, self.config.gamma)
 
@@ -338,7 +329,7 @@ class KSemStamp(BaseWatermark):
 
             current_trials += 1
 
-            accepted_text, curr_cluster_id = KSemStampUtils.kmeans_reject_overlap(text=new_text, embedder=embedder, cluster_centers=cluster_centers, margin=self.config.margin_m)
+            accepted_text, curr_cluster_id = self.utils.kmeans_reject_overlap(text=new_text, embedder=embedder, cluster_centers=cluster_centers, margin=self.config.margin_m)
 
             if (accepted_text == None and current_trials < self.config.N_max):
                 continue
@@ -377,10 +368,10 @@ class KSemStamp(BaseWatermark):
         sentences = sent_tokenize(text)
         n_sent = len(sentences)
         n_watermark = 0
-        curr_cluster_id = KSemStampUtils.get_cluster_id(sentences[0], embedder=embedder, cluster_centers=cluster_centers)
+        curr_cluster_id = self.utils.get_cluster_id(sentences[0], embedder=embedder, cluster_centers=cluster_centers)
         cluster_mask = self.utils.get_cluster_mask(curr_cluster_id, self.config.k, self.config.gamma)
         for i in range(1, n_sent):
-            curr_cluster_id = KSemStampUtils.get_cluster_id(sentences[i], embedder=embedder, cluster_centers=cluster_centers)
+            curr_cluster_id = self.utils.get_cluster_id(sentences[i], embedder=embedder, cluster_centers=cluster_centers)
             if curr_cluster_id in cluster_mask:
                 n_watermark += 1
             cluster_mask = self.utils.get_cluster_mask(curr_cluster_id, self.config.k, self.config.gamma)
