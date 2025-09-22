@@ -93,6 +93,7 @@
 As the MarkLLM repository content becomes increasingly rich and its size grows larger, we have created a model storage repository on Hugging Face called [MarkLLM-models](https://huggingface.co/MarkLLM-models) to facilitate usage. This repository contains various default models for watermarking algorithms that involve self-trained models. We have removed the model weights from the corresponding `model/` folders of these watermarking algorithms in the main repository. **When using the code, please first download the corresponding models from the Hugging Face repository according to the config paths and save them to the `model/` directory before running the code.**
 
 ### Updates
+- 🎉 **(2025.09.22)** Add [SemStamp](https://arxiv.org/abs/2310.03991) watermark method. Thanks Huan Wang for her PR!
 - 🎉 **(2025.09.17)** Add [IE](https://arxiv.org/abs/2505.14112) watermark method. Thanks Tianle Gu for her PR!
 - 🎉 **(2025.09.14)** Add [Watermark Stealing](https://arxiv.org/abs/2402.19361) attack method. Thanks Shuhao Zhang for his PR!
 - 🎉 **(2025.07.17)** Add [k-SemStamp](https://arxiv.org/abs/2402.11399) watermarking method. Thanks Huan Wang for her PR!
@@ -153,6 +154,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | PF Watermark | ICLR 2025   | [\[2402.05864\] Permute-and-Flip: An Optimally Stable and Watermarkable Decoder for LLMs](https://arxiv.org/abs/2402.05864)  
   | MorphMark | ACL 2025   | [\[2505.11541\] MorphMark: Flexible Adaptive Watermarking for Large Language Models](https://arxiv.org/abs/2505.11541)                                                                     |
   | Adaptive Watermark | ICML 2024   | [\[2401.13927\] Adaptive Text Watermark for Large Language Models](https://arxiv.org/abs/2401.13927) |
+  | SemStamp | NAACL 2024  | [\[2310.03991\]SemStamp: A Semantic Watermark with Paraphrastic Robustness for Text Generation](2310.03991) |
   | k-SemStamp | ACL 2024 (Findings)   | [\[2402.11399\] k-SemStamp: A Clustering-Based Semantic Watermark for Detection of Machine-Generated Text](2402.11399) |
   | EXP/EXPGumbel      | Lecture Note | https://www.scottaaronson.com/talks/watermark.ppt                                                                                                                          |
   | EXP-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
