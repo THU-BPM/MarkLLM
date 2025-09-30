@@ -12,6 +12,8 @@
 
 > 🎉 **We welcome PRs!** If you have implemented a LLM watermarking algorithm or are interested in contributing one, we'd love to include it in MarkLLM. Join our community and help make text watermarking more accessible to everyone!
 
+> 🔥 If you are interested in watermarking for diffusion models (image/video watermark), please refer to the [MarkDiffusion](https://github.com/THU-BPM/MarkDiffusion/) toolkit from our group.
+
 ### 💡 Some other watermark papers from our team that may interest you ✨
 
 1. [<u>**(ICLR 2024) A Semantic Invariant Robust Watermark for Large Language Models</u>**](https://arxiv.org/abs/2310.06356)
@@ -498,3 +500,4 @@ In addition to the Colab Jupyter notebook we provide (some models cannot be down
     abstract = "Watermarking for Large Language Models (LLMs), which embeds imperceptible yet algorithmically detectable signals in model outputs to identify LLM-generated text, has become crucial in mitigating the potential misuse of LLMs. However, the abundance of LLM watermarking algorithms, their intricate mechanisms, and the complex evaluation procedures and perspectives pose challenges for researchers and the community to easily understand, implement and evaluate the latest advancements. To address these issues, we introduce MarkLLM, an open-source toolkit for LLM watermarking. MarkLLM offers a unified and extensible framework for implementing LLM watermarking algorithms, while providing user-friendly interfaces to ensure ease of access. Furthermore, it enhances understanding by supporting automatic visualization of the underlying mechanisms of these algorithms. For evaluation, MarkLLM offers a comprehensive suite of 12 tools spanning three perspectives, along with two types of automated evaluation pipelines. Through MarkLLM, we aim to support researchers while improving the comprehension and involvement of the general public in LLM watermarking technology, fostering consensus and driving further advancements in research and application. Our code is available at https://github.com/THU-BPM/MarkLLM.",
 }
 ```
+
