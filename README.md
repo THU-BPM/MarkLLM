@@ -5,7 +5,7 @@
 # An Open-Source Toolkit for LLM Watermarking
 
 [![Homepage](https://img.shields.io/badge/Homepage-5F259F?style=for-the-badge&logo=homepage&logoColor=white)](https://generative-watermark.github.io/)
-[![Paper](https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2405.10051) [![HF Models](https://img.shields.io/badge/HF--Models-%23FFD14D?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/MarkLLM-models)  [![EMNLP](https://img.shields.io/badge/EMNLP--Demo-%230C2E82.svg?style=for-the-badge&logo=conferene&logoColor=white)](https://aclanthology.org/2024.emnlp-demo.7/) [![colab](https://img.shields.io/badge/Google--Colab-%23D97700?style=for-the-badge&logo=Google-colab&logoColor=white)](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing) [![video](https://img.shields.io/badge/Video--Description-%23000000?style=for-the-badge&logo=Airplay-Video&logoColor=white)](https://www.youtube.com/watch?v=QN3BhNvw14E&)
+[![Paper](https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2405.10051) [![HF Models](https://img.shields.io/badge/HF--Models-%23FFD14D?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/Generative-Watermark-Toolkits)  [![EMNLP](https://img.shields.io/badge/EMNLP--Demo-%230C2E82.svg?style=for-the-badge&logo=conferene&logoColor=white)](https://aclanthology.org/2024.emnlp-demo.7/) [![colab](https://img.shields.io/badge/Google--Colab-%23D97700?style=for-the-badge&logo=Google-colab&logoColor=white)](https://colab.research.google.com/drive/169MS4dY6fKNPZ7-92ETz1bAm_xyNAs0B?usp=sharing) [![video](https://img.shields.io/badge/Video--Description-%23000000?style=for-the-badge&logo=Airplay-Video&logoColor=white)](https://www.youtube.com/watch?v=QN3BhNvw14E&)
 
 </div>
 
@@ -89,8 +89,8 @@
     - [Demo jupyter notebooks](#demo-jupyter-notebooks)
     - [Citations](#citations)
 
-### Notes
-As the MarkLLM repository content becomes increasingly rich and its size grows larger, we have created a model storage repository on Hugging Face called [MarkLLM-models](https://huggingface.co/MarkLLM-models) to facilitate usage. This repository contains various default models for watermarking algorithms that involve self-trained models. We have removed the model weights from the corresponding `model/` folders of these watermarking algorithms in the main repository. **When using the code, please first download the corresponding models from the Hugging Face repository according to the config paths and save them to the `model/` directory before running the code.**
+### ❗❗❗ Notes
+As the MarkLLM repository content becomes increasingly rich and its size grows larger, we have created a model storage repository on Hugging Face called [Generative-Watermark-Toolkits](https://huggingface.co/Generative-Watermark-Toolkits) to facilitate usage. This repository contains various default models for watermarking algorithms that involve self-trained models. We have removed the model weights from the corresponding `model/` folders of these watermarking algorithms in the main repository. **When using the code, please first download the corresponding models from the Hugging Face repository according to the config paths and save them to the `model/` directory before running the code.**
 
 ### Updates
 - 🎉 **(2025.09.22)** Add [SemStamp](https://arxiv.org/abs/2310.03991) watermark method. Thanks Huan Wang for her PR!
