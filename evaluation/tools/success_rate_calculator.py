@@ -139,8 +139,8 @@ class DynamicThresholdSuccessRateCalculator(BaseSuccessRateCalculator):
                 rule (str): The rule for determining the threshold. Choose from 'best' or 'target_fpr'.
                 target_fpr (float): The target false positive rate to achieve.
                 reverse (bool): Whether to reverse the sorting order of the detection results.
-                                True: higher values are considered positive.
-                                False: lower values are considered positive.
+                                False: higher values are considered positive.
+                                True: lower values are considered positive.
         """
         super().__init__(labels)
         self.rule = rule
