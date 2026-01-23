@@ -45,7 +45,8 @@ CONFIG_MAPPING_NAMES = {
     'Adaptive': 'watermark.adaptive.AdaptiveConfig',
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
     "SEMSTAMP": 'watermark.semstamp.SemStampConfig',
-    "IE": "watermark.ie.IEConfig"
+    "IE": "watermark.ie.IEConfig",
+    "CoheMark": "watermark.cohemark.CoheMarkConfig",
 }
 
 
