@@ -14,7 +14,7 @@
 
 # ====================================================
 # __init__.py
-# Description: Initialization file for the semstamp package
+# Description: Initialization file for the cohemark package
 # ====================================================
 
 from .cohemark import CoheMark

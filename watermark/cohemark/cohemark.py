@@ -31,7 +31,7 @@ from utils.utils import load_config_file
 from utils.transformers_config import TransformersConfig
 from exceptions.exceptions import AlgorithmNameMismatchError
 
-# --- CoheMark dependencies (user-provided files) ---
+# --- CoheMark dependencies ---
 from .utils import FuzzyModel
 from .utils import SentenceEndCriteria, gen_sent
 from .utils import threshold_detect
@@ -48,7 +48,7 @@ class CoheMarkConfig(BaseConfig):
         runtime_max_new = getattr(self.transformers_config, "max_new_tokens", None) if hasattr(self, "transformers_config") else None
         runtime_min_new = getattr(self.transformers_config, "min_new_tokens", None) if hasattr(self, "transformers_config") else None
 
-        # max_new_tokens: prefer runtime value, then json, else default
+        # max_new_tokens: prefer runtime value
         if runtime_max_new is not None:
             self.max_new_tokens = int(runtime_max_new)
         else:
@@ -60,7 +60,7 @@ class CoheMarkConfig(BaseConfig):
         else:
             self.min_new_tokens = int(self.config_dict.get("min_new_tokens", 0))
 
-        # reject sampling: max_trials (paper: stop if still cannot satisfy after some tries)
+        # reject sampling: max_trials
         self.max_trials = int(self.config_dict.get("max_trials", 30))
 
         # fuzzy model settings
@@ -69,14 +69,15 @@ class CoheMarkConfig(BaseConfig):
         self.K = int(self.config_dict.get("K", 8))
         self.embedder = self.config_dict.get("embedder", "sentence-transformers/all-mpnet-base-v1")
 
-        # detection threshold on watermark_ratio (NOT z-score)
+        # detection threshold on watermark_ratio
         self.ratio_threshold = float(self.config_dict.get("ratio_threshold", 0.9))
 
-        # decoding params (keep close to your sampling scripts defaults)
+        # decoding params
         self.repetition_penalty = float(self.config_dict.get("repetition_penalty", 1.05))
         self.temperature = float(self.config_dict.get("temperature", 0.7))
         self.top_k = int(self.config_dict.get("top_k", 0))
         self.top_p = float(self.config_dict.get("top_p", 1.0))
+        self.bad_words = self.config_dict.get("bad_words", ["\n"])
 
         # build HF GenerationConfig
         self.gen_config = GenerationConfig(
@@ -111,7 +112,7 @@ class CoheMarkUtils:
 
     @staticmethod
     def _is_one_sentence(text: str) -> bool:
-        # your code: require ending punctuation and exactly one sentence after sent_tokenize
+        # require ending punctuation and exactly one sentence after sent_tokenize
         if text == "":
             return False
         if text[-1] not in PUNCTS:
@@ -120,7 +121,7 @@ class CoheMarkUtils:
 
     def _compute_green_ids(self, last_sent_membership_vec: np.ndarray, nums_samespace: int) -> list[int]:
         """
-        Reproduce your K==8 logic.
+        Compute green IDs.
         """
         sorted_indices = np.argsort(last_sent_membership_vec)
 
@@ -129,7 +130,7 @@ class CoheMarkUtils:
                 # [-1] and [-3]
                 return [int(sorted_indices[-1]), int(sorted_indices[-3])]
             else:
-                # fallback mode with 4 green ids (and allow more trials in caller)
+                # fallback mode with 4 green ids
                 return [
                     int(sorted_indices[-2]),
                     int(sorted_indices[-4]),
@@ -145,10 +146,18 @@ class CoheMarkUtils:
     def generate_watermarked(self, prompt: str, model, tokenizer, device: str | torch.device | None = None) -> str:
         """
         Generate prompt+completion, enforcing semantic-space watermark constraints per sentence.
-        Stops when:
-          - (generated_tokens - prompt_tokens) >= max_new_tokens - 1
-          - OR cannot sample desired signature after max_trials (break)
         """
+        # build bad_words_ids at runtime
+        bad_words = getattr(self.config, "bad_words", None)
+        if bad_words:
+            bad_words_ids = []
+            for w in bad_words:
+                ids = tokenizer(w, add_special_tokens=False).input_ids
+                if ids:
+                    bad_words_ids.append(ids)
+            if bad_words_ids:
+                self.config.gen_config.bad_words_ids = bad_words_ids
+
         if device is None:
             device = self.config.device
         device = str(device)
@@ -187,7 +196,7 @@ class CoheMarkUtils:
             if (not new_sent) or (not self._is_one_sentence(new_sent)):
                 current_trials += 1
                 if current_trials >= local_max_trials:
-                    # paper/code behavior: stop if cannot get a valid sample after max trials
+                    # stop if cannot get a valid sample after max trials
                     break
                 continue
 
@@ -200,7 +209,7 @@ class CoheMarkUtils:
             # compute accept ids from last accepted sentence similarity distribution
             accept_ids = self._compute_green_ids(last_sent_simi[0], nums_samespace)
 
-            # if we are in the "4-green-ids" mode, allow more trials (match your code)
+            # if we are in the "4-green-ids" mode, allow more trials
             if self.config.K == 8 and len(accept_ids) == 4:
                 local_max_trials = max(local_max_trials, 100)
             # stop if exceed trials budget
@@ -209,7 +218,7 @@ class CoheMarkUtils:
             # reject if not in accept_ids
             if new_membership not in accept_ids:
                 continue
-            # accepted: update counters similar to your generate_response_* code
+            # accepted: update counters
             if len(accept_ids) == 2 and new_membership == accept_ids[0]:
                 nums_samespace += 1
             if len(accept_ids) == 4:
@@ -222,7 +231,7 @@ class CoheMarkUtils:
             text_ids = new_text_ids
             sent_end_criteria.update(text)
 
-            # stop by max_new_tokens (paper/code: only max token is used)
+            # stop by max_new_tokens (in the paper: only max token is used)
             if (int(text_ids.size(1)) - prompt_length) >= (self.config.max_new_tokens - 1):
                 break
 
@@ -260,7 +269,7 @@ class CoheMark(BaseWatermark):
     @classmethod
     def load(cls, algorithm_config: str, transformers_config: TransformersConfig | None = None, *args, **kwargs) -> "CoheMark":
         """
-        Optional convenience load, consistent with some watermark implementations.
+        Load CoheMark with the specified configuration.
         """
         cfg_dict = load_config_file(algorithm_config)
         if cfg_dict.get("algorithm_name", "CoheMark") != "CoheMark":
@@ -298,9 +307,6 @@ class CoheMark(BaseWatermark):
         }
 
     def get_data_for_visualization(self, text: str, *args, **kwargs) -> dict:
-        """
-        Optional: provide minimal visualization payload.
-        """
         ratio = self.utils.detect_ratio(text)
         return {
             "algorithm": "CoheMark",
