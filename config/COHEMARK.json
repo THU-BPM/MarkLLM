@@ -1,0 +1,10 @@
+{
+  "algorithm_name": "CoheMark",
+  "embedder": "sentence-transformers/all-mpnet-base-v1",
+  "cluster_path": "watermark/cohemark/centers-8-1.1-lfqa.pickle", 
+  "K": 8,
+  "max_trials": 100,
+  "m": 1.1,
+  "ratio_threshold": 0.9,
+  "_comment": "You may choose other cluster files based on your data domain. The default cluster is trained on the LFQA dataset."
+}
