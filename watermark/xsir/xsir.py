@@ -108,6 +108,9 @@ class XSIRUtils:
             model_name=self.config.transform_model_name,
             input_dim=config.transform_model_input_dim
         ).to(self.config.device, dtype=torch.float32)
+        self.transform_model.eval()
+        for param in self.transform_model.parameters():
+            param.requires_grad_(False)
         self.mapping = self._get_mapping(self.config.mapping_name)
 
     def get_embedding(self, sentence: str) -> torch.FloatTensor:
