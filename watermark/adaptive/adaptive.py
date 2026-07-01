@@ -180,7 +180,8 @@ class AdaptiveUtils:
     def next_token_entropy(self, input_text, model, tokenizer, device):
         input_ids = tokenizer.encode(input_text, return_tensors='pt', add_special_tokens=False).to(device)
         outputs = model(input_ids)
-        probs = torch.nn.functional.softmax(outputs.logits[0, -1, :], dim=-1)
+        logits = outputs.logits[0, -1, :].float()
+        probs = torch.nn.functional.softmax(logits, dim=-1)
         mask = probs > 0
         entropy = -torch.sum(probs[mask] * torch.log(probs[mask]))
         return entropy
@@ -257,10 +258,10 @@ class Adaptive(BaseWatermark):
             # stopping criteria
             stop = self.utils.stopping_criteria(output_ids, self.config.generation_tokenizer)
             if stop:
-                output_text = self.config.generation_tokenizer.decode(output_ids[0].tolist())
+                output_text = self.config.generation_tokenizer.decode(output_ids[0].tolist(), skip_special_tokens=True)
                 return output_text
-        
-        output_text = self.config.generation_tokenizer.decode(output_ids[0])
+
+        output_text = self.config.generation_tokenizer.decode(output_ids[0].tolist(), skip_special_tokens=True)
         
         return output_text
     
