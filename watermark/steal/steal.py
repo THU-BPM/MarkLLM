@@ -18,6 +18,7 @@
 # ============================================
 
 import torch
+import torch.nn.functional as F
 from functools import partial
 import math
 from ..base import BaseWatermark, BaseConfig
@@ -473,8 +474,9 @@ class SpoofedProcessor(LogitsProcessor):
                 ctx = tuple(input_ids[b][-self.prevctx_width :].cpu().tolist())
 
             # 1) {ABC}->D: most precise but generally sparse   abcd 4-gram abc->d
+            ctx_abcd = tuple(ctx) if ordered else tuple(sorted(ctx))
             boosts_abcd = self._get_boosts_with_cache(
-                tuple(sorted(ctx)), vocab_sz, ordered, device
+                ctx_abcd, vocab_sz, ordered, device
             )
             boosts += self.config.w_abcd * boosts_abcd
             total_w += self.config.w_abcd
@@ -485,7 +487,7 @@ class SpoofedProcessor(LogitsProcessor):
                 solo_boosts = []  # single token boosts, without any context
                 for tok in ctx:
                     solo_boosts.append(
-                        self._get_boosts_with_cache((tok,), vocab_sz, ordered, device)
+                        self._get_boosts_with_cache((tok,), vocab_sz, False, device)
                     )
 
                 # pair 2-gram, a->d
@@ -531,8 +533,9 @@ class SpoofedProcessor(LogitsProcessor):
             if self.config.w_empty > 0:
                 # 3) Just use the empty context {}->D for an additional ctx-independent boost
                 # (finding D that are strong + true)
+                empty_ctx = self.emptyctx if ordered else tuple()
                 boosts_empty = self._get_boosts_with_cache(
-                    tuple(), vocab_sz, ordered, device
+                    empty_ctx, vocab_sz, ordered, device
                 )
                 boosts += self.config.w_empty * boosts_empty
                 total_w += self.config.w_empty
