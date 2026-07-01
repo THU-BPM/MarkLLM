@@ -166,9 +166,8 @@ class TSUtils:
             gamma = self.gamma
 
         if process == 'process':
-        # get every token's gamma value and delta value
-          self.gamma_list = torch.cat([self.gamma_list, gamma])
-          self.delta_list = torch.cat([self.delta_list, delta])
+            self.gamma_list = torch.cat([self.gamma_list, gamma.detach().reshape(-1).to(self.gamma_list.dtype)])
+            self.delta_list = torch.cat([self.delta_list, delta.detach().reshape(-1).to(self.delta_list.dtype)])
 
         # generate greenlist, every token have different greenlist_id
         greenlist_size = int(self.vocab_size * gamma)
@@ -180,12 +179,12 @@ class TSUtils:
 
         return greenlist_ids, gamma, delta,gamma_len
 
-    def _compute_z_score(self, observed_count, T):
-        # count refers to number of green tokens, T is total number of tokens
-        var = torch.sum(self.gamma_list * (1 - self.gamma_list))
-        mean = torch.sum(self.gamma_list)
-        z = (observed_count - mean)/torch.sqrt(var)
-        return z
+    def _compute_z_score(self, observed_count, gammas):
+        var = torch.sum(gammas * (1 - gammas))
+        mean = torch.sum(gammas)
+        if var.item() <= 0:
+            return torch.zeros((), device=gammas.device, dtype=gammas.dtype)
+        return (observed_count - mean) / torch.sqrt(var)
 
     def _score_sequence(
         self,
@@ -204,11 +203,12 @@ class TSUtils:
 
         green_token_count = 0
         green_token_mask = [-1 for _ in range(self.config.prefix_length)]
+        detect_gammas = []
 
         for idx in range(self.config.prefix_length, len(input_ids)):
             curr_token = input_ids[idx]
             if "opt" in self.config.generation_model.name_or_path.lower():
-                greenlist_ids, gamma, delta, gamma_len = self._get_greenlist_ids(input_ids[:idx],"detect")
+                greenlist_ids, gamma, delta, _ = self._get_greenlist_ids(input_ids[:idx],"detect")
 
             else:
                 llama_str = self.tokenizer_llama.decode(input_ids[max(idx-5, 0):idx], add_special_tokens=False)
@@ -216,7 +216,9 @@ class TSUtils:
                 if len(ids_opt) == 0:
                     green_token_mask.append(False)
                     continue
-                greenlist_ids, gamma, delta, gamma_len = self._get_greenlist_ids(torch.tensor(ids_opt).to(self.device),"detect")
+                greenlist_ids, gamma, delta, _ = self._get_greenlist_ids(torch.tensor(ids_opt).to(self.device),"detect")
+
+            detect_gammas.append(gamma.detach().to(torch.float).reshape(-1))
 
             if curr_token in greenlist_ids:
                 green_token_count += 1
@@ -224,9 +226,12 @@ class TSUtils:
             else:
                 green_token_mask.append(False)
 
-        self.gamma_list = self.gamma_list[self.config.prefix_length:]
+        if not detect_gammas:
+            z_score = torch.zeros((), device=self.device, dtype=torch.float)
+            return z_score, green_token_mask
 
-        z_score = self._compute_z_score(green_token_count, num_tokens_scored)
+        gammas = torch.cat(detect_gammas)
+        z_score = self._compute_z_score(green_token_count, gammas)
 
         return z_score, green_token_mask
 
