@@ -75,6 +75,25 @@ class KSemStampUtils:
         """
         self.config = config
         self.rng = torch.Generator(device=self.config.device)
+        self._embedder = None
+        self._cluster_centers = None
+
+    def get_embedder(self) -> SentenceTransformer:
+        """Build and cache the SBERT embedder on first use."""
+        if self._embedder is None:
+            word_embedding_model = models.Transformer(self.config.path_to_embedder)
+            pooling_model = models.Pooling(
+                word_embedding_model.get_word_embedding_dimension(),
+                pooling_mode_mean_tokens=True,
+            )
+            self._embedder = SentenceTransformer(modules=[word_embedding_model, pooling_model])
+        return self._embedder
+
+    def get_cluster_centers(self):
+        """Load and cache the K-Means cluster centroids on first use."""
+        if self._cluster_centers is None:
+            self._cluster_centers = torch.load(self.config.path_to_centroids)
+        return self._cluster_centers
 
     @staticmethod
     def worker(rank, text_chunk, embedder_path, queue, encode_batch_size):
@@ -286,17 +305,8 @@ class KSemStamp(BaseWatermark):
 
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate watermarked text using the KSEMSTAMP algorithm."""
-        # get cluster
-        cluster_centers=torch.load(self.config.path_to_centroids)
-        #cluster_centers = self.utils.generate_cluster()
-
-        # get embedder
-        word_embedding_model = models.Transformer(self.config.path_to_embedder)
-        pooling_model = models.Pooling(
-            word_embedding_model.get_word_embedding_dimension(),
-            pooling_mode_mean_tokens=True
-        )
-        embedder = SentenceTransformer(modules=[word_embedding_model, pooling_model])
+        cluster_centers = self.utils.get_cluster_centers()
+        embedder = self.utils.get_embedder()
 
         # instantiate sentence end criteria
         sent_end_criteria = KSemStampUtils.SentenceEndCriteria(self.config.generation_tokenizer)
@@ -355,15 +365,8 @@ class KSemStamp(BaseWatermark):
     
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the input text."""
-        # get cluster
-        cluster_centers = torch.load(self.config.path_to_centroids)
-        # get embedder
-        word_embedding_model = models.Transformer(self.config.path_to_embedder)
-        pooling_model = models.Pooling(
-            word_embedding_model.get_word_embedding_dimension(),
-            pooling_mode_mean_tokens=True
-        )
-        embedder = SentenceTransformer(modules=[word_embedding_model, pooling_model])
+        cluster_centers = self.utils.get_cluster_centers()
+        embedder = self.utils.get_embedder()
 
         sentences = sent_tokenize(text)
         n_sent = len(sentences)

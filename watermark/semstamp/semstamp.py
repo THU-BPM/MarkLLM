@@ -67,6 +67,18 @@ class SemStampUtils:
         """
         self.config = config
         self.rng = torch.Generator(device=self.config.device)
+        self._lsh_model = None
+
+    def get_lsh_model(self):
+        """Build and cache the SBERT LSH model on first use."""
+        if self._lsh_model is None:
+            self._lsh_model = self.SBERTLSHModel(
+                lsh_model_path=self.config.path_to_embedder,
+                batch_size=1,
+                lsh_dim=self.config.dimension_d,
+                sbert_type='base',
+            )
+        return self._lsh_model
 
     class SBERTLSHModel:
         """Helper class for SBERTLSHModel"""
@@ -184,11 +196,7 @@ class SemStamp(BaseWatermark):
 
     def generate_watermarked_text(self, prompt: str, *args, **kwargs) -> str:
         """Generate watermarked text using the SEMSTAMP algorithm."""
-
-        # get LSH
-        lsh_model = self.utils.SBERTLSHModel(
-            lsh_model_path=self.config.path_to_embedder, batch_size=1, lsh_dim=self.config.dimension_d, sbert_type='base'
-        )
+        lsh_model = self.utils.get_lsh_model()
 
         # instantiate sentence end criteria
         sent_end_criteria = SemStampUtils.SentenceEndCriteria(
@@ -293,21 +301,11 @@ class SemStamp(BaseWatermark):
 
     def detect_watermark(self, text: str, return_dict: bool = True, *args, **kwargs):
         """Detect watermark in the input text."""
-        # get embedder
-        word_embedding_model = models.Transformer(self.config.path_to_embedder)
-        pooling_model = models.Pooling(
-            word_embedding_model.get_word_embedding_dimension(),
-            pooling_mode_mean_tokens=True
-        )
-        embedder = SentenceTransformer(
-            modules=[word_embedding_model, pooling_model])
-
         sentences = sent_tokenize(text)
         n_sent = len(sentences)
         n_watermark = 0
 
-        lsh_model = self.utils.SBERTLSHModel(
-            lsh_model_path=self.config.path_to_embedder, batch_size=1, lsh_dim=self.config.dimension_d, sbert_type='base')
+        lsh_model = self.utils.get_lsh_model()
         lsh_seed = lsh_model.get_hash([sentences[0]])[0]
         n_bins = 2**self.config.dimension_d
         n_accept = int(n_bins * self.config.gamma)

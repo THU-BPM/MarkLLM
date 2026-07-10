@@ -251,7 +251,11 @@ class UnbiasedUtils:
     
     def value_transformation(self, value: float) -> float:
         """Transform value to range [0, 1]."""
-        return value/(value + 1)
+        v = float(value)
+        d = v + 1.0
+        if d == 0.0:
+            return 0.0
+        return float(v / d)
     
     def score_sequence(self, text: str) -> tuple[float, list[int]]:
         """Score the input_ids and return z_score and green_token_flags."""
@@ -298,8 +302,8 @@ class UnbiasedUtils:
         unclipped_scores = torch.gather(llr, -1, labels.unsqueeze(-1)).squeeze(-1)
         ## shape = (batch_size, seq_len - prefix_length, query_size)
         scores = torch.clamp(unclipped_scores.unsqueeze(-1), min_llr, max_llr)
-        scores = np.array(scores[0].cpu())
-        labels = np.array(labels[0].cpu())
+        scores = scores[0].float().cpu().numpy()
+        labels = labels[0].cpu().numpy()
         
         # Step 5: Choose the best index for grid search
         sum_scores = np.sum(scores, axis=0)
@@ -320,8 +324,8 @@ class UnbiasedUtils:
                 highlight_values[position] = self.value_transformation(score)
         
         ## Theorem 9: p <= A * e^(-t)
-        p_val = n * np.exp(-final_score)
-        
+        p_val = float(n * np.exp(-final_score))
+
         return p_val, highlight_values
 
 class UnbiasedLogitsProcessor(LogitsProcessor):
