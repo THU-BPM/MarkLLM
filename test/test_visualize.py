@@ -104,7 +104,7 @@ def test_visualization_without_weight(algorithm_name, visualize_type='discrete')
     # Validate input
     assert visualize_type in ['discrete', 'continuous']
     if visualize_type == 'discrete':
-        assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'UPV', 'SIR', 'XSIR', 'EWD', 'DIP', 'Unbiased']
+        assert algorithm_name in ['KGW', 'Unigram', 'SWEET', 'UPV', 'SIR', 'XSIR', 'EWD', 'DIP', 'Unbiased', 'SSG']
     else:
         assert algorithm_name in ['EXP', 'EXPEdit', 'ITSEdit', 'EXPGumbel']
 
@@ -141,7 +141,7 @@ def test_visualization_without_weight(algorithm_name, visualize_type='discrete')
 
 def test_visualization_with_weight(algorithm_name):
     # Validate input
-    assert algorithm_name in ['SWEET', 'EWD']
+    assert algorithm_name in ['SWEET', 'EWD', 'SSG']
 
     # Get data for visualization
     watermarked_data, unwatermarked_data = get_data(algorithm_name)

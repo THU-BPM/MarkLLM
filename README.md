@@ -95,6 +95,7 @@
 As the MarkLLM repository content becomes increasingly rich and its size grows larger, we have created a model storage repository on Hugging Face called [Generative-Watermark-Toolkits](https://huggingface.co/Generative-Watermark-Toolkits) to facilitate usage. This repository contains various default models for watermarking algorithms that involve self-trained models. We have removed the model weights from the corresponding `model/` folders of these watermarking algorithms in the main repository. **When using the code, please first download the corresponding models from the Hugging Face repository according to the config paths and save them to the `model/` directory before running the code.**
 
 ### Updates
+- 🎉 **(2026.08.18)** Add [SSG](https://arxiv.org/abs/2604.22438) watermarking method.
 - 🎉 **(2025.09.22)** Add [SemStamp](https://arxiv.org/abs/2310.03991) watermark method. Thanks Huan Wang for her PR!
 - 🎉 **(2025.09.17)** Add [IE](https://arxiv.org/abs/2505.14112) watermark method. Thanks Tianle Gu for her PR!
 - 🎉 **(2025.09.14)** Add [Watermark Stealing](https://arxiv.org/abs/2402.19361) attack method. Thanks Shuhao Zhang for his PR!
@@ -147,6 +148,7 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | SWEET              | ACL 2024    | [\[2305.15060\] Who Wrote this Code? Watermarking for Code Generation (arxiv.org)](https://arxiv.org/abs/2305.15060)                                                            |
   | UPV                | ICLR 2024    | [\[2307.16230\] An Unforgeable Publicly Verifiable Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2307.16230)                                           |
   | EWD                | ACL 2024    | [\[2403.13485\] An Entropy-based Text Watermarking Detection Method (arxiv.org)](https://arxiv.org/abs/2403.13485)                                                              |
+  | SSG                | ACL 2026    | [\[2604.22438\] SSG: Logit-Balanced Vocabulary Partitioning for LLM Watermarking (arxiv.org)](https://arxiv.org/abs/2604.22438)                                                  |
   | SIR                | ICLR 2024    | [\[2310.06356\] A Semantic Invariant Robust Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.06356)                                                  |
   | X-SIR              | ACL 2024    | [\[2402.14007\] Can Watermarks Survive Translation? On the Cross-lingual Consistency of Text Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2402.14007) |
   | DiPmark            | ICML 2024    | [\[2310.07710\] A Resilient and Accessible Distribution-Preserving Watermark for Large Language Models (arxiv.org)](https://arxiv.org/abs/2310.07710)                           |
