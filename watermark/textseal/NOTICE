@@ -1,0 +1,9 @@
+TextSeal
+Copyright 2025 Meta Platforms, Inc. and affiliates.
+
+This product includes the TextSeal dual-key generation-time watermarking
+method, developed at FAIR, Meta Superintelligence Labs.
+
+The MarkLLM integration adapts the PRF, dual-key Gumbel-max generation, and
+global entropy-aware detection method from
+https://github.com/facebookresearch/textseal (Apache License 2.0).
