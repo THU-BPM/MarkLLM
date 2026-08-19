@@ -1,0 +1,13 @@
+{
+    "algorithm_name": "SimMark",
+    "embedding_model_name": "hkunlp/instructor-large",
+    "embedding_prompt": "Represent the sentence for cosine similarity:",
+    "interval_low": 0.68,
+    "interval_high": 0.76,
+    "expected_valid_fraction": 0.1,
+    "softness": 250.0,
+    "z_threshold": 2.33,
+    "max_trials": 100,
+    "candidate_max_new_tokens": 64,
+    "ensure_sentence_punctuation": true
+}
