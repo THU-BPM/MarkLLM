@@ -339,7 +339,8 @@ class DEWLogitsProcessor(LogitsProcessor):
         new_scores = torch.full_like(scores, -float("inf"))
         for b_idx in range(input_ids.shape[0]):
             bias = self.utils.compute_biases(input_ids[b_idx:b_idx + 1], top_k_indices[b_idx])
-            new_scores[b_idx].scatter_(0, top_k_indices[b_idx], top_k_logits[b_idx] + bias)
+            biased_logits = (top_k_logits[b_idx] + bias).to(dtype=new_scores.dtype)
+            new_scores[b_idx].scatter_(0, top_k_indices[b_idx], biased_logits)
         return new_scores
 
 
