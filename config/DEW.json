@@ -1,0 +1,17 @@
+{
+    "algorithm_name": "DEW",
+    "secret_key": 42,
+    "n_vectors": 3072,
+    "lambda_strength": 2.0,
+    "top_k": 30,
+    "bias_use_tanh": true,
+    "tanh_scale": 1.0,
+    "normalize_embeddings": true,
+    "normalize_projected_vectors": true,
+    "standardize_score_by_sqrt_n": true,
+    "context_embedding_model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "context_window_size": 5,
+    "token_embedding_transform_path": "watermark/dew/transforms/pca_std_whitening.joblib",
+    "token_embedding_transform_n_components": null,
+    "detection_alpha": 0.01
+}
