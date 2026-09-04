@@ -1,0 +1,14 @@
+{
+    "algorithm_name": "E2E",
+    "delta": 1.25,
+    "top_k": 20,
+    "window_size": 10,
+    "detection_threshold": 0.5,
+    "checkpoint_path": "watermark/e2e/model/35000.pth",
+    "reference_model_name": "facebook/opt-1.3b",
+    "reference_tokenizer_name": "facebook/opt-1.3b",
+    "tokenizer_conversion_multiplier": 3,
+    "mapper_layers": 5,
+    "hidden_dim": 64,
+    "detector_layers": 3
+}

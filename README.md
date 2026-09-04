@@ -162,7 +162,10 @@ MarkLLM is an open-source toolkit developed to facilitate the research and appli
   | EXP-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
   | ITS-Edit           | TMLR 2024 | [\[2307.15593\] Robust Distortion-free Watermarks for Language Models (arxiv.org)](https://arxiv.org/abs/2307.15593)                                                           |
   | IE           | Arxiv Preprint | [\[2505.14112\] Invisible Entropy: Towards Safe and Efficient Low-Entropy LLM Watermarking (arxiv.org)](https://arxiv.org/abs/2505.14112)                                                           |
+  | E2E-LLM-Watermark | ICML 2025 | [\[2505.02344\] An End-to-End Model For Logits Based Large Language Models Watermarking](https://arxiv.org/abs/2505.02344) |
+  | IE           | Arxiv Preprint | [\[2505.14112\] Invisible Entropy: Towards Safe and Efficient Low-Entropy LLM Watermarking (arxiv.org)](https://arxiv.org/abs/2505.14112)                                                           |
   | DEW           | Arxiv Preprint | [\[2606.31602\] Robust Text Watermarking for Large Language Models via Dual Semantic Embeddings (arxiv.org)](https://arxiv.org/abs/2606.31602) |
+
 - **Visualization Solutions:** The toolkit includes custom visualization tools that enable clear and insightful views into how different watermarking algorithms operate under various scenarios. These visualizations help demystify the algorithms' mechanisms, making them more understandable for users.
 
   <img src="images\mechanism_visualization.png" alt="mechanism_visualization" style="zoom:35%;" />
