@@ -46,7 +46,8 @@ CONFIG_MAPPING_NAMES = {
     "KSEMSTAMP": 'watermark.k_semstamp.KSemStampConfig',
     "SEMSTAMP": 'watermark.semstamp.SemStampConfig',
     "IE": "watermark.ie.IEConfig",
-    "E2E": "watermark.e2e.E2EConfig"
+    "E2E": "watermark.e2e.E2EConfig",
+    "DEW": 'watermark.dew.DEWConfig'
 }
 
 

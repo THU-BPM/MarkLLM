@@ -13,3 +13,5 @@ sentence-transformers
 networkx
 translate
 tiktoken
+scikit-learn
+joblib

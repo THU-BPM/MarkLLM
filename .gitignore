@@ -15,6 +15,7 @@ evaluation/examples/tools.py
 watermark/sir/model/compositional-bert-large-uncased/
 watermark/xsir/model/paraphrase-multilingual-mpnet-base-v2/
 watermark/e2e/model/*.pth
+watermark/dew/transforms/
 
 # Figures
 test_images/
