@@ -1,0 +1,13 @@
+{
+    "algorithm_name": "TextSeal",
+    "ngram": 1,
+    "key_a": 42,
+    "key_b": 12387,
+    "mixing_alpha": 0.5,
+    "p_threshold": 0.01,
+    "scoring_method": "v2",
+    "use_entropy_weighting": true,
+    "default_temperature": 0.8,
+    "default_top_p": 0.95,
+    "min_p_value": 1e-300
+}
