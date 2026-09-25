@@ -50,7 +50,8 @@ class OpenAIAPI:
     def get_result_from_gpt4(self, query):
         """get result from GPT-4 model."""
         response = self.client.chat.completions.create(
-            model="gpt-4-0613",
+            # gpt-4-0613 is shut down on 2026-10-23: https://developers.openai.com/api/docs/deprecations
+            model="gpt-4.1",
             temperature=self.temperature,
             messages=[
                 {"role": "system", "content": self.system_content},
@@ -62,7 +63,8 @@ class OpenAIAPI:
     def get_result_from_gpt3_5(self, query):
         """get result from GPT-3.5 model."""
         response = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            # gpt-3.5-turbo is shut down on 2026-10-23: https://developers.openai.com/api/docs/deprecations
+            model="gpt-4.1-mini",
             temperature=self.temperature,
             messages=[
                 {"role": "system", "content": self.system_content},
