@@ -1,0 +1,10 @@
+TextSeal2
+Copyright (c) Meta Platforms, Inc. and affiliates.
+
+This product includes the TextSeal2 distortion-free two-key copula watermark
+and its watermarked speculative decoding (block verification with the
+residual race), developed at FAIR, Meta Superintelligence Labs.
+
+The MarkLLM integration adapts the 53-bit PRF, the copula race, the detection
+test and the residual race from the TextSeal toolkit
+https://github.com/facebookresearch/textseal (Apache License 2.0).
