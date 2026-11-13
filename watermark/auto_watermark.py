@@ -47,6 +47,7 @@ WATERMARK_MAPPING_NAMES = {
     "SEMSTAMP": 'watermark.semstamp.SemStamp',
     "IE": "watermark.ie.IE",
     "TextSeal": "watermark.textseal.TextSeal",
+    "TextSeal2": "watermark.textseal2.TextSeal2",
     "E2E": "watermark.e2e.E2E",
     "DEW": 'watermark.dew.DEW'
 }
