@@ -1,0 +1,13 @@
+{
+    "algorithm_name": "TextSeal2",
+    "ngram": 3,
+    "key_a": 42,
+    "key_b": 12387,
+    "rho": 0.9,
+    "repeated_windows": "skip",
+    "p_threshold": 0.001,
+    "num_speculative_tokens": 4,
+    "compile": true,
+    "default_temperature": 1.0,
+    "default_top_p": 0.95
+}

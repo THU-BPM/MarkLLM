@@ -47,6 +47,7 @@ CONFIG_MAPPING_NAMES = {
     "SEMSTAMP": 'watermark.semstamp.SemStampConfig',
     "IE": "watermark.ie.IEConfig",
     "TextSeal": "watermark.textseal.TextSealConfig",
+    "TextSeal2": "watermark.textseal2.TextSeal2Config",
     "E2E": "watermark.e2e.E2EConfig",
     "DEW": 'watermark.dew.DEWConfig'
 }
